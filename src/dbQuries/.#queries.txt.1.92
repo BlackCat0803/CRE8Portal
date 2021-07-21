@@ -1,0 +1,1687 @@
+
+####################  Added on Sep 14, 2017  -  Ponnusamy.  #########################
+ ##########   List of Tables Start ##########
+ 1.security_question
+ 2.prescriber_type _master
+ 3.phy_info
+ 4.phy_old_password
+ 5.pharmacy
+ 6.admin_account
+ 7.admin_old_password
+ 8.clinic
+ 9.physician_assistant
+ 10.physician_assistant _old_password
+
+ ##########   List of Tables End ##########
+
+
+
+
+create SCHEMA pharmacyportal;
+
+
+CREATE TABLE `security_question` (
+   row_id int(10) AUTO_INCREMENT  NOT NULL,
+  `securityquestion` text NOT NULL ,
+  `status` varchar(10) NOT NULL DEFAULT '',
+   PRIMARY KEY (`row_id`)
+) ;
+
+CREATE TABLE `prescriber_type_master` (
+   type_id int(10) AUTO_INCREMENT  NOT NULL,
+  `prescriber_type` varchar(3) NOT NULL DEFAULT '',
+   PRIMARY KEY (`type_id`)
+) ;
+
+CREATE TABLE `phy_info` (
+   physician_id int(10) NOT NULL AUTO_INCREMENT,
+  `physician_code` varchar(15) DEFAULT '',
+  `first_name` varchar(50) NOT NULL DEFAULT '',
+  `last_name` varchar(50) NOT NULL DEFAULT '',
+  `middle_name` varchar(10) DEFAULT '',
+  `physician_name` varchar(110) NOT NULL DEFAULT '',
+  `previous_signon` date DEFAULT '0000-00-00',
+  `status` varchar(15) NOT NULL DEFAULT '',
+  `password` varbinary(100) NOT NULL DEFAULT '',
+  `phone` varchar(15) NOT NULL DEFAULT '',
+  `email` varchar(255) DEFAULT '',
+  `mobile` varchar(15) NOT NULL DEFAULT '',
+  `password_reset_date` date DEFAULT '0000-00-00',
+  `login_attempts` int(10) DEFAULT '0',
+  `login_locked_date` date DEFAULT '0000-00-00',
+  `security_question_number` int(10) DEFAULT '0',
+  `security_answer` varchar(50) NOT NULL DEFAULT '',
+  `security_question_number2` int(10) DEFAULT '0',
+  `security_answer2` varchar(50) NOT NULL DEFAULT '',
+  `forgot_password_attempts` int(10) DEFAULT '0',
+  `forgot_pwd_locked_date` date DEFAULT '0000-00-00',
+  `prescriber_type` int(10) DEFAULT '0',
+  `prescriber_group` text ,
+  `fax` varchar(15) DEFAULT '',
+  `phone2` varchar(15) DEFAULT '',
+  `phone3` varchar(15) DEFAULT '',
+  `address1` text ,
+  `city` varchar(25) NOT NULL DEFAULT '',
+  `state` varchar(3) NOT NULL DEFAULT '',
+  `zip_code` varchar(12) DEFAULT '',
+  `country` varchar(200) NOT NULL DEFAULT '',
+   PRIMARY KEY (`physician_id`) 
+   );
+
+
+
+CREATE TABLE `phy_old_password` (
+  `row_id` int(10) NOT NULL AUTO_INCREMENT,
+  `physician_id` int(10) NOT NULL DEFAULT '0',
+  `password` varbinary(100) NOT NULL DEFAULT '',
+  `date_moved` date DEFAULT '0000-00-00',
+   PRIMARY KEY (`row_id`)
+);
+
+CREATE TABLE `pharmacy` (
+   pharmacy_id int(10)	NOT NULL AUTO_INCREMENT,
+   pharmacy_name	VARCHAR (100)  NOT NULL DEFAULT '',
+   address	VARCHAR (100) NOT NULL DEFAULT '',
+   city	VARCHAR (25) NOT NULL DEFAULT '',
+   state	VARCHAR (3) NOT NULL DEFAULT '',
+   zip_code VARCHAR(12) DEFAULT '',
+   phone	VARCHAR (12) NOT NULL DEFAULT '',
+   status	VARCHAR (15) NOT NULL DEFAULT '',
+   PRIMARY KEY (`pharmacy_id`)
+);
+
+
+CREATE TABLE `admin_account` (
+  row_id	Int(10) NOT NULL AUTO_INCREMENT,
+  pharmacy_id	Int(10) NOT NULL DEFAULT '0',
+  status	VARCHAR (15) NOT NULL DEFAULT '',
+  type	VARCHAR (15) NOT NULL DEFAULT '',
+  date_of_registration	DATE DEFAULT '0000-00-00',
+  first_name	VARCHAR(50) NOT NULL DEFAULT '',
+  last_name	VARCHAR(50) NOT NULL DEFAULT '',
+  middle_name	VARCHAR(10) DEFAULT '',
+  name	VARCHAR(110) NOT NULL DEFAULT '',
+  email	VARCHAR(255) NOT NULL DEFAULT '',
+  password	VARBINARY(100) NOT NULL DEFAULT '',
+  phone	VARCHAR(15) DEFAULT '',
+  mobile	VARCHAR(15) DEFAULT '',
+  password_reset_date	DATE DEFAULT '0000-00-00',
+  login_attempts	INT(10) NOT NULL DEFAULT '0',
+  login_locked_date	DATE DEFAULT '0000-00-00',
+  security_question_number int(10) NOT NULL DEFAULT '0',
+  security_answer	VARCHAR(50) NOT NULL DEFAULT '',
+  security_question_number2	INT(10) NOT NULL DEFAULT '0',
+  security_answer2	VARCHAR(50) NOT NULL DEFAULT '',
+  forgot_password_attempts	INT(10),
+  forgot_pwd_locked_date	DATE DEFAULT '0000-00-00',
+  PRIMARY KEY (`row_id`)
+);
+
+
+
+CREATE TABLE `admin_old_password` (
+  row_id	 Int(10) NOT NULL AUTO_INCREMENT,
+  admin_id	Int(10) NOT NULL DEFAULT '0',
+  password	VARBINARY(100) NOT NULL DEFAULT '',
+  date_moved	DATE DEFAULT '0000-00-00',
+  PRIMARY KEY (`row_id`)
+);
+
+
+CREATE TABLE `clinic` (
+  clinic_id	Int(10) NOT NULL AUTO_INCREMENT,
+  clinic_name	VARCHAR (100)  NOT NULL DEFAULT '',
+  address	VARCHAR (100)  NOT NULL DEFAULT '',
+  city	VARCHAR (25)  NOT NULL DEFAULT '',
+  state	VARCHAR (3)  NOT NULL DEFAULT '',
+  zip_code VARCHAR(12)  NOT NULL DEFAULT '',
+  Phone	VARCHAR (15)  NOT NULL DEFAULT '',
+  status	VARCHAR (15)  NOT NULL DEFAULT '',
+  PRIMARY KEY (`clinic_id`)
+);
+
+
+CREATE TABLE `physician_assistant` (
+  row_id	Int(10) NOT NULL AUTO_INCREMENT,
+  physician_id	Int(10) NOT NULL DEFAULT '0',
+  clinic_id	Int(10) NOT NULL DEFAULT '0',
+  status	VARCHAR (15)   NOT NULL DEFAULT '',
+  date_of_registration	DATE DEFAULT '0000-00-00',
+  first_name	VARCHAR(50)   NOT NULL DEFAULT '',
+  last_name	VARCHAR(50)   NOT NULL DEFAULT '',
+  middle_name	VARCHAR(10) DEFAULT '',
+  name	VARCHAR(110)   NOT NULL DEFAULT '',
+  email	VARCHAR(255)   NOT NULL DEFAULT '',
+  password	VARBINARY(100)   NOT NULL DEFAULT '',
+  phone	VARCHAR(15) DEFAULT '',
+  mobile	VARCHAR(15) DEFAULT '',
+  password_reset_date	DATE DEFAULT '0000-00-00',
+  login_attempts	INT(10) NOT NULL DEFAULT '0',
+  login_locked_date	DATE DEFAULT '0000-00-00',
+  security_question_number INT(10) NOT NULL DEFAULT '0',
+  security_answer	VARCHAR(50)   NOT NULL DEFAULT '',
+  Security_question_number2 INT(10) NOT NULL DEFAULT '0',
+  security_answer2	VARCHAR(50)   NOT NULL DEFAULT '',
+  forgot_password_attempts	INT(10) NOT NULL DEFAULT '0',
+  forgot_pwd_locked_date	DATE DEFAULT '0000-00-00',
+  PRIMARY KEY (`row_id`)
+);
+
+
+CREATE TABLE `physician_assistant_old_password` (
+  row_id	Int(10) NOT NULL AUTO_INCREMENT,
+  physician_assistant_id	Int(10) NOT NULL DEFAULT '0',
+  password	VARBINARY(100) NOT NULL DEFAULT '0',
+  date_moved	DATETIME DEFAULT '0000-00-00',
+  PRIMARY KEY (`row_id`)
+);
+
+##########   Insert Queries ##########
+insert into `prescriber_type_master` (prescriber_type) VALUES ('GE');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('CT');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('DB');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('GH');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('HB');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('HS');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('IF');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('MD');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('MF');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('PL');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('PQ');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('R1');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('SA');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('IN');
+insert into `prescriber_type_master` (prescriber_type) VALUES ('IP');
+
+########## Alter Column phy_info - by Ponnusamy 14-09-2017 ##########
+ALTER TABLE phy_info
+ CHANGE physician_code physician_code VARCHAR(15),
+ CHANGE phone phone VARCHAR(15),
+ CHANGE email email VARCHAR(255) NOT NULL,
+ CHANGE security_answer security_answer VARCHAR(50),
+ CHANGE security_answer2 security_answer2 VARCHAR(50);
+ 
+ ########## Add Column phy_info - by Ponnusamy 15-09-2017##########
+ALTER TABLE phy_info
+ Add approved_by INT(10)  DEFAULT '0',
+ Add approved_date DATETIME DEFAULT '0000-00-00',
+ Add denied_by INT(10)  DEFAULT '0',
+ Add denied_date DATETIME DEFAULT '0000-00-00';
+ 
+ ##########  Add Column physician_assistant  - by Ponnusamy 15-09-2017 ##########
+ALTER TABLE physician_assistant
+ Add approved_by INT(10)  DEFAULT '0',
+ Add approved_date DATETIME DEFAULT '0000-00-00',
+ Add denied_by INT(10)  DEFAULT '0',
+ Add denied_date DATETIME DEFAULT '0000-00-00';
+ 
+ ##########  Add Column phy_info - by Ponnusamy 15-09-2017  ##########
+ALTER TABLE phy_info
+ Add date_of_registration DATETIME DEFAULT '0000-00-00';
+ 
+##########   Alter Table physician_assistant - by Ponnusamy 15-09-2017 ##########
+ ALTER TABLE physician_assistant
+ CHANGE login_attempts login_attempts INT(10),
+ CHANGE security_question_number security_question_number INT(10)  DEFAULT '0',
+ CHANGE security_answer	security_answer VARCHAR(50)   DEFAULT '',
+ CHANGE Security_question_number2 Security_question_number2 INT(10)  DEFAULT '0',
+ CHANGE security_answer2	security_answer2 VARCHAR(50)    DEFAULT '',
+ CHANGE forgot_password_attempts	forgot_password_attempts INT(10)  DEFAULT '0';
+ 
+ ##########  Create state Table -  by Ponnusamy 15-09-2017 ##########
+  CREATE TABLE `state` (
+  state_code	CHAR(3) NOT NULL ,
+  state_name	VARCHAR(50) NOT NULL DEFAULT '0',
+  status	CHAR(2) DEFAULT '',
+  PRIMARY KEY (`state_code`)
+);
+
+ ##########  Insert into  state Table -  by Ponnusamy 15-09-2017 ##########
+ 
+insert into `state` (state_code,state_name,status) VALUES ('AL','AL - Alabama','N');
+insert into `state` (state_code,state_name,status) VALUES ('AK','AK - Alaska','N');
+insert into `state` (state_code,state_name,status) VALUES ('AZ','AZ - Arizona','N');
+insert into `state` (state_code,state_name,status) VALUES ('AR','AR - Arkansas','N');
+insert into `state` (state_code,state_name,status) VALUES ('CA','CA - California','N');
+insert into `state` (state_code,state_name,status) VALUES ('CO','CO - Colorado','N');
+insert into `state` (state_code,state_name,status) VALUES ('CT','CT - Connecticut','N');
+insert into `state` (state_code,state_name,status) VALUES ('DE','DE - Delaware','N');
+insert into `state` (state_code,state_name,status) VALUES ('FL','FL - Florida','N');
+insert into `state` (state_code,state_name,status) VALUES ('GA','GA - Georgia','N');
+insert into `state` (state_code,state_name,status) VALUES ('HI','HI - Hawaii','N');
+insert into `state` (state_code,state_name,status) VALUES ('ID','ID - Idaho','N');
+insert into `state` (state_code,state_name,status) VALUES ('IL','IL - Illinois','N');
+insert into `state` (state_code,state_name,status) VALUES ('IN','IN - Indiana','N');
+insert into `state` (state_code,state_name,status) VALUES ('IA','IA - Iowa','N');
+insert into `state` (state_code,state_name,status) VALUES ('KS','KS - Kansas','N');
+insert into `state` (state_code,state_name,status) VALUES ('KY','KY - Kentucky','N');
+insert into `state` (state_code,state_name,status) VALUES ('LA','LA - Louisiana','N');
+insert into `state` (state_code,state_name,status) VALUES ('ME','ME - Maine','N');
+insert into `state` (state_code,state_name,status) VALUES ('MD','MD - Maryland','N');
+insert into `state` (state_code,state_name,status) VALUES ('MA','MA - Massachusetts','N');
+insert into `state` (state_code,state_name,status) VALUES ('MI','MI - Michigan','N');
+insert into `state` (state_code,state_name,status) VALUES ('MN','MN - Minnesota','N');
+insert into `state` (state_code,state_name,status) VALUES ('MS','MS - Mississippi','N');
+insert into `state` (state_code,state_name,status) VALUES ('MO','MO - Missouri','N');
+insert into `state` (state_code,state_name,status) VALUES ('MT','MT - Montana','N');
+insert into `state` (state_code,state_name,status) VALUES ('NE','NE - Nebraska','N');
+insert into `state` (state_code,state_name,status) VALUES ('NV','NV - Nevada','N');
+insert into `state` (state_code,state_name,status) VALUES ('NH','NH - New Hampshire','N');
+insert into `state` (state_code,state_name,status) VALUES ('NJ','NJ - New Jersey','N');
+insert into `state` (state_code,state_name,status) VALUES ('NM','NM - New Mexico','N');
+insert into `state` (state_code,state_name,status) VALUES ('NY','NY - New York','N');
+insert into `state` (state_code,state_name,status) VALUES ('NC','NC - North Carolina','N');
+insert into `state` (state_code,state_name,status) VALUES ('ND','ND - North Dakota','N');
+insert into `state` (state_code,state_name,status) VALUES ('OH','OH - Ohio','N');
+insert into `state` (state_code,state_name,status) VALUES ('OK','OK - Oklahoma','N');
+insert into `state` (state_code,state_name,status) VALUES ('OR','OR - Oregon','N');
+insert into `state` (state_code,state_name,status) VALUES ('PA','PA - Pennsylvania','N');
+insert into `state` (state_code,state_name,status) VALUES ('RI','RI - Rhode Island','N');
+insert into `state` (state_code,state_name,status) VALUES ('SC','SC - South Carolina','N');
+insert into `state` (state_code,state_name,status) VALUES ('SD','SD - South Dakota','N');
+insert into `state` (state_code,state_name,status) VALUES ('TN','TN - Tennessee','N');
+insert into `state` (state_code,state_name,status) VALUES ('TX','TX - Texas','N');
+insert into `state` (state_code,state_name,status) VALUES ('UT','UT - Utah','N');
+insert into `state` (state_code,state_name,status) VALUES ('VT','VT - Vermont','N');
+insert into `state` (state_code,state_name,status) VALUES ('VA','VA - Virginia','N');
+insert into `state` (state_code,state_name,status) VALUES ('WA','WA - Washington','N');
+insert into `state` (state_code,state_name,status) VALUES ('WV','WV - West Virginia','N');
+insert into `state` (state_code,state_name,status) VALUES ('WI','WI - Wisconsin','N');
+insert into `state` (state_code,state_name,status) VALUES ('WY','WY - Wyoming','N');
+
+
+##########  ALter Table PHY_info for Profile -  by Rohini 16-09-2017 ##########
+ALTER TABLE pharmacyportal.phy_info
+ ADD secondary_address1 TEXT ASCII AFTER date_of_registration,
+ ADD secondary_city VARCHAR(25),
+ ADD secondary_state VARCHAR(3),
+ ADD secondary_zip_code VARCHAR(12),
+ ADD secondary_country VARCHAR(50);
+=======
+
+##########  Create phy_profile Table -  by Ponnusamy 16-09-2017 ##########
+
+CREATE TABLE `phy_profile` (
+  physician_id	Int(10) NOT NULL AUTO_INCREMENT,
+  website	text ,
+  marketer	text ,
+  dea	VARCHAR(150)  DEFAULT '',
+  npi	VARCHAR(150)  DEFAULT '',
+  upin	VARCHAR(150)  DEFAULT '',
+  state_license	VARCHAR(150)  DEFAULT '',
+  medicaid	VARCHAR(150)  DEFAULT '',
+  dps	VARCHAR(150)  DEFAULT '',
+  comm_email	Char(3)  DEFAULT '',
+  comm_phone	Char(3)  DEFAULT '',
+  comm_fax	Char(3)  DEFAULT '',
+  renewal_req_days_bf_supply_ends	Int(3)  DEFAULT '0',
+  comments	text,
+  PRIMARY KEY (`physician_id`)
+);
+
+##########  Create phy_creditcard Table -  by Ponnusamy 16-09-2017 ##########
+
+CREATE TABLE `phy_creditcard` (
+  physician_id	Int(10) NOT NULL AUTO_INCREMENT,
+  card_type	INT(3)  DEFAULT '0',
+  card_holder_name	VARCHAR(120)  DEFAULT '',
+  Card_expiry_month	VARCHAR(2)  DEFAULT '',
+  Card_expiry_year	VARCHAR(4)  DEFAULT '',
+ PRIMARY KEY (`physician_id`)
+);
+
+##########  Create card_type_master Table -  by Ponnusamy 16-09-2017 ##########
+
+CREATE TABLE `card_type_master` (
+  id	Int(3) NOT NULL AUTO_INCREMENT,
+  cardtype	VARCHAR(200) DEFAULT '',
+  isActive	Char(1) DEFAULT '',
+PRIMARY KEY (`id`)
+);
+
+
+###########  Missed Credit card details included in table - By Vijayakumar 16-09-2017 ###########
+ALTER TABLE pharmacyportal.phy_creditcard
+ ADD card_number VARCHAR(25) NOT NULL AFTER card_type,
+ ADD card_cvc_number VARCHAR(4);
+
+###########  securityquestions added in table security_question - By Shalini on 19-09-2017 ###########
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 1 ,'What was the last name of your third grade teacher?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 2 ,'What was the name of the boy/girl you had your second kiss with?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 3 ,'Where were you when you had your first alcoholic drink (or cigarette)?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 4 ,'What was the name of your second dog/cat/goldfish/etc.?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 5 ,'Where were you when you had your first kiss?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 6 ,'When you were young, what did you want to be when you grew up?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 7 ,'Where were you when you first heard about 9/11?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 8 ,'Where were you New Year''s 2000?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 9 ,'What''s John''s (or other friend/family member) middle name?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 10 ,'Who was your childhood hero? ' ,'active');
+
+###########  secondary country added phy_info - By Rohini on 19-09-2017 ###########
+
+ALTER TABLE pharmacyportal.phy_info
+ ADD secondary_country VARCHAR(50) AFTER secondary_state;
+ ADD secondary_zip_code VARCHAR(12) AFTER secondary_country;
+
+ 
+ 
+############# wrongly created column name changed - by Vijayakumar @ 19-09-2017
+ALTER TABLE pharmacyportal.physician_assistant CHANGE row_id physician_assistant_id INT(10) AUTO_INCREMENT NOT NULL;
+ALTER TABLE pharmacyportal.admin_account CHANGE row_id admin_id INT(10) AUTO_INCREMENT NOT NULL; 
+ 
+##########  Removed NOT NULL in many fields - Changed by Vijayakumar @ 21-09-2017
+drop table `admin_account`;
+CREATE TABLE `admin_account` (
+  admin_id	Int(10) NOT NULL AUTO_INCREMENT,
+  pharmacy_id	Int(10) NOT NULL DEFAULT '0',
+  status	VARCHAR (15) NOT NULL DEFAULT '',
+  type	VARCHAR (15) NOT NULL DEFAULT '',
+  date_of_registration	DATE DEFAULT '0000-00-00',
+  first_name	VARCHAR(50) NOT NULL DEFAULT '',
+  last_name	VARCHAR(50) NOT NULL DEFAULT '',
+  middle_name	VARCHAR(10) DEFAULT '',
+  name	VARCHAR(110) NOT NULL DEFAULT '',
+  email	VARCHAR(255) NOT NULL DEFAULT '',
+  password	VARBINARY(100) NOT NULL DEFAULT '',
+  phone	VARCHAR(15) DEFAULT '',
+  mobile	VARCHAR(15) DEFAULT '',
+  password_reset_date	DATE DEFAULT '0000-00-00',
+  login_attempts	INT(10)  DEFAULT '0',
+  login_locked_date	DATE DEFAULT '0000-00-00',
+  security_question_number int(10)  DEFAULT '0',
+  security_answer	VARCHAR(50) DEFAULT '',
+  security_question_number2	INT(10)  DEFAULT '0',
+  security_answer2	VARCHAR(50)  DEFAULT '',
+  forgot_password_attempts	INT(10),
+  forgot_pwd_locked_date	DATE DEFAULT '0000-00-00',
+  PRIMARY KEY (`admin_id`)
+); 
+
+########## Create Table Patient - By Ponnusamy @ 25-09-2017 ########
+
+CREATE TABLE `patient_profile` (
+  patient_id	Int(10) NOT NULL AUTO_INCREMENT,
+  physician_id INT(10)  NOT NULL  DEFAULT '0',
+  patient_code	VARCHAR(15)  DEFAULT '',
+  first_name	VARCHAR(50) NOT NULL DEFAULT '',
+  last_name	VARCHAR(50) NOT NULL DEFAULT '',
+  middle_name	VARCHAR(10)  DEFAULT '',
+  patient_name	VARCHAR(110) NOT NULL DEFAULT '',
+  previous_signon	DATETIME  DEFAULT '0000-00-00',
+  status	VARCHAR(15) NOT NULL DEFAULT '',
+  password	VARBINARY(100)  DEFAULT '',
+  phone	VARCHAR(15) NOT NULL DEFAULT '',
+  email	VARCHAR(255)  DEFAULT '',
+  mobile	VARCHAR(15) NOT NULL DEFAULT '',
+  password_reset_date	DATE DEFAULT '0000-00-00',
+  login_attempts	INT(10)  DEFAULT '0',
+  login_locked_date	DATE  DEFAULT '0000-00-00',
+  security_question_number	int(10)  DEFAULT '0',
+  security_answer	VARCHAR(50) DEFAULT '',
+  security_question_number2	int(10)  DEFAULT '0',
+  security_answer2	VARCHAR(50) DEFAULT '',
+  forgot_password_attempts	INT  DEFAULT '0',
+  forgot_pwd_locked_date	DATE  DEFAULT '0000-00-00',
+  notify_no  	VARCHAR(50)  DEFAULT '',
+  rx_notify	VARCHAR(50) DEFAULT '',
+  refill_renewal	VARCHAR(50) DEFAULT '',
+  date_of_birth	DATE DEFAULT '0000-00-00',
+  gender	CHAR(1) DEFAULT '',
+  allergies	text,
+  other_medications	text,
+  medical_conditions	text ,
+  critical_comments	text ,
+  drivers_license	VARCHAR(20)  DEFAULT '',
+  license_expiration_date	Date  DEFAULT '0000-00-00',
+  SSN	VARCHAR(11) DEFAULT '',
+  Date_registered	Date DEFAULT '0000-00-00',
+  updated_by INT(10)  DEFAULT '0',
+  updated_date DATE DEFAULT '0000-00-00',
+  updated_by_type VARCHAR(50)   DEFAULT '',
+  PRIMARY KEY (`patient_id`)
+); 
+
+########## Add column patient_profile - By Ponnusamy @ 25-09-2017 ########
+
+ALTER TABLE pharmacyportal.patient_profile
+  ADD `address` text ,
+  ADD `city` varchar(25) NOT NULL DEFAULT '',
+  ADD `state` varchar(3) NOT NULL DEFAULT '',
+  ADD `zip_code` varchar(12) DEFAULT '',
+  ADD `country` varchar(200) NOT NULL DEFAULT '',
+  ADD `drivers_license_state` varchar(3) NOT NULL DEFAULT '';
+
+########## Change column phy_profile - By Ponnusamy @ 26-09-2017 ########
+
+ALTER TABLE phy_profile
+  CHANGE dea dea	VARCHAR(25)  DEFAULT '',
+  CHANGE npi npi	VARCHAR(25)  DEFAULT '',
+  CHANGE upin upin	VARCHAR(25)  DEFAULT '',
+  CHANGE state_license state_license	VARCHAR(25)  DEFAULT '',
+  CHANGE medicaid medicaid	VARCHAR(25)  DEFAULT '',
+  CHANGE dps dps	VARCHAR(25)  DEFAULT '';
+
+
+############  Credit Card type Master records -- By Vijayakumar @ 27-09-2017 #########
+insert into `card_type_master`(`id`,`cardtype`,`isActive`) values (1,'American Express','Y');
+insert into `card_type_master`(`id`,`cardtype`,`isActive`) values (2,'Maestro Card','Y');
+insert into `card_type_master`(`id`,`cardtype`,`isActive`) values (3,'Master Card','Y');
+insert into `card_type_master`(`id`,`cardtype`,`isActive`) values (4,'Visa','Y');
+
+ 
+##################################### Modified on Sep 26,2017 by shalini for locked out time for all accounts#################################
+ALTER TABLE phy_info modify login_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE phy_info modify forgot_pwd_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE phy_info modify password_reset_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE physician_assistant modify login_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE physician_assistant modify forgot_pwd_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE physician_assistant modify password_reset_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE admin_account modify login_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE admin_account modify forgot_pwd_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE admin_account modify password_reset_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ 
+
+
+ ########## Add column patient_profile - By Ponnusamy @ 25-09-2017 ########
+
+ALTER TABLE pharmacyportal.patient_profile
+  ADD `pregnancyprecaution` varchar(3)  DEFAULT '';
+ 
+ 
+ 
+ 
+#######################  File upload Tables By Vijayakumar @ 28-09-2017 ####################################################
+CREATE TABLE phy_fileupload (
+   file_id INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+   physician_id INT(10) NOT NULL,
+   original_file_name VARCHAR(200) NOT NULL,
+   stored_file_name VARCHAR(200) NOT NULL,
+   file_type VARCHAR(5) NOT NULL,
+   description TEXT ASCII,
+   uploaded_date DATE NOT NULL,
+   uploaded_by INT(10) NOT NULL,
+   user_type VARCHAR(10) NOT NULL,
+  PRIMARY KEY (file_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+
+CREATE TABLE physician_assistant_fileupload (
+   file_id INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+   physician_assistant_id INT(10) NOT NULL,
+   original_file_name VARCHAR(200) NOT NULL,
+   stored_file_name VARCHAR(200) NOT NULL,
+   file_type VARCHAR(5) NOT NULL,
+   description TEXT ASCII,
+   uploaded_date DATE NOT NULL,
+   uploaded_by INT(10) NOT NULL,
+   user_type VARCHAR(10) NOT NULL,
+  PRIMARY KEY (file_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+
+CREATE TABLE admin_fileupload (
+   file_id INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+   admin_id INT(10) NOT NULL,
+   original_file_name VARCHAR(200) NOT NULL,
+   stored_file_name VARCHAR(200) NOT NULL,
+   file_type VARCHAR(5) NOT NULL,
+   description TEXT ASCII,
+   uploaded_date DATE NOT NULL,
+   uploaded_by INT(10) NOT NULL,
+   user_type VARCHAR(10) NOT NULL,
+  PRIMARY KEY (file_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+CREATE TABLE patient_fileupload (
+   file_id INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+   patient_id INT(10) NOT NULL,
+   original_file_name VARCHAR(200) NOT NULL,
+   stored_file_name VARCHAR(200) NOT NULL,
+   file_type VARCHAR(5) NOT NULL,
+   description TEXT ASCII,
+   uploaded_date DATE NOT NULL,
+   uploaded_by INT(10) NOT NULL,
+   user_type VARCHAR(10) NOT NULL,
+  PRIMARY KEY (file_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+
+########  One missing column added and not null constrain removed from one column in patient table By Vijayakumar @ 04-Oct-2017
+alter table patient_profile add pregnancyprecaution varchar(5);
+alter table patient_profile modify column mobile varchar(15);
+
+############  patient_old_password -- By Shalini @ 28-09-2017 #########
+CREATE TABLE `patient_old_password` (
+  `row_id` int(10) NOT NULL AUTO_INCREMENT,
+  `patient_id` int(10) NOT NULL DEFAULT '0',
+  `password` varbinary(100) NOT NULL DEFAULT '',
+  `date_moved` date DEFAULT '0000-00-00',
+  PRIMARY KEY (`row_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
+
+ALTER TABLE patient_profile modify login_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE patient_profile modify forgot_pwd_locked_date DATETIME DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE patient_profile modify password_reset_date DATETIME DEFAULT '0000-00-00 00:00:00';
+
+######## user type in file upload tables width increased to support 'Super Admin' and 'Physician Assistant' to stroed.
+######## query by Vijayakumar @ 05-oct-2017
+ALTER TABLE `physician_assistant_fileupload` CHANGE `user_type` user_type VARCHAR(20) NOT NULL;
+ALTER TABLE `admin_fileupload` CHANGE `user_type` user_type VARCHAR(20) NOT NULL;
+ALTER TABLE `phy_fileupload` CHANGE `user_type` user_type VARCHAR(20) NOT NULL;
+ALTER TABLE `patient_fileupload` CHANGE `user_type` user_type VARCHAR(20) NOT NULL;
+
+
+############  group_master -- By Shalini @ 09-10-2017 #########
+CREATE TABLE `group_master` (
+  `group_id` int(10) NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(250) NOT NULL DEFAULT '',
+  `contact_name` varchar(110) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `phone` varchar(15) DEFAULT '',
+  `status` varchar(15) NOT NULL DEFAULT '',
+  `group_director_id` int(10) NOT NULL DEFAULT '0',
+  `last_updated_by` int(10) DEFAULT '0',
+  `last_updated_date` datetime DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(10) DEFAULT '0',
+  `created_date` datetime DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+############### instruction_manual table for uploading instruction manuals by admin and super admin
+############### created by Vijayakumar @ 9-oct-2017 
+CREATE TABLE instruction_manual (
+   file_id INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+   file_title VARCHAR(200) NOT NULL,
+   original_thumb_file_name  VARCHAR(200) NOT NULL,
+   stored_thumb_file_name VARCHAR(200) NOT NULL,
+   thumb_file_extension VARCHAR(5) NOT NULL,
+   original_file_name VARCHAR(200) NOT NULL,
+   stored_file_name VARCHAR(200) NOT NULL,
+   file_extension VARCHAR(5) NOT NULL,
+   description TEXT ASCII,
+   display_order int(5) NOT NULL,
+   admin_id INT(10) NOT NULL, 
+   uploaded_date DATE NOT NULL,
+   PRIMARY KEY (file_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+
+############# remove not null from phone column by vijayakumar @ 11-oct-2017
+alter table patient_profile modify phone varchar(15);
+
+
+############  group_director -- added by Shalini @ 11-10-2017 ############
+CREATE TABLE `group_director` (
+  `group_director_id` int(10) NOT NULL AUTO_INCREMENT,
+  `group_id` int(10) NOT NULL DEFAULT '0',
+  `status` varchar(15) NOT NULL DEFAULT '',
+  `date_of_registration` date DEFAULT '0000-00-00',
+  `first_name` varchar(50) NOT NULL DEFAULT '',
+  `last_name` varchar(50) NOT NULL DEFAULT '',
+  `middle_name` varchar(10) DEFAULT '',
+  `name` varchar(110) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `password` varbinary(100) NOT NULL DEFAULT '',
+  `phone` varchar(15) DEFAULT '',
+  `mobile` varchar(15) DEFAULT '',
+  `password_reset_date` datetime DEFAULT '0000-00-00 00:00:00',
+  `login_attempts` int(10) DEFAULT NULL,
+  `login_locked_date` datetime DEFAULT '0000-00-00 00:00:00',
+  `security_question_number` int(10) DEFAULT '0',
+  `security_answer` varchar(50) DEFAULT '',
+  `Security_question_number2` int(10) DEFAULT '0',
+  `security_answer2` varchar(50) DEFAULT '',
+  `forgot_password_attempts` int(10) DEFAULT '0',
+  `forgot_pwd_locked_date` datetime DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`group_director_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+############  group_director_old_password -- added by Shalini @ 11-10-2017 ############
+CREATE TABLE `group_director_old_password` (
+  `row_id` int(10) NOT NULL AUTO_INCREMENT,
+  `group_director_id` int(10) NOT NULL DEFAULT '0',
+  `password` varbinary(100) NOT NULL DEFAULT '0',
+  `date_moved` datetime DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`row_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+############  group_director_fileupload -- added by Shalini @ 11-10-2017 ############
+CREATE TABLE `group_director_fileupload` (
+  `file_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `group_director_id` int(10) NOT NULL,
+  `original_file_name` varchar(200) NOT NULL,
+  `stored_file_name` varchar(200) NOT NULL,
+  `file_type` varchar(5) NOT NULL,
+  `description` text CHARACTER SET latin1,
+  `uploaded_date` date NOT NULL,
+  `uploaded_by` int(10) NOT NULL,
+  `user_type` varchar(20) NOT NULL,
+  PRIMARY KEY (`file_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+############  group_master -- added by Shalini @ 12-10-2017 ############
+ALTER TABLE group_master DROP COLUMN group_director_id;
+
+################ group_id added in Physician table by Vijayakumar @ 12-10-2017 ##############
+alter table phy_info add column group_id int(10) not null default 0;
+
+################ group_master changed phone to mobile in Group Master by Shalini @ 13-10-2017 ##############
+ALTER TABLE `group_master` CHANGE COLUMN `phone` `mobile` varchar(15) DEFAULT '';
+
+
+#################  Removing Group id from physician table by vijayakumar @ 19-10-2017 ###################
+ALTER TABLE `phy_info` DROP COLUMN `group_id`;
+
+#################  Physician Group table created by vijayakumar @ 19-10-2017 ##################
+CREATE TABLE `phy_group` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `physician_id` int(10) NOT NULL,
+  `group_id` int(10) NOT NULL,
+  `status` varchar(15) NOT NULL,
+  `created_date` date NOT NULL,
+  `created_by` int(10) NOT NULL,
+  `created_user_type` varchar(20) NOT NULL,
+  `updated_date` date NOT NULL,
+  `updated_by` int(10) NOT NULL,
+  `updated_user_type` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+#################  prescriber_type_master table modified by shalini @ 24-10-2017 ##################
+ALTER TABLE `prescriber_type_master` modify COLUMN `prescriber_type` varchar(10) NOT NULL DEFAULT '';
+ALTER TABLE `prescriber_type_master` add COLUMN `pioneer_prescriber_type_id` nvarchar(100) DEFAULT '';
+truncate table prescriber_type_master;
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('0F9D48E2-D0F3-4E19-882C-0307B7B50D05','OD');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('48D83337-52C0-4FA5-8A7F-21F3F46A2DB3','D.O.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('282A05C9-A88E-42FB-9280-354C48DD0BC7','D.D.S.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('4870DA30-578E-4F17-8C09-4065A916DB50','F.N.P.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('695DFEE6-9B3F-4081-B79C-480330803F1A','CPP');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('04C34E27-197A-49B3-9437-488455CD085B','N.D.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('A9C4379C-BCA2-490E-8667-4A24BC5BD946','P.A.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('CEE81234-BBB2-4055-9BFA-56C7AC5BDCFC','RPh');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('9176C1C6-A0B4-4B4B-AAB5-5BDEEC208550','APRN');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('09F50514-6F3B-4750-A0DC-82E7B9857E06','DC APC');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('8D56A4DE-171E-43B3-9A56-92BF38348798','CRNA');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('15B0D7D5-0CE9-4F22-8E0B-9921E0806802','PharmD');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('4D6DC006-B023-4E50-BF9F-AE8AE8547A93','WHNP');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('A12DDDDE-F21C-469C-B3C2-BFDEF2DC176B','PhD');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('87A9FC9E-30FC-4AAA-8E41-C17EE0B87E10','ARNP');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('051A1005-3690-486B-AD92-C9FE2ACD0799','DPM');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('81145CFA-E7D3-4339-95DA-CEE0C533610A','CNP');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('56830F16-848D-48A4-AA84-E359AE862AB4','N.P.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('4AF52909-C267-44FD-BA05-E3A78A32273F','CDH');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('F612E886-0F96-433D-8E27-EB7F6E130F91','D.M.D.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('A54976C3-A068-4EC5-99BC-EF4F82FFFBBC','D.V.M.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('D139410D-1DF9-4F25-AFFF-F6F35F4E4C30','M.D.');
+insert into `prescriber_type_master` (pioneer_prescriber_type_id,prescriber_type) VALUES ('CA7B735E-6AAD-44AC-962F-FB1D66BA1011','CNM');
+
+#################  phy_info table modified by shalini @ 24-10-2017 ##################
+ALTER TABLE phy_info add `pioneer_uid` varchar(100) DEFAULT '';
+ALTER TABLE phy_info add `pioneer_response` int(2) DEFAULT '-1';
+
+#################  patient_profile table modified by shalini @ 24-10-2017 ##################
+ALTER TABLE patient_profile add `pioneer_uid` varchar(100) DEFAULT '';
+ALTER TABLE patient_profile add `pioneer_response` int(2) DEFAULT '-1';
+
+
+#################  pioneer.prescription.prescribeditemtype table added by shalini @ 31-10-2017 ##################
+CREATE TABLE `pioneer.prescription.prescribeditemtype` (
+  `prescribedItemTypeID` int(10) NOT NULL AUTO_INCREMENT,
+  `prescribedItemTypeText` varchar(25) NOT NULL DEFAULT '',
+  PRIMARY KEY (`prescribedItemTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+insert into `pioneer.prescription.prescribeditemtype` (prescribedItemTypeText) VALUES ('Drug Family');
+insert into `pioneer.prescription.prescribeditemtype` (prescribedItemTypeText) VALUES ('Specific Drug');
+insert into `pioneer.prescription.prescribeditemtype` (prescribedItemTypeText) VALUES ('Compound');
+insert into `pioneer.prescription.prescribeditemtype` (prescribedItemTypeText) VALUES ('IV');
+
+
+#################  Clinic id Moved from physician assistant to Physician table ###########
+################# updated by vijayakumar @ 2nd nov. 2017 ######################
+alter table physician_assistant drop column clinic_id;
+alter table phy_info add column clinic_id int(10) default '0';
+
+#################  pioneer.person.patientrxnotifytype table added by shalini @ 4-11-2017 ##################
+CREATE TABLE `pioneer.person.patientrxnotifytype` (
+  `rxNotifyTypeID` int(10) NOT NULL,
+  `rxNotifyTypeText` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`rxNotifyTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('0','Ask Patient?');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('1','Do not notify');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('2','Email');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('3','Text');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('4','Email, Text');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('5','IVR (Phone only)');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('6','Email, IVR');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('7','IVR, Text');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifytype`(rxNotifyTypeID ,rxNotifyTypeText) VALUES ('8','Email, IVR, Text');
+
+
+#################  pioneer.person.patientrxnotifyprovidertype table added by shalini @ 4-11-2017 ##################
+CREATE TABLE `pioneer.person.patientrxnotifyprovidertype` (
+  `rxProviderNotifyTypeID` int(10) NOT NULL,
+  `rxProviderNotifyTypeText` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`rxProviderNotifyTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('0','Custom');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('1','T­Mobile');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('2','Virgin Mobile');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('3','ATT');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('4','Sprint');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('5','Verizon');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('8','Boost');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('9','MetroPCS');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('10','Cricket');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('11','US Cellular');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('12','Viaero');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('13','Net10');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('14','Cellular One');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('15','Blue Grass Cellular');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('16','Northwest Missouri Cell');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('17','AIO Wireless');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('18','Pioneer Wireless');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('19','Thumb Cellular');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('20','CSpire');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('21','Carolina West');
+INSERT INTO pharmacyportal.`pioneer.person.patientrxnotifyprovidertype`(rxProviderNotifyTypeID,rxProviderNotifyTypeText) VALUES ('22','AIO/Cricket MMS');
+
+#################  add rxNotifyProviderTypeID to pharmacyportal.patient_profile table added by shalini @ 4-11-2017 ##################
+ALTER TABLE pharmacyportal.patient_profile  ADD `rxNotifyProviderTypeID` int(10) NOT NULL DEFAULT 0;
+ALTER TABLE pharmacyportal.patient_profile  ADD `syncStatus` int(10) NOT NULL DEFAULT 0;
+ALTER TABLE pharmacyportal.patient_profile  ADD `syncStatusChangedDate` date DEFAULT '0000-00-00';
+
+
+
+#################  pioneer.person.patientsyncstatustype table added by shalini @ 4-11-2017 ##################
+CREATE TABLE `pioneer.person.patientsyncstatustype` (
+  `syncStatusTypeID` int(10) NOT NULL,
+  `syncStatusTypeText` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`syncStatusTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+INSERT INTO pharmacyportal.`pioneer.person.patientsyncstatustype`(syncStatusTypeID,syncStatusTypeText) VALUES ('0','Not Enrolled');
+INSERT INTO pharmacyportal.`pioneer.person.patientsyncstatustype`(syncStatusTypeID,syncStatusTypeText) VALUES ('1','Recommended');
+INSERT INTO pharmacyportal.`pioneer.person.patientsyncstatustype`(syncStatusTypeID,syncStatusTypeText) VALUES ('2','Enrolled');
+INSERT INTO pharmacyportal.`pioneer.person.patientsyncstatustype`(syncStatusTypeID,syncStatusTypeText) VALUES ('3','Declined');
+INSERT INTO pharmacyportal.`pioneer.person.patientsyncstatustype`(syncStatusTypeID,syncStatusTypeText) VALUES ('4','Not Recommended');
+
+UPDATE pharmacyportal.patient_profile SET syncStatusChangedDate = date_registered;
+
+
+################# Email field added in clinic table added by vijayakumar @ 4-11-2017
+ALTER TABLE `clinic` ADD email VARCHAR(255) NOT NULL DEFAULT '';
+
+
+################# Group name length reducted in group master from 250 to 80 changed by vijayakumar @ 6-11-2017
+ALTER TABLE `group_master` CHANGE `group_name` group_name VARCHAR(80) NOT NULL;
+
+
+#################Start Pioneer Tables Created ################# added by shalini  @ 9-11-2017
+CREATE TABLE `pioneer.item.item` (
+itemid						varchar(100)  default '',
+locationid					varchar(100)  default '',
+itemtypeid					int(10)  default 0,
+itemname					varchar(100)  default '',
+printname					varchar(100)  default '',
+itemgroup					varchar(50)  default '',
+upc							varchar(100)  default '',
+ndc							varchar(20)  default '',
+manufacturer				varchar(50)  default '',
+departmentid				varchar(100)  default '',
+labeltypeid					int(10)  default 0,
+drugclassid					int(10)  default 0,
+deaschedule					int(10)  default 0,
+cpt							varchar(50)  default '',
+hcpc						varchar(50)  default '',
+brandequivalentndc			varchar(20)  default '',
+gcn							varchar(50)  default '',
+hicl						varchar(50)  default '',
+itemadministrationid		int(10)  default 0,
+dosageformid				int(10)  default 0,
+dispensingunitid			int(10)  default 0,
+unitsperlabel				int(10)  default 0,
+stocksize					decimal(18,9) default 0.00,
+packagetypeid				int(10)  default 0,
+strength					varchar(60)  default '',
+defaultdayssupply			int(10)  default 0,
+defaultdirections			text,
+issoldotc					int(10)  default 0,
+refrigerationtypeid			int(10)  default 0,
+compoundrecipetotalquantity	decimal(18,6) default 0.00,
+compoundquantitytypeid		int(10)  default 0,
+compoundmixingdirections	text,	
+compoundcost				decimal(18,9) default 0.00,
+compoundcostchangeddate		date default '0000-00-00',
+awp							decimal(18,9) default 0.00,
+awpchangeddate				date default '0000-00-00',
+mac							decimal(18,9) default 0.00,
+macchangeddate				date default '0000-00-00',
+msrp						decimal(18,9) default 0.00,
+msrpchangeddate				date default '0000-00-00',
+allowsubstitutions			int(10)  default 0,	
+usermonograph				text,
+usermonographspanish		text,
+criticalcomment				text,
+informationalcomment		text,
+hiddencomment				text,
+needsreview					int(10)  default 0,
+audithistory				text,
+statustypeid				varchar(100)  default '',
+statuschangedon				date default '0000-00-00',
+dateadded					date default '0000-00-00',
+changedon					date default '0000-00-00',
+changedby					varchar(100)  default '',
+changedat					varchar(100)  default '',
+manuallyentered				int(10)  default 0,
+legacynumber				varchar(50)  default '',
+lastcostpaid				decimal(18,9) default 0.00,
+compoundcalculatedcost		decimal(18,9) default 0.00,
+compoundcalculatedawp		decimal(18,9) default 0.00,
+compoundcalculatedmac		decimal(18,9) default 0.00,
+compoundflavorid			varchar(100)  default '',
+compoundminutestomake		decimal(18,9) default 0.00,
+compoundbeyondusedatevalue	decimal(18,9) default 0.00,
+compoundbeyondusedatetypeid	int(10)  default 0,
+inventorymanagedbylot		int(10)  default 0,
+alternateid					varchar(50)  default '',
+compoundadditionalcost		decimal(18,9) default 0.00,
+conversionlog				text,
+batchmethodtypeid			int(10)  default 0,	
+alwaysenterprice			int(10)  default 0,
+compoundawpoverride			decimal(18,9) default 0.00,
+compoundmacoverride			decimal(18,9) default 0.00,
+compoundcostoverride		decimal(18,9) default 0.00,
+isflex						int(10)  default 0,
+legacynumberretail			varchar(50)  default '',
+isdeleted					int(10)  default 0,
+receiveinventorytogrouptypeid	varchar(100)  default '',	
+itemidmergedto				varchar(100)  default '',
+blisterpacklabelfactor		int(10)  default 0,
+subforoverride				varchar(100)  default '',
+dispensingunitsperlabel		decimal(18,9) default 0.00,
+commondispensedsize			decimal(18,6) default 0.00,
+ingredienttransmittypeid	int(10)  default 0,
+alwaystaxasnonrx			int(10)  default 0,
+lookalikesoundaliketypeid	int(10)  default 0,
+upc12withcheckdigit			varchar(12)  default '',
+createdat					varchar(100)  default '',
+createdby					varchar(100)  default '',
+approvedby					varchar(100)  default '',
+sharedstatustypeid			int(10)  default 0,
+isiv						int(10)  default 0,
+packindividually			int(10)  default 0,
+labeloverridereportid		varchar(100)  default '',
+compoundtypeid				int(10)  default 0,
+snomedtypeid				varchar(15)  default '',
+compoundinventorygrouptypeid	varchar(100)  default '',
+centralneedsreview			int(10)  default 0,
+centralreviewby				varchar(100)  default '',
+centralreviewon				date default '0000-00-00',
+centralautoaddtolocations	int(10)  default 0,	
+changedonutc				date default '0000-00-00',
+agerestrictedyearsold		int(10)  default 0,
+centraladdedonutc			date default '0000-00-00',
+pharmacistsaleonly			int(10)  default 0,
+centralchangedonutc			date default '0000-00-00',
+blackboxwarningtypeid		int(10)  default 0,
+itemcentralkey				int(10)  default 0,
+centralstoresyncedonutc		date default '0000-00-00',
+iscentralstatus				int(10)  default 0,
+upn							varchar(50)  default '',
+marwarningtext				text,
+createdfromcatalogitemid	varchar(100)  default '',
+creationsourcetypeid		int(10)  default 0,
+specialhandling				int(10)  default 0,
+specialhandlingtext			text,	
+isunitdose					int(10)  default 0,
+primarycategoryid			varchar(100)  default '',
+immunizationreporttypeid	int(10)  default 0,
+salecomment					text,
+  PRIMARY KEY (`itemid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `pioneer.prescription.origintype` (
+  `origintypeid` int(10) NOT NULL AUTO_INCREMENT,
+  `origintypetext` varchar(50) NOT NULL DEFAULT '',
+  `ncpdpcode` int(10) NOT NULL default 0,
+  PRIMARY KEY (`origintypeid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `pioneer.item.dispensingunit` (
+  `dispensingunitid` int(10) NOT NULL AUTO_INCREMENT,
+  `dispensingunittext` varchar(100) NOT NULL DEFAULT '',
+  `ncpdpdispensingunitid` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`dispensingunitid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `pioneer.diagnosis.icd10` (
+  `icd10code` varchar(50) NOT NULL DEFAULT '',
+  `isheader` int(10) NOT NULL DEFAULT '0',
+  `shortdescription` varchar(100) NOT NULL DEFAULT '',
+  `longdescription` text,
+  PRIMARY KEY (`icd10code`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+create table `pioneer.fdb.medmedication` (
+medicationid					int(10)  default 0,
+routeddosageformmedicationid			int(10)  default 0,
+strength					varchar(15)  default '',
+strengthunitofmeasure				varchar(15)  default '',
+medicationdescription				varchar(70)  default '',
+clinicalformulationid				int(10)  default 0,
+clinicalformulationidassignmentcode		varchar(1)  default '',
+medicationnamesourcecode			varchar(1)  default '',
+referencefederallegendindicator			varchar(1)  default '',
+referencefederaldeaclasscode			varchar(1)  default '',
+referencemultisourcecode			varchar(1)  default '',
+referencegenericmedicationnamecode		varchar(1)  default '',
+referencegenericcomparativepricecode		varchar(1)  default '',
+referencegenericpricespreadcode			varchar(1)  default '',
+referenceinnovatorindicator			varchar(1)  default '',
+referencegenerictherapeuticequivalencecode	varchar(1)  default '',
+referencedesiindicator				varchar(1)  default '',
+referencedesi2indicator				varchar(1)  default '',
+medicationstatuscode				varchar(1)  default '',
+genericmedicationid				int(10)  default 0,
+  primary key (`medicationid`)
+) engine=innodb auto_increment=1 default charset=utf8;
+
+
+create table `pioneer.prescription.sig` (
+sigid						varchar(100)  default '',
+code						varchar(50)  default '',
+englishtext					varchar(400)  default '',
+spanishtext					varchar(400)  default '',
+legacynumber					varchar(50)  default '',
+quantity					decimal(9,4) default 0.00,
+frequency					decimal(9,4) default 0.00,
+totaldayssupply					int(10)  default 0,
+calculatedayssupply				int(10)  default 0,
+sigscheduledataid				varchar(100)  default '',
+othertext					varchar(400)  default '',
+sigtype						int(10)  default 0,
+changedat					varchar(100)  default '',
+changedonutc					date default '0000-00-00',
+bulkinsertedonutc				date default '0000-00-00',
+syncdeleted					int(10)  default 0,
+othertext2					varchar(400)  default '',
+othertext3					varchar(400)  default '',
+othertext4					varchar(400)  default '',
+othertext5					varchar(400)  default '',
+othertext6					varchar(400)  default '',
+  primary key (`sigid`)
+) engine=innodb auto_increment=1 default charset=utf8;
+#################End Pioneer Tables Created ################# added by shalini  @ 9-11-2017
+
+
+
+
+
+
+######################### prescription_master Table creation  By Vijayakumar @ 7-11-2017 ##############
+CREATE TABLE `prescription_master` (
+  `prescription_id` int(11) NOT NULL AUTO_INCREMENT,
+  `prescriber_order_number` varchar(100) DEFAULT NULL,
+  `physician_id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `clinic_id` int(11) NOT NULL,
+  `clinic_name` varchar(100) DEFAULT NULL,
+  `written_by` int(11) NOT NULL,
+  `written_by_name` varchar(100) DEFAULT NULL,
+  `prescription_date` date DEFAULT NULL,
+  `phy_address` text CHARACTER SET latin1,
+  `phy_city` varchar(25) DEFAULT NULL,
+  `phy_state` varchar(3) DEFAULT NULL,
+  `phy_zip_code` varchar(12) DEFAULT NULL,
+  `phy_country` varchar(200) DEFAULT NULL,
+  `phy_phone` varchar(15) DEFAULT NULL,
+  `phy_dea` varchar(25) DEFAULT NULL,
+  `phy_npi` varchar(25) DEFAULT NULL,
+  `phy_upin` varchar(25) DEFAULT NULL,
+  `phy_state_license` varchar(25) DEFAULT NULL,
+  `phy_medicaid` varchar(25) DEFAULT NULL,
+  `patient_name` varchar(100) DEFAULT NULL,
+  `patient_address` text CHARACTER SET latin1,
+  `patient_city` varchar(25) DEFAULT NULL,
+  `patient_state` varchar(3) DEFAULT NULL,
+  `patient_zip_code` varchar(12) DEFAULT NULL,
+  `patient_country` varchar(200) DEFAULT NULL,
+  `patient_date_of_birth` date NOT NULL,
+  `patient_mobile` varchar(15) DEFAULT NULL,
+  `patient_ssn` varchar(11) NOT NULL,
+  `allergies` text CHARACTER SET latin1,
+  `diagnosis` text CHARACTER SET latin1,
+  `patient_bill_to_id` int(11) NOT NULL,
+  `clinic_po` varchar(25) DEFAULT NULL,
+  `payment_type` varchar(50) DEFAULT NULL,
+  `payment_terms` text CHARACTER SET latin1 NOT NULL,
+  `name_on_card` varchar(50) DEFAULT NULL,
+  `credit_card_type` varchar(50) DEFAULT NULL,
+  `credit_card_number` varchar(25) DEFAULT NULL,
+  `cvc_code` varchar(5) DEFAULT NULL,
+  `billing_address_id` varchar(3) DEFAULT NULL,
+  `billing_name` varchar(100) DEFAULT NULL,
+  `billing_address` text CHARACTER SET latin1,
+  `billing_city` varchar(25) DEFAULT NULL,
+  `billing_state` varchar(3) DEFAULT NULL,
+  `billing_zip_code` varchar(12) DEFAULT NULL,
+  `billing_country` varchar(200) DEFAULT NULL,
+  `patient_ship_to_id` varchar(3) DEFAULT NULL,
+  `shipping_method` varchar(50) DEFAULT NULL,
+  `other_shipping_method` varchar(50) DEFAULT NULL,
+  `shipping_company` varchar(50) DEFAULT NULL,
+  `other_shipping_company` varchar(50) DEFAULT NULL,
+  `shipping_account_no` varchar(50) DEFAULT NULL,
+  `remove_signature` varchar(3) DEFAULT NULL,
+  `shipping_address_id` varchar(3) DEFAULT NULL,
+  `shipping_name` varchar(100) DEFAULT NULL,
+  `shipping_address` text CHARACTER SET latin1,
+  `shipping_city` varchar(25) DEFAULT NULL,
+  `shipping_state` varchar(3) DEFAULT NULL,
+  `shipping_zip_code` varchar(12) DEFAULT NULL,
+  `shipping_country` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`prescription_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `prescription_transaction` (
+  `prescription_tran_id` int(11) NOT NULL AUTO_INCREMENT,
+  `prescription_id` int(11) NOT NULL,
+  `rx_number` varchar(50) DEFAULT NULL,
+  `rx_status` varchar(50) DEFAULT NULL,
+  `written_date` date DEFAULT NULL,
+  `expire_date` date DEFAULT NULL,
+  `type` varchar(25) DEFAULT NULL,
+  `origin` varchar(25) DEFAULT NULL,
+  `item` int(11) NOT NULL,
+  `item_name` varchar(50) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `unit_name` varchar(25) NOT NULL,
+  `refills` int(11) DEFAULT NULL,
+  `refills_remaining` int(11) DEFAULT NULL,
+  `refills_filled` int(11) DEFAULT NULL,
+  `last_filled_date` date DEFAULT NULL,
+  `dwa` varchar(5) NOT NULL,
+  `auto` varchar(5) DEFAULT NULL,
+  `prn` varchar(5) DEFAULT NULL,
+  `icd10` varchar(50) DEFAULT NULL,
+  `sig_codes` varchar(50) DEFAULT NULL,
+  `tracking_number` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`prescription_tran_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+############ Adding delFlag for prescription transaction table by vijayakumar @ 15-11-2017 
+ALTER TABLE `prescription_transaction` ADD delFlag VARCHAR(1) DEFAULT 'N';
+ALTER TABLE `prescription_transaction` CHANGE `sig_codes` sig_codes VARCHAR(100);
+ALTER TABLE `prescription_transaction` CHANGE `item_name` item_name VARCHAR(100) NOT NULL;
+
+
+################# Start Pioneer Tables Created ################# added by shalini  @ 16-11-2017
+CREATE TABLE `pioneer.prescription.prioritytype` (
+  `prioritytypeid` int(10) NOT NULL AUTO_INCREMENT,
+  `prioritytypetext` varchar(50) NOT NULL DEFAULT '',
+  `prioritynotificationtypeid` int(10) NOT NULL DEFAULT '0',
+  `prioritytimetypeid` int(10) NOT NULL DEFAULT '0',
+  `prioritytypeidsequential` varchar(100) NOT NULL DEFAULT '',
+  `timeofday` time NOT NULL,
+  `priorityminutes` int(10) NOT NULL DEFAULT '0',
+  `issystem` int(10) NOT NULL DEFAULT '0',
+  `quickbutton` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`prioritytypeid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `pioneer.prescription.rxstatustype` (
+  `rxstatustypeid`  varchar(100) NOT NULL DEFAULT '',
+  `rxstatustypetext` varchar(50) NOT NULL DEFAULT '',
+  `isactivestatus` int(10) NOT NULL DEFAULT '0',
+  `statustypeenum` int(10) NOT NULL DEFAULT '0',
+  `keepinqueue` int(10) NOT NULL DEFAULT '0',
+  `showrxinqueue` int(10) NOT NULL DEFAULT '0',
+  `isreadytobesold` int(10) NOT NULL DEFAULT '0',
+  `includeonmar` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`rxstatustypeid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table `pioneer.item.deascheduletype` (
+  `deascheduletypeid` int(10) not null auto_increment,
+  `deascheduletypetext` varchar(50) not null default '',
+   `description` varchar(250) not null default '',
+  primary key (`deascheduletypeid`)
+) engine=innodb default charset=utf8;
+
+create table `pioneer.delivery.deliverymethod` (
+  `deliverymethodid` varchar(100) not null default '',
+  `deliverymethodtext` varchar(30) not null default '',
+   `deliverymethodenum` int(10) not null default '0',
+  primary key (`deliverymethodid`)
+) engine=innodb default charset=utf8;
+
+
+create table `pioneer.person.phonetype` (
+  `PhoneTypeID` varchar(100) not null default '',
+  `PhoneTypeText` varchar(50) not null default '',
+   `PhoneEnum` int(10) not null default '0',
+  primary key (`PhoneTypeID`)
+) engine=innodb default charset=utf8;
+
+################# End Pioneer Tables Created ################# added by shalini  @ 16-11-2017
+
+
+############ Order master table ############  added by vijayakumar @ 21-11-2017
+CREATE TABLE order_master (
+   order_id INT(11) AUTO_INCREMENT NOT NULL,
+   order_number VARCHAR(50) NOT NULL,
+   order_date DATE NOT NULL,
+   group_id INT(11) NOT NULL DEFAULT '0',
+   physician_id INT(11) NOT NULL DEFAULT '0',
+   patient_id INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (order_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+CREATE TABLE order_transaction (
+   transaction_id INT(11) AUTO_INCREMENT NOT NULL,
+   order_id INT(11) NOT NULL DEFAULT '0',
+   rx_number VARCHAR(50),
+   rx_status VARCHAR(50),
+   prescribed_name VARCHAR(100),
+   prescribed_drug VARCHAR(50),
+   prescribed_quantity INT(11) DEFAULT '0',
+   prescribed_unit VARCHAR(20),
+   dispensed_name VARCHAR(100),
+   dispensed_drug VARCHAR(50),
+   dispensed_quantity INT(11) DEFAULT '0',
+   dispensed_unit VARCHAR(20),
+   days_supply INT(3) DEFAULT '0',
+   quantity_remaining INT(11) DEFAULT '0',
+   refills_allowed INT(11) DEFAULT '0',
+   refills_filled INT(11) DEFAULT '0',
+   refills_remaining INT(11) DEFAULT '0',
+   last_filled_date DATE NOT NULL,
+   tracking_number VARCHAR(50) NOT NULL,
+  PRIMARY KEY (transaction_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+ALTER TABLE .`prescription_transaction` ADD days_supply INT(3) NOT NULL DEFAULT '0';
+
+
+################# Adding new fields by vijayakumar @ 21-11-2017 
+
+ALTER TABLE `prescription_transaction` ADD future_fill VARCHAR(3),
+  ADD priorty_type VARCHAR(25),
+  ADD script_type VARCHAR(10),
+  ADD previous_rx_number VARCHAR(50),
+  ADD prescriber_order_number VARCHAR(50);
+
+  
+ ################ Adding additional fields in Order Transaction Table by Vijayakumar @ 22-11-2017 ##########
+ 
+ ALTER TABLE `order_transaction` ADD prescription_tran_id INT(11) NOT NULL,
+  ADD priority_type VARCHAR(20),
+  ADD lot_number VARCHAR(20),
+  ADD lot_expiration_date DATE,
+  ADD rx_comments TEXT ASCII,
+  ADD completed_date DATE;
+  
+  
+##################### Credit card informations added in patient table by vijayakumar @ 23-11-2017
+ALTER TABLE patient_profile
+ ADD card_type int(3) DEFAULT '0',
+ ADD card_number VARCHAR(25),
+ ADD card_cvc_number VARCHAR(4),
+ ADD card_holder_name VARCHAR(120) DEFAULT '',
+ ADD Card_expiry_month VARCHAR(2) DEFAULT '',
+ ADD Card_expiry_year VARCHAR(4) DEFAULT '';
+ 
+ 
+ #################### INVOICE tables by vijayakumar @ 23-11-2017  ##############
+ DROP TABLE invoice_master;
+ CREATE TABLE invoice_master (
+   invoice_id INT(11) AUTO_INCREMENT NOT NULL,
+   invoice_number VARCHAR(50) NOT NULL,
+   invoice_date DATE NOT NULL,
+   rx_number VARCHAR(50) NOT NULL,
+   written_date DATE NOT NULL,
+   patient_id INT(11) NOT NULL,
+   physician_id INT(11) NOT NULL,
+   billing_name VARCHAR(100) NOT NULL,
+   billing_address VARCHAR(100) NOT NULL,
+   billing_city VARCHAR(25) NOT NULL,
+   billing_state VARCHAR(3) NOT NULL,
+   billing_zipcode VARCHAR(12) NOT NULL,
+   shipping_name VARCHAR(100) NOT NULL,
+   shipping_address VARCHAR(100) NOT NULL,
+   shipping_city VARCHAR(25) NOT NULL,
+   shipping_state VARCHAR(3) NOT NULL,
+   shipping_zipcode VARCHAR(12) NOT NULL,
+   subtotal decimal(18,2) NOT NULL DEFAULT '0',
+   tax decimal(18,2) NOT NULL DEFAULT '0',
+   total decimal(18,2) NOT NULL DEFAULT '0',
+  PRIMARY KEY (invoice_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+
+DROP TABLE invoice_transaction;
+CREATE TABLE invoice_transaction (
+   invoice_tran_id INT(11) AUTO_INCREMENT NOT NULL,
+   invoice_id INT(11) NOT NULL,
+   item TEXT ASCII NOT NULL,
+   quantity INT(11) NOT NULL DEFAULT '0',
+   awp decimal(18,2) NOT NULL DEFAULT '0',
+   total decimal(18,2) NOT NULL DEFAULT '0',
+   lot_number VARCHAR(50),
+   expiration_date DATE,
+  PRIMARY KEY (invoice_tran_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+  ################ Adding additional fields in Order Master Table by Shalini @ 23-11-2017 ##########
+ ALTER TABLE `order_master`  
+  add `shipping_address` text, 
+  add `shipping_city` varchar(25) DEFAULT NULL,
+  add `shipping_state` varchar(3) DEFAULT NULL,
+  add `shipping_zip_code` varchar(12) DEFAULT NULL;
+  
+  
+    ################ Remove identity from  phy_creditcard Table by Shalini @ 24-11-2017 ##########
+    ALTER TABLE phy_creditcard
+  modify `physician_id` int(10) NOT NULL DEFAULT '0';
+ 
+ /**DROP TABLE phy_creditcard;
+ CREATE TABLE `phy_creditcard` (
+  `physician_id` int(10) NOT NULL DEFAULT '0',
+  `card_type` text,
+  `card_number` text,
+  `card_holder_name` text,
+  `Card_expiry_month` text,
+  `Card_expiry_year` text,
+  `card_cvc_number` text,
+  PRIMARY KEY (`physician_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;**/
+
+################ Added Encryption and Descrption to Table phy_creditcard Table by Shalini @ 24-11-2017 ##########
+DROP TABLE phy_creditcard;
+
+CREATE TABLE `phy_creditcard` (
+  `physician_id` int(10) NOT NULL DEFAULT '0',
+  `card_type` longblob,
+  `card_number` longblob,
+  `card_holder_name` longblob,
+  `Card_expiry_month` longblob,
+  `Card_expiry_year` longblob,
+  `card_cvc_number` longblob,
+  PRIMARY KEY (`physician_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+SELECT physician_id,AES_DECRYPT(FROM_BASE64(card_type), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(card_number), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(card_holder_name), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(Card_expiry_month), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(Card_expiry_year), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(card_cvc_number), 'MySuperSecretKey') 
+from pharmacyportal.phy_creditcard;
+ 
+SELECT physician_id,TO_BASE64(AES_ENCRYPT(card_type, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(card_number, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(card_holder_name, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(Card_expiry_month, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(Card_expiry_year, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(card_cvc_number, 'MySuperSecretKey')) 
+from pharmacyportal.phy_creditcard;
+################End  Added Encryption and Descrption to Table phy_creditcard Table by Shalini @ 24-11-2017 ##########
+
+################ Added Encryption and Descrption to Table patient_profile Table by Shalini @ 24-11-2017 ##########
+ALTER TABLE pharmacyportal.patient_profile
+DROP COLUMN card_type,
+DROP COLUMN card_number,
+DROP COLUMN card_holder_name,
+DROP COLUMN Card_expiry_month,
+DROP COLUMN Card_expiry_year,
+DROP COLUMN card_cvc_number;
+
+ALTER TABLE patient_profile
+ add card_type longblob,
+ add card_number longblob,
+ add card_cvc_number longblob,
+ add card_holder_name longblob,
+ add card_expiry_month longblob,
+ add card_expiry_year longblob;
+
+SELECT patient_id,patient_name,AES_DECRYPT(FROM_BASE64(card_type), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(card_number), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(card_holder_name), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(Card_expiry_month), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(Card_expiry_year), 'MySuperSecretKey'),
+AES_DECRYPT(FROM_BASE64(card_cvc_number), 'MySuperSecretKey') 
+from pharmacyportal.patient_profile;
+ 
+SELECT patient_id,TO_BASE64(AES_ENCRYPT(card_type, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(card_number, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(card_holder_name, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(Card_expiry_month, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(Card_expiry_year, 'MySuperSecretKey')),
+TO_BASE64(AES_ENCRYPT(card_cvc_number, 'MySuperSecretKey')) 
+from pharmacyportal.patient_profile;
+
+################End  Added Encryption and Descrption to Table patient_profile Table by Shalini @ 24-11-2017 ##########
+  
+
+  
+  
+  ############ created and last updated details added all tables 
+alter table admin_account 
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table clinic 
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table group_director
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table group_master
+add created_user varchar(20),
+add last_updated_user varchar(20);
+
+alter table invoice_master
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table order_master
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table patient_profile
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table phy_info
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table physician_assistant
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+alter table prescription_master
+add created_by int(11), add created_user varchar(20), add created_date DATETIME,
+add last_updated_by int(11), add last_updated_user varchar(20), add last_updated_date DATETIME;
+
+
+update admin_account set created_by=0,last_updated_by=0;
+update clinic set created_by=0,last_updated_by=0;
+update group_director set created_by=0,last_updated_by=0;
+update invoice_master set created_by=0,last_updated_by=0;
+update order_master set created_by=0,last_updated_by=0;
+update patient_profile set created_by=0,last_updated_by=0;
+update phy_info set created_by=0,last_updated_by=0;
+update physician_assistant set created_by=0,last_updated_by=0;
+update prescription_master set created_by=0,last_updated_by=0;
+
+################ Modified Table order_transaction Table by Shalini @ 27-11-2017 ################
+ALTER TABLE order_transaction  modify `last_filled_date` DATE;
+ALTER TABLE order_transaction  modify `tracking_number` VARCHAR(50);
+
+
+################ Invoice Transaction table new column added by vijayakumar @ 28-11-2017 ##########
+ALTER TABLE `invoice_transaction` ADD days_supply INT(3) NOT NULL DEFAULT '0';
+ALTER TABLE invoice_master ADD remarks TEXT;
+
+################ Modified Table invoice_master,invoice_transaction Table by Shalini @ 29-11-2017 ################
+ALTER TABLE pharmacyportal.invoice_transaction DROP COLUMN awp;
+ALTER TABLE pharmacyportal.invoice_master add percentageSalesTaxAmountPaid decimal(18,2) NOT NULL DEFAULT '0';
+ALTER TABLE pharmacyportal.invoice_master add percentageSalesTaxAmountSubmitted decimal(18,2) NOT NULL DEFAULT '0';
+ALTER TABLE pharmacyportal.invoice_master add percentageSalesTaxRatePaid decimal(18,2) NOT NULL DEFAULT '0';
+ALTER TABLE pharmacyportal.invoice_master add percentageSalesTaxRateSubmitted decimal(18,2) NOT NULL DEFAULT '0';
+ALTER TABLE pharmacyportal.invoice_master add flatSalesTaxAmountPaid decimal(18,2) NOT NULL DEFAULT '0';
+ALTER TABLE pharmacyportal.invoice_master add flatSalesTaxAmountSubmitted decimal(18,2) NOT NULL DEFAULT '0';
+ALTER TABLE `invoice_transaction` ADD prescription_tran_id INT(11) NOT NULL;
+ALTER TABLE `invoice_transaction` ADD rx_number VARCHAR(50);
+
+################ Added Table pioneer.item.deaoverride added by Shalini @ 30-11-2017 ################
+CREATE TABLE `pioneer.item.deaoverride` (
+  `deaoverrideid` varchar(100) NOT NULL,
+  `gcn` varchar(50),
+  `statecode` char(2)
+  ,locationid varchar(100)
+  ,deaschedule int(10) NOT NULL DEFAULT '0'
+  ,drugofconcern int(10) NOT NULL DEFAULT '0'
+  ,changedon date DEFAULT '0000-00-00'
+  ,changedby varchar(100)
+  ,changedat varchar(100)
+  ,itemid varchar(100)
+  ,changedonutc date DEFAULT '0000-00-00'
+  ,centralchangedonutc date DEFAULT '0000-00-00'
+  ,applytoexpirationdate int(10) NOT NULL DEFAULT '0'
+  ,applytorefills int(10) NOT NULL DEFAULT '0'
+  ,applytopartialfills int(10) NOT NULL DEFAULT '0'
+  ,applytotransfers int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`deaoverrideid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+############### item control substance Y/N store by vijayakumar @ 01-12-2017 
+alter table prescription_transaction add control_substance char(1) not null;
+
+############### prescription_number added in prescription_master by shalini @ 02-12-2017 
+ALTER TABLE prescription_master DROP COLUMN prescriber_order_number;
+alter table prescription_master add prescription_number  INT(11);
+
+############### numberOfRefillsFilled added in invoice_transaction by shalini @ 04-12-2017 
+ALTER TABLE `invoice_transaction` ADD numberOfRefillsFilled INT(11) NOT NULL;
+
+
+############### rxtransactionstatustype table added in pioneer.prescription by shalini @ 04-12-2017 
+create table `pioneer.prescription.rxtransactionstatustype` (
+`rxtransactionstatustypeid` varchar(100) not null default '',
+`rxtransactionstatustypetext` varchar(50) not null default '',
+`statustypeenum` int(10) not null default '0',
+`defaultnextstatustypeid` varchar(100) not null default '',
+`showrxtransactioninqueue` int(10) not null default '0',
+`removefrominventory` int(10) not null default '0',
+`readytobesold` int(10) not null default '0',
+`isactive` int(10) not null default '0',
+`workfloworder` int(10) not null default '0',
+primary key (`rxtransactionstatustypeid`)
+) engine=innodb default charset=utf8;
+
+
+create table `pioneer.pointofsale.deliverystatustype` (
+  `deliverystatustypeid` int(10) not null,
+  `deliverystatustypetext` varchar(50) not null default '',
+  primary key (`deliverystatustypeid`)
+) engine=innodb default charset=utf8;
+
+
+create table `pioneer.pointofsale.paymenttype` (
+  `paymenttypeenum` int(10) not null,
+  `paymenttypetext` varchar(30) not null default '',
+  primary key (`paymenttypeenum`)
+) engine=innodb default charset=utf8;
+
+create table `pioneer.pointofsale.shipperstatustype` (
+  `shipperstatustypeid` int(10) not null,
+  `shipperstatustypetext` varchar(50) not null default '',
+  primary key (`shipperstatustypeid`)
+) engine=innodb default charset=utf8;
+
+
+create table `pioneer.pointofsale.shippertype` (
+  `shippertypeid` int(10) not null,
+  `shippertypetext` varchar(20) not null default '',
+  `isdeleted` int(10) not null,
+  `webserviceprod` varchar(200) default '',
+  `webservicedev` varchar(200) default '',
+  `urltrackingprod` varchar(200) default '',
+  `urltrackingdev` varchar(200) default '',
+  `regex` varchar(500) default '',
+  `accountname` varchar(500) default '',
+  `accountpassword` varchar(500) default '',
+  `accountkey` varchar(500) default '',
+  `accountnumber` varchar(500) default '',
+  `accountmeternumber` varchar(500) default '',
+  
+  primary key (`shippertypeid`)
+) engine=innodb default charset=utf8;
+
+
+ ALTER TABLE `order_transaction` ADD shipmentstatus varchar(50) default '';
+  ALTER TABLE `order_transaction` ADD shippingcompany varchar(50) default '';
+ 
+ 
+ ALTER TABLE `invoice_transaction` ADD paymentstatus  varchar(30) default '';
+ ALTER TABLE `invoice_transaction` ADD paymenttype  varchar(30) default '';
+ 
+############### fields added to table invoice_transaction by shalini @ 11-12-2017 
+ ALTER TABLE `invoice_transaction` ADD paymentdate  date DEFAULT '0000-00-00';
+ 
+ 
+########################## New Values updated to table security_question by shalini @ 15-12-2017 ###############################
+truncate table `security_question`;
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 1 ,'What is the first and last name of your first boyfriend or girlfriend?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 2 ,'Which phone number do you remember most from your childhood?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 3 ,'What was your favorite place to visit as a child?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 4 ,'Who is your favorite actor, musician, or artist?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 5 ,'What is the name of your favorite pet?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 6 ,'In what city were you born?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 7 ,'What high school did you attend?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 8 ,'What is the name of your first school?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 9 ,'What is your favorite movie?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 10 ,'What is your mother''s maiden name? ' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 11 ,'What street did you grow up on?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 12 ,'What was the make of your first car?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 13 ,'When is your anniversary?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 14 ,'What is your favorite color?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 15 ,'What is your father''s middle name?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 16 ,'What is the name of your first grade teacher?' ,'active');
+INSERT INTO pharmacyportal.security_question(   row_id  ,securityquestion  ,status) VALUES ( 17 ,'What was your high school mascot?' ,'active');
+
+
+
+
+########################  Table for uploading documents for Subtrance items per prescription item. By vijayakumar @ 22-dec-2017  
+CREATE TABLE subtance_item_documents (
+   id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL,
+   prescription_id INT(11) NOT NULL,
+   original_file_name VARCHAR(200) NOT NULL,
+   stored_file_name VARCHAR(200) NOT NULL,
+   file_type VARCHAR(5) NOT NULL,
+   scan CHAR(1) ASCII NOT NULL DEFAULT 'N',
+   fax CHAR(1) ASCII NOT NULL DEFAULT 'N',
+   is_hard_copy CHAR(1) ASCII NOT NULL DEFAULT 'N',
+   description TEXT ASCII,
+   uploaded_date DATE,
+   uploaded_by INT(11),
+   user_type VARCHAR(20),
+   verify_by INT(11),
+   verify_date DATE,
+   verify_user_type VARCHAR(20),
+  PRIMARY KEY (id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+########################  Refill Number added in order and invoice By shalini @ 26-dec-2017
+ALTER TABLE `order_transaction` 
+  ADD scriptType VARCHAR(10),
+  ADD refillNumber INT(11) NOT NULL DEFAULT '0';
+ 
+ALTER TABLE `invoice_transaction` 
+  ADD scriptType VARCHAR(10),
+  ADD refillNumber INT(11) NOT NULL DEFAULT '0';
+  
+alter table `prescription_master` modify 
+  `payment_terms` text CHARACTER SET latin1 NULL;
+  
+ ########################  prescription_transaction modified By shalini @ 03-jan-2018 
+  alter table `prescription_transaction` modify `sig_codes` text;
+  
+ ########################  added group_id to clinic By shalini @ 04-jan-2018 
+  alter table `clinic` add `group_id` int(10) NOT NULL DEFAULT '0';
+ 
+ ########################  added dispensed_itemid,dispensed_itemname,prescription_no to prescription_transaction By shalini @ 05-jan-2018 
+ alter table `prescription_transaction` add  dispensed_itemid VARCHAR(50)  AFTER item_name;
+ alter table `prescription_transaction` add  dispensed_itemname VARCHAR(100) AFTER dispensed_itemid;
+
+ 
+#update prescription_transaction  inner join `pioneerevent.medicationdispensed`  on prescription_transaction.rx_number =`pioneerevent.medicationdispensed`.RxNumber set prescription_transaction.dispensed_itemname=`pioneerevent.medicationdispensed`.drugname
+
+#update prescription_transaction  inner join `pioneerevent.medicationdispensed`  on prescription_transaction.rx_number =`pioneerevent.medicationdispensed`.RxNumber set prescription_transaction.dispensed_itemid = `pioneerevent.medicationdispensed`.pioneerrxitemid 
+
+alter table `prescription_transaction` add  prescription_no  INT(11) NOT NULL after rx_number;
+ 
+############  Add new column by vijayakumar @ 9th Jan.2018 
+ALTER TABLE prescription_master ADD cre8_prescription_no VARCHAR(20) AFTER prescription_number;
+### set previously added records to this values 
+### update prescription_master set cre8_prescription_no = concat('CRE8-', prescription_number);
+
+############  Add new column by shalini @ 12th Jan 2018 
+ALTER TABLE prescription_transaction ADD cre8_prescription_no VARCHAR(20) AFTER prescription_no;
+### set previously added records to this values 
+###UPDATE prescription_master T1,prescription_transaction T2 SET T2.cre8_prescription_no=concat(T1.prescription_number,'-', T2.prescription_no) WHERE T1.prescription_id = T2.prescription_id;
+############  Add new column by shalini @ 15th Jan 2018 
+ALTER TABLE prescription_transaction ADD comments text;
+update prescription_transaction set cre8_prescription_no=concat('CRE8-', cre8_prescription_no) 
+
+########### patient stautses changed to 'New', 'Approved' and 'Denied'.... (from Active and Inactive)
+########### query to change new values for status for existing records.  by vijayakumar @ 15-jan-2018  
+update patient_profile set status='Approved' where status='Active';
+update patient_profile set status='Denied' where status='Inactive';
+
+############  Added New Table group_fileupload for group logo by shalini @ 16th Jan 2018 
+CREATE TABLE `group_fileupload` (
+  `file_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(10) NOT NULL,
+  `original_file_name` varchar(200) NOT NULL,
+  `stored_file_name` varchar(200) NOT NULL,
+  `file_type` varchar(5) NOT NULL,
+  `description` text CHARACTER SET latin1,
+  `uploaded_date` date NOT NULL,
+  `uploaded_by` int(10) NOT NULL,
+  `user_type` varchar(20) NOT NULL,
+  PRIMARY KEY (`file_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+############  Added New Field to Table phy_info for physician by shalini @ 16th Jan 2018 
+alter table `phy_info` add useGroupLogo	Char(3)  DEFAULT '';
+
+##################  Adding location in Clinic by Vijayakumar @ 17th jan. 2018
+ALTER TABLE clinic ADD location VARCHAR(50) AFTER group_id;
+ALTER TABLE clinic ADD contact_name VARCHAR(50) AFTER location;
+
+############  Added New Field to Table prescription_master for prescription by shalini @ 16th Jan 2018 
+alter table `prescription_master` add useGroupLogo	Char(3)  DEFAULT '';
+
+################ new table physician clinic for storing multiple clinic for a physician by vijayakumar @ 17-jan-2018
+CREATE TABLE `phy_clinic` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `physician_id` int(10) NOT NULL,
+  `clinic_id` int(10) NOT NULL,
+  `delFlag` char(1) CHARACTER SET latin1 NOT NULL DEFAULT 'N',
+  `created_date` date NOT NULL,
+  `created_by` int(10) NOT NULL,
+  `created_user_type` varchar(20) NOT NULL,
+  `updated_date` date NOT NULL,
+  `updated_by` int(10) NOT NULL,
+  `updated_user_type` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+################### new field added to show physician name with group name by vijayakumar @ 18-jan-2018 
+ALTER TABLE phy_info ADD name_with_group_name VARCHAR(200) AFTER useGroupLogo;
+
+### updating existing records for physician name with group name field....
+# update phy_info p inner join phy_group pg on p.physician_id = pg.physician_id inner join group_master g on pg.group_id = g.group_id set p.name_with_group_name = concat(p.physician_name, " - ", g.group_name);
+# update phy_info p set p.name_with_group_name = p.physician_name where p.name_with_group_name is null;
+
+

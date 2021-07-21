@@ -1,0 +1,561 @@
+<%@ include file="../../../layout/taglib.jsp" %>
+
+<c:if test="${loginDetail.type != 'Patient'}">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<img class="img-responsive goSummary" src="${pageContext.request.contextPath}/resources/images/back_icon-3.png" title="Go to Summary">
+			
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<img class="img-responsive goNewRec" src="${pageContext.request.contextPath}/resources/images/add.png" title="Add new Patient">
+		</div>
+	</div>
+</c:if>
+		
+<form:form method="POST" action="SavePatientAccount" name="patientAccount" commandName="patientAccount"  enctype="multipart/form-data" >
+	<!-- page content -->
+   	<div class="">
+		<c:if test="${not empty message}">
+			<c:choose>
+				<c:when test="${saveStatus == 'true'}">
+					<div class="row">
+						<div class="col-sm-offset-1 col-sm-10  fontSize14 text-center">
+							<div class="alert alert-success fade in">
+								<a href="#" class="close" data-dismiss="alert">&times;</a> 
+									 &nbsp;&nbsp;&nbsp; ${message}
+							</div>
+						</div>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="row">
+						<div class="col-sm-offset-1 col-sm-10  fontSize14 text-center">
+							<div class="alert alert-danger fade in">
+								<a href="#" class="close" data-dismiss="alert">&times;</a> 
+								${message}
+							</div>
+						</div>
+					</div>
+				</c:otherwise>
+			</c:choose>
+		</c:if>
+	
+    	<div class="row">
+        	<div class="col-md-6 col-sm-6 col-xs-12">
+          		<div class="x_panel">
+               		<div class="x_title">
+	                   	<h2>Patient Profile</h2>
+	                   	<div class="clearfix"></div>
+                 	</div>
+                 	<div class="x_content x_title_padding">
+                 	
+						<div class="row">
+                    		<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+								<div class="row">
+									<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="first-name">First Name </label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="firstName" class="form-control" maxlength="50"  required="required" onkeyup="displayFullname('firstName', 'middleName', 'lastName', 'patientName' );" />
+									</div>		                        		
+	                      		</div>
+								<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label" for="middle-name">Middle Name</label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="middleName" class="form-control" maxlength="10" onkeyup="displayFullname('firstName', 'middleName', 'lastName', 'patientName' );" />
+	                        		</div>
+	                      		</div>
+	                      		<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="lastName">Last Name </label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="lastName" class="form-control" maxlength="50"  required="required" onkeyup="displayFullname('firstName', 'middleName', 'lastName', 'patientName' );" />
+	                        		</div>
+	                      		</div>
+	                    		<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label" for="patientName">Full Name </label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="patientName" class="form-control" maxlength="110" readonly="true" />
+	                        		</div>
+	                      		</div>
+								<div class="row">
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<label for="status" class="control-label required">Patient Status</label>
+									</div>
+									<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<c:choose>
+											<c:when test="${loginDetail.type == 'Patient'}">
+												<form:input path="status" class="form-control" readonly="true" />
+											</c:when>
+											<c:otherwise>
+												<form:select path="status" class="select2_single form-control">
+													<form:option value="">Select</form:option>
+													<form:option value="Active">Active</form:option>
+													<form:option value="Inactive">Inactive</form:option>
+												</form:select>
+											</c:otherwise>
+										</c:choose>
+									</div>
+								</div>	
+								<div class="row">
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<label for="status" class="control-label required">Sync Status</label>
+									</div>
+									<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										
+												<form:select path="syncStatus" class="select2_single form-control">
+													<form:options items="${patientSyncStatusTypeList}" itemLabel="syncStatusTypeText" itemValue="syncStatusTypeID" />
+												</form:select>
+											
+									</div>
+								</div>	  
+								
+								<div class="row">
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="statusChangedDate">Status Changed Date</label>
+									</div>
+									<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="syncStatusChangedDate" class="form-control calendarIcon" />
+									</div>
+								</div>	  
+							
+									                    		
+	                   		</div>
+						</div>
+	                 </div>
+				</div>
+           		
+				<!-- Primary Location -->
+            	<div class="x_panel">
+                	<div class="x_title">
+                    	<h2>Primary Address</h2>
+                    	<div class="clearfix"></div>
+                  	</div>
+                  	<div class="x_content x_title_padding">
+						<div class="row">
+	                    	<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+								<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label " for="street1">Street </label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+	                          			<form:input path="address" class="form-control" />
+	                        		</div>
+	                      		</div>
+								<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="city1">City </label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+	                          			<form:input path="city" class="form-control" maxlength="25" />
+	                        		</div>
+	                      		</div>
+	                      		<div class="row">
+	                        		<label for="state1" class="control-label col-md-3 col-sm-3 col-xs-12 required">State</label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:select path="state" class="select2_single form-control" id="state" >
+											<form:option value="">Select</form:option>
+											<form:options items="${stateList}" itemLabel="stateName" itemValue="stateCode"/>
+										</form:select>
+	                        		</div>
+	                      		</div>
+	                    		<div class="row">
+	                        		<label for="zip1" class="control-label col-md-3 col-sm-3 col-xs-12 ">Zip Code</label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+	                          			<form:input path="zipCode" class="form-control" maxlength="12" onkeypress="return isNumber(event)" />
+	                        		</div>
+	                      		</div>
+								<div class="row">
+									<label for="country" class="control-label col-md-3 col-sm-3 col-xs-12 ">Country</label>
+									<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="country" class="form-control" readonly="true" />
+									</div>
+								</div>
+                    		</div>
+						</div>
+                  	</div>
+				</div>
+
+				<!-- Contact Information -->
+				<div class="x_panel">
+                	<div class="x_title">
+                    	<h2>Contact Information</h2>
+                    	<div class="clearfix"></div>
+                  	</div>
+                  	<div class="x_content x_title_padding">
+						<div class="row">
+	                    	<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+								<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="mobile">Mobile  </label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+	                          			<form:input path="mobile" class="form-control" maxlength="15" onkeypress="return isNumber(event)" />
+	                        		</div>
+	                      		</div>
+								<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="email">Email </label>
+	                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<c:choose>
+											<c:when test="${loginDetail.type == 'Patient'}">
+												<form:input path="email" class="form-control" maxlength="255" readonly="true" />
+											</c:when>
+											<c:otherwise>
+												<form:input path="email" class="form-control" maxlength="255" />
+											</c:otherwise>
+										</c:choose>
+	                        		</div>
+	                      		</div>
+	                      		
+								<c:if test="${patientAccount.patientId eq 0}">
+									<div class="row">
+		                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="password">Password  </label>
+		                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+		                          			<form:password path="password" class="form-control" />
+		                        		</div>
+		                      		</div>
+								</c:if>
+                    		</div>
+						</div>
+                  	</div>
+				</div>
+
+
+
+				<!-- License Numbers -->
+				<div class="x_panel">
+                	<div class="x_title">
+                    	<h2>Identification</h2>
+                    	<div class="clearfix"></div>
+                  	</div>
+                  	<div class="x_content x_title_padding">
+						<div class="row">
+	                    	<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+								<div class="row">
+									<label class="col-md-3 col-sm-3 col-xs-12 control-label" for="driversLicense">Drivers License</label>
+									<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="driversLicense" class="form-control" maxlength="15" />
+									</div>	                        		
+	                      		</div>
+								<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label" for="driversLicenseState">License State</label>
+									<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:select path="driversLicenseState" class="select2_single form-control" id="driversLicenseState" >
+											<form:option value="0">Select</form:option>
+											<form:options items="${stateList}" itemLabel="stateName" itemValue="stateCode" />
+										</form:select>
+									</div>
+	                      		</div>
+	                      		
+	                      		<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label" for="licenseExpDate">Expiration Date</label>
+									<div class="col-md-9 col-sm-9 col-xs-12 input-group form-group" style="padding: 0px 8px 0px;">
+										<form:input path="licenseExpDate" class="form-control calendarIcon" />
+									</div>
+	                      		</div>
+	                      		
+	                    		<div class="row">
+	                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="ssn" >SSN </label>
+									<div class="col-md-9 col-sm-9 col-xs-12 form-group">
+										<form:input path="ssn" class="form-control"  onkeypress="return isNumber(event)" />
+									</div>
+	                      		</div>
+                    		</div>
+						</div>
+                  	</div>
+				</div>
+			</div>
+			
+           	<div class="col-md-6 col-sm-6 col-xs-12">
+           	
+				<div class="x_panel">
+	            	<div class="x_title">
+	                	<h2>Profile Photo</h2>
+	                    <div class="clearfix"></div>
+					</div>
+	                <div class="x_content x_title_padding">
+						<div class="row form-group profile_img">
+				        	<div class="col-md-12 col-sm-12 col-xs-12" id="crop-avatar">
+			                    <c:choose>
+                         			<c:when test="${patientAccount.photoFile != null and patientAccount.photoFile != ''}">
+                         				<img class="" src="${pageContext.request.contextPath}/resources/${patientAccount.photoFile}" height="128" alt="Avatar">
+                         			</c:when>
+                         			<c:otherwise>
+										<img class="" src="${pageContext.request.contextPath}/resources/images/img.jpg" alt="Avatar" >
+                         			</c:otherwise>
+                         		</c:choose>
+							</div>
+						</div>
+						<div class="row form-group" >
+				        	<div class="col-md-12 col-sm-12 col-xs-12" id="ProfilePhoto">
+				            	<input type="file" id="file" name="patientPhoto" accept="image/x-png" >
+				            	<div class=" file-upload-errors"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+					
+				<div class="x_panel">
+                	<div class="x_title">
+                    	<h2>Physician</h2>
+                    	<div class="clearfix"></div>
+                  	</div>
+                  	<div class="x_content x_title_padding">
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12 profile_left profile-padding ">
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label required" for="street1">Physician Name </label>
+									<c:choose>
+										<c:when test="${loginDetail.type == 'Physician' or loginDetail.type == 'Physician Assistant'}">
+											<div class="col-md-8 col-sm-9 col-xs-12 form-group txtPadding">${physicianFullName}
+												<form:hidden path="physicianId" id="physicianId"/>
+												<form:hidden path="physicianName" id="physicianName" />
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="col-md-8 col-sm-9 col-xs-12 form-group">
+												<%-- <form:select path="physicianId" class="select2_single form-control">
+													<form:option value="0">Select</form:option>
+													<form:options items="${physicianList}" itemLabel="physicianName" itemValue="id" />
+												</form:select> --%>
+												
+												  <select class="autoCompleterPhysicianId select2_single form-control" style="width:100%;color:black;" name="autoCompleterPhysicianId"  id="autoCompleterPhysicianId"></select>
+												  <form:hidden path="physicianId" id="physicianId"/>
+												  <form:hidden path="physicianName" id="physicianName" />
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</div>
+                  		</div>
+                  	</div>
+				</div>
+
+           	
+				<!-- Other Informations -->
+            	<div class="x_panel">
+                  	<div class="x_content x_title_padding">
+						<div class="row">
+	                    	<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+								
+								<div class="row">
+									<label class="col-md-4 col-sm-4 col-xs-12 control-label" for="notifyNo">Notify # </label>
+									<div class="col-md-4 col-sm-4 col-xs-12 form-group">
+										<form:input path="notifyNo" class="form-control" />
+									</div>
+									<div class="col-md-4 col-sm-4 col-xs-12 form-group">
+										 <form:select path="rxNotifyProviderTypeID" class="select2_single form-control">
+											<form:options items="${rxNotifyProviderTypeList}" itemLabel="rxProviderNotifyTypeText" itemValue="rxProviderNotifyTypeID" />
+										</form:select>
+									</div>
+								</div>
+
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="rxnotify">Rx Notify </label>
+									<div class="col-md-8 col-sm-9 col-xs-12 form-group">
+									 	<form:select path="rxNotify" class="select2_single form-control">
+											<form:options items="${rxNotifyTypeList}" itemLabel="rxNotifyTypeText" itemValue="rxNotifyTypeID" />
+										</form:select>
+									
+									</div>
+								</div>
+								
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="renewal">Refill / Renewal </label>
+									<div class="col-md-8 col-sm-9 col-xs-12 form-group">
+										<form:select path="refillRenewal" class="select2_single form-control">
+											<form:option value="">Select</form:option>
+											<form:option value="New">New</form:option>
+											<form:option value="Refill">Refill</form:option>
+											<form:option value="Renewal">Renewal</form:option>
+										</form:select>
+									</div>
+								</div>
+
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="dob">Date of Birth </label>
+									<div class='col-md-4 col-sm-4 col-xs-10 input-group form-group' style="padding: 0px 8px 0px; float: left;">
+										<form:input path="dateOfBirth" class="form-control calendarIcon" />
+									</div>
+									<div class="col-md-1 col-sm-2 col-xs-6">
+										<label class=" control-label ">Age </label>
+									</div>
+									<div class="col-md-3 col-sm-2 col-xs-6">
+										<input type="text" class="form-control displayAge" >
+									</div>
+								</div>
+								
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label required" for="gender">Gender</label>
+									<div class="col-md-3 col-sm-3 col-xs-12 form-group" style="float: left">
+										<form:select path="gender" class="select2_single form-control">
+											<form:option value="">Select</form:option>
+											<form:option value="M">Male</form:option>
+											<form:option value="F">Female</form:option>
+										</form:select>
+									</div>
+								</div>
+								
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label"></label>
+									<div class="col-md-8 col-sm-9 col-xs-12 form-group" style="float: left;">
+										<div class="checkboxbox">
+											<form:checkbox path="pregnancyprecaution" value="Yes" />
+										</div>
+										<div class="checkboxValue control-label">Ignore Pregnancy precautions</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="allergies">Allergies </label>
+									<div class="col-md-8 col-sm-9 col-xs-12 form-group">
+										<form:textarea path="allergies" rows="3" class="form-control" />
+									</div>
+								</div>
+								
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="otherMedical">Other Medications </label>
+									<div class="col-md-8 col-sm-9 col-xs-12 form-group">
+										<form:textarea path="otherMedications" rows="3" class="form-control" />
+									</div>
+								</div>
+								
+								<div class="row">
+									<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="medicalCondition">Medical Conditions </label>
+									<div class="col-md-8 col-sm-9 col-xs-12 form-group">
+										<form:textarea path="medicalConditions" rows="3" class="form-control" />
+									</div>
+								</div>
+                    		</div>
+						</div>
+                  	</div>
+				</div>
+
+				<c:if test="${patientAccount.patientId gt 0}">
+					<div class="x_panel">
+	                	<div class="x_title">
+	                    	<h2>Documents</h2>
+	                    	<div class="clearfix"></div>
+	                  	</div>
+	                  	<div class="x_content x_title_padding">
+							<div class="row form-group">
+		                    	<div class="col-md-12 col-sm-12 col-xs-12 fileTagLoc">
+		                    		<input type="file" name="docFiles" />
+		                    	</div>
+		                    </div>
+							<div class="row form-group">
+		                    	<div class="col-md-12 col-sm-12 col-xs-12">
+		                    		<button type="button" class="btn btn-success uploadDocFile">Upload File</button>
+		                    	</div>
+		                    </div>
+	                  	
+							<div class="row col-md-12 col-sm-12 col-xs-12 table-responsive">
+								<table id="physicianDocFilesTable" class="table table-striped table-bordered">
+									<thead>
+										<tr class="heading_background">
+											<th>File Name</th>
+											<th>Uploaded on</th>
+											<th>User</th>
+											<th>User Type</th>
+											<th>Delete</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%-- <c:choose>
+											<c:when test="${not empty uploadedDocList}">
+												<c:forEach items="${uploadedDocList}" var="file">
+													<tr>
+														<td><a href="patientDocFileDownload?f=${file.fileId}&p=${patientId}">${file.originalFileName}</a></td>
+														<td>${file.uploadedDate}</td>
+														<td>${file.uploadedByName}</td>
+														<td>${file.userType}</td>
+														<td><input type="hidden" class="deleteFile" value="${file.fileId}" />
+															<button type="button" class="btn btn-success fileDeleteBtn">Delete</button></td>
+													</tr>
+												</c:forEach>
+											</c:when>
+											<c:otherwise>
+												<tr><td colspan="5" class="text-center">No file(s) uploaded</td></tr>
+											</c:otherwise>
+										</c:choose> --%>
+									</tbody>
+								</table>	
+							</div>
+	                  	</div>
+					</div>
+				</c:if>				
+			</div>
+		</div>
+
+        <div class="row form-group">
+			<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+				<div class="x_panel">
+                	<div class="x_title">
+                    	<h2>Critical comments</h2>
+                    	<div class="clearfix"></div>
+                  	</div>
+
+                  	<div class="x_content x_title_padding">
+						<div class="row">
+	                    	<div class="col-md-12 col-sm-12 col-xs-12 profile_left checkboxDiv">
+		                        <form:textarea path="criticalComments" cols="30" rows="5" class="form-control" />
+                    		</div>
+						</div>
+                  	</div>
+				</div>           		
+			</div>
+		</div>
+
+        <div class="row form-group">
+			<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+				<div class="x_panel">
+                 		<div class="x_content x_title_padding">
+                   		<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+								<button type="button"  class="btn btn-success" onClick="checkValues();" >Save</button>
+								<input type="submit" id="submitpatientprofileHidden" style="display: none;">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<c:if test="${loginDetail.type != 'Patient'}">
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12 formLink">
+					<!-- <button type="button" id="goSummary" class="btn btn-primary" >go to Summary</button> -->
+					<img class="img-responsive goSummary" src="${pageContext.request.contextPath}/resources/images/back_icon-3.png" title="Go to Summary">
+				</div>
+			</div>
+		</c:if>		
+		
+		
+	</div>
+	
+   	<form:hidden path="patientId" />
+   	<input type="hidden" id="err_firstname" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.first_name\')" />' />
+	<input type="hidden" id="err_lastname" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.last_name\')" />' />
+	<input type="hidden" id="err_status" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.status\')" />' />
+	<input type="hidden" id="err_street" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.street\')" />' />
+	<input type="hidden" id="err_city" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.city\')" />' />
+	<input type="hidden" id="err_state" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.state\')" />' />
+	<input type="hidden" id="err_zipcode" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.zipcode\')" />' />
+	<input type="hidden" id="err_ssn" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.ssn\')" />' />
+	<input type="hidden" id="err_phone" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.phone\')" />' />
+	<input type="hidden" id="err_email" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.email\')" />' />
+	<input type="hidden" id="err_emailformat" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.email_format\')" />' />
+	<input type="hidden" id="err_password" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.password\')" />' />
+	<input type="hidden" id="err_primary" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.primary\')" />' />
+	<input type="hidden" id="err_emailAlreadyExists" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.emailAlreadyExists\')" />' />
+	<input type="hidden" id="err_physician" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.physician\')" />' />
+	<input type="hidden" id="err_savingDB" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.savingDB\')" />' />
+	<input type="hidden" id="err_mobile" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.mobile\')" />' />
+	<input type="hidden" id="err_mobileformat" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.mobile_format\')" />' />
+	<input type="hidden" id="err_zip_format" value='<spring:eval expression="@physicianConfigurer.getProperty(\'error.zip_format\')" />' />
+	<input type="hidden" id="err_status" value='<spring:eval expression="@physicianConfigurer.getProperty(\'error.state\')" />' />
+	<input type="hidden" id="err_ssnformat" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.ssnformat\')" />' />
+	<input type="hidden" id="err_driving_license" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.driving_license\')" />' />
+	<input type="hidden" id="err_license_state" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.license_state\')" />' />
+	<input type="hidden" id="err_license_state_valid" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.license_state_valid\')" />' />
+	<input type="hidden" id="err_license_exp_date" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.license_exp_date\')" />' />
+	<input type="hidden" id="err_license_exp_date_exp" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.license_exp_date_exp\')" />' />
+	<input type="hidden" id="err_future_dob" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.future_dob\')" />' />
+	<input type="hidden" id="err_gender" value='<spring:eval expression="@patientConfigurer.getProperty(\'error.gender\')" />' />
+	
+</form:form>
+<script>
+var urlPath="${pageContext.request.contextPath}/";
+</script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/patient/patientAccount.js?v=6"></script>

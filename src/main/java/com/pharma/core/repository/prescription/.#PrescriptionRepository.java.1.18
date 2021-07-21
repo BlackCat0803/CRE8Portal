@@ -1,0 +1,699 @@
+package com.pharma.core.repository.prescription;
+
+import java.sql.Date;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.pharma.core.model.prescription.PrescriptionMaster;
+
+@Repository("prescriptionRepository")
+public interface PrescriptionRepository extends JpaRepository<PrescriptionMaster, Integer> {
+
+	
+	/*************  Admin and Super Admin Users Log-in Queries ***************/
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo%  GROUP BY pm.id ")
+	int countByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName,@Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p where pm.physicianId=pa.id "
+			+ "and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByFilterFromDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionDate <=:presriptionDate and pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByFilterToDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate, 
+			 @Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate,
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	
+	
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p where pm.physicianId=pa.id "
+			+ "and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByFilterFromDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionDate <=:presriptionDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByFilterToDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate, 
+			 @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo%  GROUP BY pm.id ")
+	int countByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate,
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	
+	
+	@Query("select c from PrescriptionMaster c order by c.id desc")
+	Page<PrescriptionMaster> getAllRecords(Pageable page);
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionNumber=:prescriptionNo "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> getByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName,
+			@Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate and "
+			+ "pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo%  "
+			+ "GROUP BY pm.id  order by pm.id desc")
+	Page<PrescriptionMaster> getByFilterFromDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate,@Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate <=:presriptionDate "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> getByFilterToDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate,@Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and "
+			+ "p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> getByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate,
+			@Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	
+
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> getByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName,
+			 @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id  order by pm.id desc")
+	Page<PrescriptionMaster> getByFilterFromDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate <=:presriptionDate "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> getByFilterToDate(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> getByFilter(@Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate,
+			 @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	
+	
+	/************************* Physician Log-in Queries ****************/
+	@Query("select  COALESCE(count(c),0)  from PrescriptionMaster c where c.physicianId=:id")	
+	int findByPhysicianId(@Param("id") int id);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id   ")
+	int countByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName,
+			@Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPhysicianFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate <=:presriptionToDate and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPhysicianFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and pm.prescriptionNumber=:prescriptionNo "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate,
+			@Param("prescriptionNo") int prescriptionNo,@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id   ")
+	int countByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPhysicianFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate <=:presriptionToDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPhysicianFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	
+	
+	
+	@Query("select c from PrescriptionMaster c where c.physicianId=:id order by c.id desc")	
+	Page<PrescriptionMaster> findByPhysicianId(@Param("id") int id, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			 @Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and pm.physicianId=:id and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate and "
+			+ "pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPhysicianFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate, @Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);	
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and pm.physicianId=:id and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPhysicianFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionToDate") Date presriptionToDate,@Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> findByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate,
+			@Param("prescriptionNo") int prescriptionNo,@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			 @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and pm.physicianId=:id and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPhysicianFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate,  
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);	
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and pm.physicianId=:id and "
+			+ "(pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPhysicianFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionToDate") Date presriptionToDate,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.physicianId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc")
+	Page<PrescriptionMaster> findByPhysicianFilter(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+		
+	
+	
+	
+	/********************  Group Director Log-in Queries ********************/
+	@Query("select  COALESCE(count(c),0)  from PrescriptionMaster c where c.groupId=:id")	
+	int findByGroupId(@Param("id") int id);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionNumber=:prescriptionNo "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName,
+			@Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate <=:presriptionDate "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate "
+			+ "and pm.prescriptionDate <=:presriptionToDate and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	
+	
+	
+
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate <=:presriptionDate "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate >=:presriptionDate "
+			+ "and pm.prescriptionDate <=:presriptionToDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	
+	@Query("select c from PrescriptionMaster c where c.groupId=:id order by c.id desc")	
+	Page<PrescriptionMaster> findByGroupId(@Param("id") int id, Pageable page);
+
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, 
+			@Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate,@Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate <=:presriptionDate and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate,@Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt,PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and pm.prescriptionNumber=:prescriptionNo "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id  order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, 
+			Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilterFromDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate <=:presriptionDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilterToDate(@Param("id") int id, @Param("physicianName") String physicianName, 
+			@Param("patientName") String patientName, @Param("presriptionDate") Date presriptionDate, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.groupId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByGroupFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate, @Param("presriptionToDate") Date presriptionToDate,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	
+	/******************************* Patient Log-in Queries **************/
+	@Query("select  COALESCE(count(c),0)  from PrescriptionMaster c where c.patientId=:id")	
+	int findByPatientId(@Param("id") int id);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pm.prescriptionNumber=:prescriptionNo "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilterWithoutDate(@Param("patientId") int patientId, @Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilterWithoutDate(@Param("patientId") int patientId, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pm.prescriptionDate >=:presriptionDate and pm.prescriptionNumber=:prescriptionNo "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilterFromDate(@Param("patientId") int patientId, @Param("presriptionDate") Date presriptionDate,
+			@Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pm.prescriptionDate <=:presriptionDate and pm.prescriptionNumber=:prescriptionNo "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilterToDate(@Param("patientId") int patientId, @Param("presriptionDate") Date presriptionDate,
+			@Param("prescriptionNo") int prescriptionNo, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate "
+			+ "and pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilter(@Param("patientId") int patientId, @Param("presriptionDate") Date presriptionDate, 
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionNo") int prescriptionNo,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pm.prescriptionDate >=:presriptionDate and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilterFromDate(@Param("patientId") int patientId, @Param("presriptionDate") Date presriptionDate,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pm.prescriptionDate <=:presriptionDate and pt.rxStatus like %:prescriptionstatus% "
+			+ "and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilterToDate(@Param("patientId") int patientId, @Param("presriptionDate") Date presriptionDate,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);
+
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id  and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:patientId and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate "
+			+ "and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id ")
+	int countByPatientFilter(@Param("patientId") int patientId, @Param("presriptionDate") Date presriptionDate, 
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo);	
+	
+	
+	@Query("select c from PrescriptionMaster c where c.patientId=:id order by c.id desc")	
+	Page<PrescriptionMaster> findByPatientId(@Param("id") int id, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.patientId=:id and pm.id=pt.prescriptionId and "
+			+ "pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id  order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientIdWithoutDate(@Param("id") int id, @Param("prescriptionNo") int prescriptionNo,   
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.patientId=:id and pm.id=pt.prescriptionId and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id  order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientIdWithoutDate(@Param("id") int id, @Param("prescriptionstatus") String prescriptionstatus, 
+			@Param("rxNo") String rxNo, Pageable page);
+	
+	
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.patientId=:id and pm.id=pt.prescriptionId and "
+			+ "pm.prescriptionDate >=:presriptionDate and pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id  order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientIdFromDate(@Param("id") int id, @Param("presriptionDate") Date presriptionDate, 
+			@Param("prescriptionNo") int prescriptionNo,@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.patientId=:id and pm.id=pt.prescriptionId and "
+			+ "pm.prescriptionDate <=:presriptionDate and pm.prescriptionNumber=:prescriptionNo and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientIdToDate(@Param("id") int id, @Param("presriptionDate") Date presriptionDate,
+			@Param("prescriptionNo") int prescriptionNo,@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:id and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pm.prescriptionNumber=:prescriptionNo and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id  order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientId(@Param("id") int id, @Param("presriptionDate") Date presriptionDate, 
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionNo") int prescriptionNo, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+	
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.patientId=:id and pm.id=pt.prescriptionId and "
+			+ "pm.prescriptionDate >=:presriptionDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id  order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientIdFromDate(@Param("id") int id, @Param("presriptionDate") Date presriptionDate, 
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.patientId=:id and pm.id=pt.prescriptionId and "
+			+ "pm.prescriptionDate <=:presriptionDate and pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% "
+			+ "GROUP BY pm.id order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientIdToDate(@Param("id") int id, @Param("presriptionDate") Date presriptionDate,
+			@Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, Pageable page);
+
+	@Query("select pm from PrescriptionMaster pm, PrescriptionTransaction pt, PhysicianAccount pa, PatientAccount p "
+			+ "where pm.physicianId=pa.id and pm.patientId=p.id and pm.id=pt.prescriptionId and "
+			+ "pm.patientId=:id and pm.prescriptionDate >=:presriptionDate and pm.prescriptionDate <=:presriptionToDate and "
+			+ "pt.rxStatus like %:prescriptionstatus% and pt.rxNumber like %:rxNo% GROUP BY pm.id  order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientId(@Param("id") int id, @Param("presriptionDate") Date presriptionDate, 
+			@Param("presriptionToDate") Date presriptionToDate, @Param("prescriptionstatus") String prescriptionstatus, @Param("rxNo") String rxNo, 
+			Pageable page);
+	
+	/*
+	---------------- Not used --------------- 
+	@Query("select pm from PrescriptionMaster pm, PhysicianAccount pa, PatientAccount p where pm.physicianId=pa.id and pm.patientId=p.id and "
+			+ "pm.patientId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%)  order by pm.id desc ")
+	Page<PrescriptionMaster> findByPatientFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			Pageable page);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PhysicianAccount pa, PatientAccount p where pm.physicianId=pa.id and pm.patientId=p.id and "
+			+ "pm.patientId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%)   ")
+	int countByPatientFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName,@Param("prescriptionNo") String prescriptionNo,@Param("prescriptionstatus") String prescriptionstatus);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PhysicianAccount pa, PatientAccount p where pm.physicianId=pa.id and pm.patientId=p.id and "
+			+ "pm.patientId=:id and (pa.physicianName like %:physicianName% and p.patientName like %:patientName%) and pm.prescriptionDate =:presriptionDate   ")
+	int countByPatientFilter(@Param("id") int id, @Param("physicianName") String physicianName, @Param("patientName") String patientName, 
+			@Param("presriptionDate") Date presriptionDate,@Param("prescriptionNo") String prescriptionNo,@Param("prescriptionstatus") String prescriptionstatus);
+	*/
+	
+	@Query("SELECT COALESCE(MAX(p.prescriptionNumber),0) from PrescriptionMaster p")
+	int getMaxPrescriptionNumber();
+	
+	//@Query("select count(pt) from PrescriptionTransaction pt where (pt.rxNumber is null or pt.rxNumber='') and  writtenDate>CURDATE()-2 and writtenDate<CURDATE() GROUP BY pt.prescriptionId ")
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt "
+			+ "where pm.id=pt.prescriptionId and pm.physicianId=:physicianId and (pt.rxNumber is null or pt.rxNumber='') and  pm.prescriptionDate>:fromDate and pm.prescriptionDate<=:toDate")
+	int fetchNewPrescriptionCountByPrescriptionDate( @Param("physicianId") int physicianId, @Param("fromDate") java.util.Date fromDate, @Param("toDate") java.util.Date toDate);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt "
+			+ "where pm.id=pt.prescriptionId and pm.physicianId=:physicianId and (pt.rxNumber is null or pt.rxNumber='') and  pm.prescriptionDate>:fromDate and pm.prescriptionDate<=:toDate")
+	int fetchNewPrescriptionWeekCountByPrescriptionDate( @Param("physicianId") int physicianId, @Param("fromDate") java.util.Date fromDate, @Param("toDate") java.util.Date toDate);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt "
+			+ "where pm.id=pt.prescriptionId and pm.physicianId=:physicianId and (pt.rxNumber is null or pt.rxNumber='') and  pm.prescriptionDate>:fromDate and pm.prescriptionDate<=:toDate")
+	int fetchNewPrescriptionMonthCountByPrescriptionDate( @Param("physicianId") int physicianId, @Param("fromDate") java.util.Date fromDate, @Param("toDate") java.util.Date toDate);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt "
+			+ "where pm.id=pt.prescriptionId and pm.groupId=:groupId and (pt.rxNumber is null or pt.rxNumber='')  and  pm.prescriptionDate>:fromDate and pm.prescriptionDate<=:toDate")
+	int fetchGroupNewPrescriptionCountByPrescriptionDate( @Param("groupId") int groupId, @Param("fromDate") java.util.Date fromDate, @Param("toDate") java.util.Date toDate);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt "
+			+ "where pm.id=pt.prescriptionId and pm.groupId=:groupId and (pt.rxNumber is null or pt.rxNumber='')  and  pm.prescriptionDate>:fromDate and pm.prescriptionDate<=:toDate")
+	int fetchGroupNewPrescriptionWeekCountByPrescriptionDate( @Param("groupId") int groupId, @Param("fromDate") java.util.Date fromDate, @Param("toDate") java.util.Date toDate);
+	
+	@Query("select  COALESCE(count(pm),0)  from PrescriptionMaster pm, PrescriptionTransaction pt "
+			+ "where pm.id=pt.prescriptionId and pm.groupId=:groupId and (pt.rxNumber is null or pt.rxNumber='')  and  pm.prescriptionDate>:fromDate and pm.prescriptionDate<=:toDate")
+	int fetchGroupNewPrescriptionMonthCountByPrescriptionDate( @Param("groupId") int groupId, @Param("fromDate") java.util.Date fromDate, @Param("toDate") java.util.Date toDate);
+	
+	
+	
+	
+	
+	/**********************  Prescription List Report Quries *************************/
+	/*
+	select m.prescription_number, t.written_date, t.expire_date, t.rx_number,p.physician_name,pat.patient_name,
+	t.item_name, t.origin, t.quantity, t.days_supply, t.refills, t.refills_remaining, t.refills_filled, t.rx_status
+	from prescription_master m left join prescription_transaction t on m.prescription_id = t.prescription_id left join phy_info p 
+	on m.physician_id = p.physician_id left join patient_profile pat on m.patient_id = pat.patient_id order by m.prescription_number
+	*/
+	
+	@Query("select  COALESCE(count(m),0)  from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% ")
+	int reportCountByFilter(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status, 
+			@Param("group") String group);
+
+	@Query("select  COALESCE(count(m),0)  from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% and t.writtenDate>=:presriptionFromDate")
+	int reportCountByFilterWithFromDate(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status,
+			@Param("group") String group, @Param("presriptionFromDate") Date presriptionFromDate);
+	
+	@Query("select  COALESCE(count(m),0)  from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% and t.writtenDate<=:presriptionToDate")
+	int reportCountByFilterWithToDate(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status,
+			@Param("group") String group, @Param("presriptionToDate") Date presriptionToDate);
+
+	@Query("select  COALESCE(count(m),0)  from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% "
+			+ "and t.writtenDate>=:presriptionFromDate and t.writtenDate<=:presriptionToDate")
+	int reportCountByFilterWithDate(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status,
+			@Param("group") String group, @Param("presriptionFromDate") Date presriptionFromDate, @Param("presriptionToDate") Date presriptionToDate);
+	
+	
+	
+	@Query("select m.prescriptionNumber, t.writtenDate, t.expireDate, t.rxNumber, p.physicianName, pat.patientName, t.itemName, o.origintypetext, "
+			+ "t.quantity, t.daysSupply, t.refills, t.refillsRemaining, t.refillsFilled, t.rxStatus "
+			+ "from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PrescriptionOriginType o, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and t.origin=o.origintypeid and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% "
+			+ "ORDER BY m.prescriptionNumber DESC ")
+	Page<Object[]> reportByFilter(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status,
+			@Param("group") String group, Pageable page);
+	
+	@Query("select m.prescriptionNumber, t.writtenDate, t.expireDate, t.rxNumber, p.physicianName, pat.patientName, t.itemName, o.origintypetext, "
+			+ "t.quantity, t.daysSupply, t.refills, t.refillsRemaining, t.refillsFilled, t.rxStatus "
+			+ "from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PrescriptionOriginType o, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and t.origin=o.origintypeid and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% "
+			+ "and t.writtenDate>=:presriptionFromDate ORDER BY m.prescriptionNumber DESC ")
+	Page<Object[]> reportByFilterWithFromDate(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status, 
+			@Param("group") String group, @Param("presriptionFromDate") Date presriptionFromDate, Pageable page);
+	
+	
+	@Query("select m.prescriptionNumber, t.writtenDate, t.expireDate, t.rxNumber, p.physicianName, pat.patientName, t.itemName, o.origintypetext, "
+			+ "t.quantity, t.daysSupply, t.refills, t.refillsRemaining, t.refillsFilled, t.rxStatus "
+			+ "from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PrescriptionOriginType o, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and t.origin=o.origintypeid and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% "
+			+ "and t.writtenDate<=:presriptionToDate ORDER BY m.prescriptionNumber DESC ")
+	Page<Object[]> reportByFilterWithToDate(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status, 
+			@Param("group") String group, @Param("presriptionToDate") Date presriptionToDate, Pageable page);
+	
+	@Query("select m.prescriptionNumber, t.writtenDate, t.expireDate, t.rxNumber, p.physicianName, pat.patientName, t.itemName, o.origintypetext, "
+			+ "t.quantity, t.daysSupply, t.refills, t.refillsRemaining, t.refillsFilled, t.rxStatus "
+			+ "from PrescriptionMaster m, PrescriptionTransaction t, PhysicianAccount p, PatientAccount pat, PrescriptionOriginType o, PhysicianGroup gph, GroupMaster g "
+			+ "where m.physicianId=p.id and m.patientId=pat.id  and m.id=t.prescriptionId and t.origin=o.origintypeid and gph.physicianId=p.id and g.id=gph.groupId and "
+			+ "p.physicianName like %:physician% and pat.patientName like %:patient% and t.rxStatus like %:status% and COALESCE(g.groupName, '') like %:group% "
+			+ "and t.writtenDate>=:presriptionFromDate and t.writtenDate<=:presriptionToDate ORDER BY m.prescriptionNumber DESC ")
+	Page<Object[]> reportByFilterWithDate(@Param("physician") String physician, @Param("patient") String patient, @Param("status") String status, 
+			@Param("group") String group, @Param("presriptionFromDate") Date presriptionFromDate, @Param("presriptionToDate") Date presriptionToDate, Pageable page);
+	
+
+	@Query("SELECT COALESCE(MAX(p.prescriptionNo),0) from PrescriptionTransaction p where prescriptionId=:prescriptionId")
+	int getMaxPrescriptionNumberCount( @Param("prescriptionId") int prescriptionId);
+
+}

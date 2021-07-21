@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" pageWidth="900" pageHeight="842" columnWidth="860" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="83d7de45-6e03-4542-869d-6f7946a984fb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="87"/>
+	<property name="ireport.y" value="350"/>
+	<parameter name="checkedImagePath" class="java.lang.String"/>
+	<parameter name="unCheckedImagePath" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="Company_Name" class="java.lang.String"/>
+	<parameter name="Company_add1" class="java.lang.String"/>
+	<parameter name="Company_add2" class="java.lang.String"/>
+	<parameter name="companyLogo" class="java.lang.String"/>
+	<field name="invoiceId" class="java.lang.Integer"/>
+	<field name="invoiceNo" class="java.lang.String"/>
+	<field name="invoiceDate" class="java.util.Date"/>
+	<field name="rxNumber" class="java.lang.String"/>
+	<field name="writtenDate" class="java.util.Date"/>
+	<field name="patientName" class="java.lang.String"/>
+	<field name="physicianName" class="java.lang.String"/>
+	<field name="patientId" class="java.lang.Integer"/>
+	<field name="physicianId" class="java.lang.Integer"/>
+	<field name="billingName" class="java.lang.String"/>
+	<field name="billingAddress" class="java.lang.String"/>
+	<field name="billingCity" class="java.lang.String"/>
+	<field name="billingState" class="java.lang.String"/>
+	<field name="billingZipcode" class="java.lang.String"/>
+	<field name="billingCountry" class="java.lang.String"/>
+	<field name="shippingName" class="java.lang.String"/>
+	<field name="shippingAddress" class="java.lang.String"/>
+	<field name="shippingCity" class="java.lang.String"/>
+	<field name="shippingState" class="java.lang.String"/>
+	<field name="shippingZipcode" class="java.lang.String"/>
+	<field name="shippingCountry" class="java.lang.String"/>
+	<field name="subtotal" class="java.lang.Double"/>
+	<field name="tax" class="java.lang.Double"/>
+	<field name="total" class="java.lang.Double"/>
+	<field name="items" class="java.util.List"/>
+	<field name="remarks" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="75" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="0" width="369" height="75" forecolor="#000000" backcolor="#FFFFFF" uuid="3a56919a-1134-4639-8020-06fc7f4306e5"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="20" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Invoice]]></text>
+			</staticText>
+			<image scaleImage="FillFrame" onErrorType="Blank">
+				<reportElement x="751" y="0" width="109" height="75" uuid="503452b7-230b-44c7-ae6a-723744635f64"/>
+				<imageExpression><![CDATA[$P{companyLogo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="483" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="860" height="20" uuid="2c8e842b-dc3b-4a7e-ad32-048ad6705ebd"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Company_Name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="22" width="860" height="20" uuid="966a9906-337f-4458-a322-1d85a35ead50"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Company_add1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="44" width="860" height="20" uuid="fbdecc50-cf7a-4271-adb0-755afff94f35"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Company_add2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="73" width="860" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="d5016107-7b6d-4748-a733-5a6388b048da"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="15" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Invoice Details Info]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="97" width="100" height="20" uuid="0d656331-2f64-40d0-a659-4447d64f52a9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Invoice #]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="97" width="269" height="20" uuid="f50356bc-0929-48b6-aa0d-6808cff5d9c6"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{invoiceNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="389" y="97" width="75" height="20" uuid="e0a10dc4-ecac-4a61-871b-8f351633ae7c"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Invoice Date]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="464" y="97" width="110" height="20" uuid="2a8b0eca-d51b-4634-adcf-a1319072f6fd"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{invoiceDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="117" width="100" height="20" uuid="f754b16f-1ba3-4e39-b15f-10cff06f991e"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Patient]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="117" width="269" height="20" uuid="dd5ce1da-eb22-4ff8-ad12-8bb338324b6e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="389" y="117" width="75" height="20" uuid="e9155a4f-02d7-4ec1-b8be-7379f101b763"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Prescriber]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="464" y="117" width="396" height="20" uuid="1078a421-9fe1-47ed-8f94-d675a3565370"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{physicianName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="169" width="100" height="20" uuid="b6a2fff9-1304-4839-bd35-33a0d4e24aa9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Billing Name]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="168" width="269" height="20" uuid="6896e769-b875-4d5b-bf12-fcd45297c3ba"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{billingName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="189" width="100" height="20" uuid="aa7c507d-3a23-4563-9579-ed45f6a13394"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="188" width="269" height="20" uuid="0220d338-0371-4966-8c85-152d8f897331"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{billingAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="209" width="100" height="20" uuid="994e90f9-5caf-47d0-9479-43f13ab942a0"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[City]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="208" width="269" height="20" uuid="bf0e05b4-0dda-4f68-9741-996dc56dfdbb"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{billingCity}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="229" width="100" height="20" uuid="7f63c6df-0201-494b-8bf1-9d2397f1ca05"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[State]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="228" width="269" height="20" uuid="e1a11561-adc1-4c5e-bc62-d7d9b1de331a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{billingState}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="308" width="100" height="20" uuid="fe59f350-e44a-4f3c-9dae-4257956db3aa"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Shipping Name]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="308" width="269" height="20" uuid="9de4642a-8a2f-4ea2-b1b0-b78666d07e8d"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shippingName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="328" width="100" height="20" uuid="afa1eb51-3622-4f7f-98dd-047412013e27"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="328" width="269" height="20" uuid="89d61638-18de-4294-8862-45dbe297f850"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shippingAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="348" width="100" height="20" uuid="ba54b26e-6380-45c3-a481-4ee0dd6870a7"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[City]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="348" width="269" height="20" uuid="7d1dbaaa-c0d4-4274-a4c9-560e7d105725"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shippingCity}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="368" width="100" height="20" uuid="1063694a-b3a8-4979-8cd3-0ee2f6a24547"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[State]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="368" width="269" height="20" uuid="dec5057a-cea1-4e31-8194-f747ba0ae6c1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{shippingState}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="426" width="860" height="57" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" uuid="c5a62f53-eae4-40ac-9c13-81e3a23e4f75"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{items})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Invoice_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="148" width="860" height="20" backcolor="#CCCCCC" uuid="58f57089-2edc-434c-9199-f25bdd2785cd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Billing Info]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="283" width="860" height="20" backcolor="#CCCCCC" uuid="f3b7ee1d-937e-4ecb-852a-c4f9da456900"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Shipping Info]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="590" y="97" width="81" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="9236dfc6-e21b-49db-95f6-39affd99ba49"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Written Date]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="671" y="96" width="189" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="b91ae920-e7f7-4aee-b86a-c68d49923e3e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{writtenDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="249" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="98fb0259-ec88-42d2-8bf1-aefde2236091"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Zip code]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="100" y="249" width="269" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="ec3daf56-d88f-4550-9c65-d265e9ecd1e1"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{billingZipcode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="388" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="1f10b13b-5a6c-4550-afda-f724465d0ef0"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Zip code]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="100" y="388" width="269" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="6efbf9fd-7ee0-43c5-ad67-9ac3bab38fed"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{shippingZipcode}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="77">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="1e0d0977-f321-4d04-a9d9-8972876df4a9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Remarks]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="269" height="77" uuid="8ff2e8b6-b14f-4609-91b1-4e72b7c91287"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{remarks}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="659" y="5" width="91" height="20" uuid="deb01c68-8587-43b7-89fb-c18735f9d804"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Sub total]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="750" y="5" width="110" height="20" uuid="4edf7ee7-78c3-4c42-9387-ae320b84ea1b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="659" y="25" width="91" height="20" uuid="5f9339df-15bd-4234-9283-04727f8a28c0"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Tax]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="750" y="25" width="110" height="20" uuid="bd00b29f-9e75-4301-a001-0d59b47ee5a1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="659" y="45" width="91" height="20" uuid="a4b2ba62-a7bc-4589-a7f7-f83137b3383d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="750" y="45" width="110" height="20" uuid="3bd63505-ad89-4f33-beb0-64d439ffd539"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph leftIndent="5" rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

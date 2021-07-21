@@ -1,0 +1,538 @@
+package com.pharma.core.pharmaservices.physicianservices;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.pharma.core.formBean.DocumentFileList;
+import com.pharma.core.formBean.LoginForm;
+import com.pharma.core.formBean.physician.PhysicianJSonObj;
+import com.pharma.core.formBean.physician.PhysicianProfile;
+import com.pharma.core.formBean.physician.PhysicianRegistration;
+import com.pharma.core.model.physician.PhysicianAccount;
+import com.pharma.core.model.physician.PhysicianCreditCardDetails;
+import com.pharma.core.model.physician.PhysicianFileUpload;
+import com.pharma.core.model.physician.PhysicianProfileInfo;
+import com.pharma.core.pharmaservices.pharmacygroupservices.GroupMasterService;
+import com.pharma.core.repository.admin.AdminAccountRepository;
+import com.pharma.core.repository.physician.PhysicianAccountRespository;
+import com.pharma.core.repository.physician.PhysicianAssistantAccountRespository;
+import com.pharma.core.repository.physician.PhysicianCreditCardRepository;
+import com.pharma.core.repository.physician.PhysicianProfileRespository;
+import com.pharma.core.util.PharmacyUtil;
+
+@Service("physicianAccountService")
+public class PhysicianAccountServiceImpl implements PhysicianAccountService  {
+	
+	@Autowired
+	PhysicianAccountRespository phyAccount;
+	
+	@Autowired
+	PhysicianAssistantAccountService assistantService;
+	
+	@Autowired
+	PhysicianProfileRespository phyProfile;
+	
+	@Autowired
+	PhysicianCreditCardRepository creditCardRepo;
+	
+	@Autowired
+	PhysicianFileUploadService fileUploadService;
+	
+	@Autowired
+	PhysicianAssistantAccountRespository assistantRepo;
+	
+	@Autowired
+	AdminAccountRepository adminRepo;
+	
+	@Autowired
+	GroupMasterService groupService;
+	
+	public PhysicianAccount register(PhysicianRegistration form) {
+		try {
+			PhysicianAccount acc = new PhysicianAccount();
+			acc.setFirstName(form.getFirstName());
+			acc.setLastName(form.getLastName());
+			acc.setEmail(form.getEmail());
+			acc.setPassword(form.getPassword());
+			acc.setMobile(form.getMobile());
+			acc.setPhone(form.getPhone());
+			acc.setCity(form.getCity());
+			acc.setState(form.getState());
+			acc.setZipCode(form.getZipCode());
+			acc.setCountry("USA");
+			
+			acc.setPhysicianName(acc.getFirstName().trim() + " " + acc.getLastName().trim());
+			acc.setStatus("New");
+			acc.setPreviousSignon(PharmacyUtil.getCurrentDateAndTime());
+			acc.setDateRegistrated(new java.sql.Date(new Date().getTime()));
+			
+			return phyAccount.save(acc);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public PhysicianAccount savePhysicianAccountProfile(PhysicianProfile form, CommonsMultipartFile photoFile, CommonsMultipartFile[] docFiles, 
+			String rootFilePath, LoginForm loggedInUser, HttpSession session) {
+		
+			try {
+				boolean isDenied = false;
+
+				PhysicianAccount acc = null;
+				
+				if(form.getPhysicianId() > 0) {
+					acc = phyAccount.findOne(form.getPhysicianId());
+					if (!"Denied".equalsIgnoreCase(acc.getStatus()) && ("Denied".equalsIgnoreCase(form.getStatus())) ) {
+						acc.setDeniedBy(loggedInUser.getUserid());
+						acc.setDeniedDate(new java.sql.Date(new Date().getTime()));
+						isDenied = true;
+					}
+					if (!"Approved".equalsIgnoreCase(acc.getStatus()) && ("Approved".equalsIgnoreCase(form.getStatus())) ) {
+						acc.setApprovedBy(loggedInUser.getUserid());
+						acc.setApprovedDate(new java.sql.Date(new Date().getTime()));
+					}
+					acc.setStatus(form.getStatus());
+				} else {
+					acc = new PhysicianAccount();
+					acc.setEmail(form.getEmail());
+					acc.setPassword(form.getPassword());
+					acc.setStatus("New");
+					acc.setDateRegistrated(new java.sql.Date(new Date().getTime()));
+				}
+				
+				if (!"Denied".equalsIgnoreCase(acc.getStatus())) {
+					acc.setFirstName(form.getFirstName());
+					acc.setLastName(form.getLastName());
+					acc.setMiddleName(form.getMiddleName());
+					acc.setMobile(form.getMobile());
+					acc.setPhone(form.getPhone());
+					acc.setCity(form.getCity());
+					acc.setState(form.getState());
+					acc.setZipCode(form.getZipCode());
+					acc.setCountry("USA");
+					acc.setPhysicianName(acc.getFirstName().trim() + " " + acc.getLastName().trim());
+					
+					acc.setPrescriberType(form.getPrescriberType());
+					acc.setPrescriberGroup(form.getPrescriberGroup());
+					acc.setFax(form.getFax());
+					acc.setPhone2(form.getPhone2());
+					acc.setPhone3(form.getPhone3());
+					acc.setAddress1(form.getAddress1());
+					acc.setPhysicianCode(form.getPhysicianCode());
+					
+					acc.setSecondaryAddress1(form.getAddress2());
+					acc.setSecondaryCity(form.getCity2());
+					acc.setSecondaryCountry("USA");
+					acc.setSecondaryState(form.getState2());
+					acc.setSecondaryZipCode(form.getZipCode2());
+					acc.setGroupId(form.getGroupId());
+				}
+				
+				PhysicianAccount doc = phyAccount.save(acc);
+
+				if (!"Denied".equalsIgnoreCase(acc.getStatus())) {
+					/* 
+					 * Saving record in phy_profile table
+					 */
+					PhysicianProfileInfo accProfile = new PhysicianProfileInfo();
+								
+					accProfile.setPhysicianId(doc.getId());
+					accProfile.setWebsite(form.getWebsite());
+					accProfile.setMarketer(form.getMarketer());
+					accProfile.setDea(form.getDea());
+					accProfile.setNpi(form.getNpi());
+					accProfile.setUpin(form.getUpin());
+					accProfile.setStateLicense(form.getStateLicense());
+					accProfile.setMedicaid(form.getMedicaid());
+					accProfile.setDps(form.getDps());
+					accProfile.setCommEmail(form.getCommEmail());
+					accProfile.setCommFax(form.getCommFax());
+					accProfile.setCommPhone(form.getCommPhone());
+					accProfile.setComments(form.getComments());
+					accProfile.setReqBeforeDays(form.getReqBeforeDays());
+					
+					phyProfile.save(accProfile);
+					
+					/* 
+					 * Saving record in phy_creditcard_details table
+					 */
+					try {
+						PhysicianCreditCardDetails phycc = new PhysicianCreditCardDetails();
+						
+						phycc.setPhysicianId(doc.getId());
+						phycc.setCardType(form.getCardType());
+						phycc.setCardNumber(form.getCardNumber());
+						phycc.setCardCvcNumber(form.getCardCvcNumber());
+						phycc.setCardHolderName(form.getCardHolderName());
+						phycc.setExpMonth(form.getExpMonth());
+						phycc.setExpYear(form.getExpYear());
+						
+						creditCardRepo.save(phycc);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
+					/*
+					 * Uploaded Files saving process
+					 */
+					if (photoFile.getSize() > 0) {
+						String folderName="physician";
+						String photoFileName="photo_"+doc.getId();
+						boolean isUploaded=PharmacyUtil.userPhotoUpload(photoFile, folderName, photoFileName, rootFilePath, doc.getId(), "");
+						if (isUploaded){
+							String oname=photoFile.getOriginalFilename();
+							String extension = oname.substring(oname.lastIndexOf('.') + 1, oname.length());
+							/* String savedPhotoFile= rootFilePath + File.separator + folderName + File.separator + photoFileName + "."+extension; */
+							
+							StringBuffer uploadedFile = new StringBuffer(PharmacyUtil.getFileUploadPath(rootFilePath, folderName, doc.getId(), ""));
+							uploadedFile.append( File.separator + photoFileName + "." + extension);
+							
+							fileUploadService.photoFileSave(doc.getId(), photoFile, uploadedFile.toString(), loggedInUser);
+							
+							//System.out.println("Photo uploaded ok");
+						} else {
+							//System.out.println("Photo not uploaded");
+						}
+					}
+				}
+				
+				// 'Denied' physician's Assistants has been inactivated 
+				if (isDenied) {
+					assistantService.setInactiveByPhysicianId(doc.getId(), loggedInUser);
+				}
+				return doc;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+	}
+	
+	
+	public PhysicianProfile getPhysicianData(int id, String filepath) {
+		
+		try {
+			PhysicianAccount acc = phyAccount.findOne(id);
+			
+			PhysicianProfile pro = new PhysicianProfile();
+			
+			pro.setPhysicianId(acc.getId());
+			pro.setFirstName(acc.getFirstName());
+			pro.setLastName(acc.getLastName()); 
+			pro.setMiddleName(acc.getMiddleName()); 
+			pro.setPhysicianName(acc.getPhysicianName()); 
+			pro.setEmail(acc.getEmail());
+			pro.setPassword(acc.getPassword());
+			pro.setMobile(acc.getMobile()); 
+			pro.setPhone(acc.getPhone()); 
+			pro.setCity(acc.getCity());	
+			pro.setState(acc.getState());
+			pro.setZipCode(acc.getZipCode());
+			pro.setPreviousSignon(acc.getPreviousSignon());
+			pro.setDateRegistrated(acc.getDateRegistrated());	
+			pro.setStatus(acc.getStatus());	
+			pro.setPasswordResetDate(acc.getPasswordResetDate());	
+			pro.setLoginAttempts(acc.getLoginAttempts());	
+			pro.setLoginLockedDate(acc.getLoginLockedDate());	
+			pro.setSecurityQuestionNumber2(acc.getSecurityQuestionNumber2());
+			pro.setSecurityQuestionNumber(acc.getSecurityQuestionNumber());	
+			pro.setSecurityAnswer(acc.getSecurityAnswer());	
+			pro.setSecurityAnswer2(acc.getSecurityAnswer2());
+			pro.setForgotPasswordAttempts(acc.getForgotPasswordAttempts());	
+			pro.setForgotPwdLockedDate(acc.getForgotPwdLockedDate());
+			pro.setPrescriberType(acc.getPrescriberType());	
+			pro.setPrescriberGroup(acc.getPrescriberGroup());
+			pro.setFax(acc.getFax());
+			pro.setPhone2(acc.getPhone2());	
+			pro.setPhone3(acc.getPhone3());	
+			pro.setAddress1(acc.getAddress1());
+			pro.setCountry(acc.getCountry());	
+			pro.setPhysicianCode(acc.getPhysicianCode());	
+			pro.setApprovedBy(acc.getApprovedBy());	
+			pro.setApprovedDate(acc.getApprovedDate());
+			pro.setDeniedBy(acc.getDeniedBy());	
+			pro.setDeniedDate(acc.getDeniedDate());	
+			
+			pro.setAddress2(acc.getSecondaryAddress1());
+			pro.setCity2(acc.getSecondaryCity());
+			pro.setState2(acc.getSecondaryState());
+			pro.setZipCode2(acc.getSecondaryZipCode());
+			pro.setGroupId(acc.getGroupId());
+			
+			if (acc.getGroupId() > 0)
+				pro.setGroupName( groupService.getGroupMasterDetails(acc.getGroupId()).getGroupName() );
+			else
+				pro.setGroupName("");
+
+			/* 
+			 * Getting data from phy_profile table
+			 */
+			PhysicianProfileInfo accProfile = phyProfile.findOne(id);
+			
+			if (accProfile != null) {
+				pro.setWebsite(accProfile.getWebsite());
+				pro.setMarketer(accProfile.getMarketer());
+				pro.setDea(accProfile.getDea());
+				pro.setNpi(accProfile.getNpi());
+				pro.setUpin(accProfile.getUpin());
+				pro.setStateLicense(accProfile.getStateLicense());
+				pro.setMedicaid(accProfile.getMedicaid());
+				pro.setDps(accProfile.getDps());
+				pro.setCommEmail(accProfile.getCommEmail());
+				pro.setCommFax(accProfile.getCommFax());
+				pro.setCommPhone(accProfile.getCommPhone());
+				pro.setComments(accProfile.getComments());
+				pro.setReqBeforeDays(accProfile.getReqBeforeDays());
+			}
+			
+			/* 
+			 * Getting data from phy_creditcard_details table
+			 */
+			PhysicianCreditCardDetails phycc = creditCardRepo.findOne(id);
+			if (phycc != null) {
+				pro.setCardType(phycc.getCardType());
+				pro.setCardNumber(phycc.getCardNumber());
+				pro.setCardCvcNumber(phycc.getCardCvcNumber());
+				pro.setCardHolderName(phycc.getCardHolderName());
+				pro.setExpMonth(phycc.getExpMonth());
+				pro.setExpYear(phycc.getExpYear());
+			}
+			pro.setPhotoFile(fileUploadService.photoNameByPhysicianId(id, filepath));
+			
+			return pro;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public String getPhysicianDataList(int draw, int start, int length, String searchTerm, int orderColumn, String orderDir, String physicianName, String clinicName, String status) {
+
+		if (physicianName == null) physicianName = "";
+		if (clinicName == null) clinicName = "";
+		if (status == null || status == "") status = "";
+		
+		int total = 0;
+		int pageNumber = 0;
+		try {
+			Pageable page = null;
+			Page<PhysicianAccount> physicianList = null;
+			
+			Direction dir = Direction.ASC;
+			if (orderDir.equalsIgnoreCase("desc"))
+				dir = Direction.DESC;
+
+			try {
+				if ("".equalsIgnoreCase(physicianName) && "".equalsIgnoreCase(clinicName) && "".equalsIgnoreCase(status)) {
+					total = (int) phyAccount.getAllRecords();
+				} else {
+					if (!"".equalsIgnoreCase(status))
+						total = phyAccount.findByStatusWithSearch(physicianName,  status);
+					else
+						total = phyAccount.findByNotDeniedWithSearch(physicianName);
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			pageNumber = start / length;
+			
+			switch (orderColumn) {
+				case 1: {
+					page = new PageRequest(pageNumber, length, dir, "permission");
+					break;
+				}
+				case 2: {
+					page = new PageRequest(pageNumber, length, dir, "isActive");
+					break;
+				}
+				default: {
+					page = new PageRequest(pageNumber, length, dir, "id");
+					break;
+				}
+			}
+			
+			try {
+				if ("".equalsIgnoreCase(physicianName) && "".equalsIgnoreCase(clinicName) && "".equalsIgnoreCase(status)) {
+					physicianList = phyAccount.getAllRecords(page);
+				} else {
+					if (!"".equalsIgnoreCase(status))
+						physicianList = phyAccount.findByStatusWithSearch(physicianName, status, page);
+					else
+						physicianList = phyAccount.findByNotDeniedWithSearch(physicianName, page);
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			List<PhysicianProfile> phyAssObjList = new ArrayList<PhysicianProfile>();
+			
+			if (physicianList != null && physicianList.getSize() > 0 ) {
+				for(PhysicianAccount a: physicianList) {
+					PhysicianProfile obj = new PhysicianProfile();
+					obj.setPhysicianId(a.getId());
+					obj.setPhysicianName(a.getPhysicianName());
+					obj.setEmail(a.getEmail());
+					obj.setCity(a.getCity());
+					obj.setState(a.getState());
+					obj.setPhone(a.getPhone());
+					obj.setMobile(a.getMobile());
+					obj.setStatus(a.getStatus());
+					obj.setDateRegistrated(a.getDateRegistrated());
+					obj.setGroupId(a.getGroupId());
+					if (a.getGroupId() > 0)
+						obj.setGroupName( groupService.getGroupMasterDetails(a.getGroupId()).getGroupName() );
+					else
+						obj.setGroupName("");
+					obj.setDT_RowId("row_" + a.getId());
+					
+					phyAssObjList.add(obj);
+				}
+			}
+			
+			PhysicianJSonObj data = new PhysicianJSonObj();
+			data.setData(phyAssObjList);
+			data.setDraw(draw);
+			data.setRecordsFiltered(total);
+			data.setRecordsFiltered(total);
+			
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String json2 = gson.toJson(data);	
+			
+			return json2;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		return null;
+	}
+
+	public List<PhysicianAccount> getAllPhysician() {
+		return phyAccount.findAll();
+	}
+
+	public List<PhysicianAccount> getApprovedPhysician() {
+		return phyAccount.getAllApprovedPhysicians();
+	}
+
+	
+	//Auto complete method
+	public List<String> getPhysicianNameList(String term) {
+		List<String> output = new ArrayList<String>();
+		List<PhysicianAccount> list = phyAccount.findByAutoPhysicianNameAndStatus(term, PharmacyUtil.statusDenied);
+		if (list.size()>0) {
+			for (PhysicianAccount a: list) {
+				output.add(a.getPhysicianName());
+			}
+		}
+		return output;
+	}
+
+    public PhysicianAccount getPhysicianAccountDetails(int id) {
+		return phyAccount.findOne(id);
+	}
+
+	public List<DocumentFileList> getUploadedDocuments(int id) {
+		List<DocumentFileList> docList = new ArrayList<DocumentFileList>();
+		List<PhysicianFileUpload> phyList = fileUploadService.getUploadedDocuments(id);
+		
+		SimpleDateFormat sm = new SimpleDateFormat("MM/dd/yyyy");
+		
+		for (PhysicianFileUpload a: phyList) {
+			DocumentFileList d = new DocumentFileList();
+			
+			d.setFileId(a.getFileId());
+			d.setFileType(a.getFileType());
+			d.setOriginalFileName(a.getOriginalFileName());
+			d.setStoredFielName(a.getStoredFielName());
+			d.setUploadedDate( sm.format(a.getUploadedDate()) );
+			d.setUserType(a.getUserType());
+			
+			String name = "";
+			if (PharmacyUtil.userPhysician.equalsIgnoreCase(a.getUserType())) {
+				name = phyAccount.findOne(a.getUploadedBy()).getPhysicianName();
+			} else if (PharmacyUtil.userPhysicianAssistant.equalsIgnoreCase(a.getUserType())) {
+				name = assistantRepo.findOne(a.getUploadedBy()).getAssistantName();
+			} else {
+				name = adminRepo.findOne( a.getUploadedBy()).getName();
+			} 
+			d.setUploadedByName(name);
+			
+			docList.add(d);
+		}
+		
+		return docList; 
+	}
+
+	public boolean savePhysicianDocFiles(CommonsMultipartFile docFile, int physicianId, String rootFilePath, LoginForm loggedInUser) {
+		boolean isUploaded = false;
+		if (docFile.getSize() > 0) {
+			// Get last file id (primary key) for generating next id for append with Document file name 
+			int nextDocId = fileUploadService.getLastDocId();
+			
+			String folderName="physician";
+			String photoFileName="document_"+(++nextDocId);
+			isUploaded=PharmacyUtil.userPhotoUpload(docFile, folderName, photoFileName, rootFilePath, physicianId, "Document");
+			if (isUploaded){
+				String oname=docFile.getOriginalFilename();
+				String extension = oname.substring(oname.lastIndexOf('.') + 1, oname.length());
+				
+				StringBuffer uploadedFile = new StringBuffer(PharmacyUtil.getFileUploadPath(rootFilePath, folderName, physicianId, "Document"));
+				uploadedFile.append( File.separator + photoFileName + "." + extension);
+				
+				fileUploadService.documentFileSave(physicianId, docFile, uploadedFile.toString(), loggedInUser);
+				
+				//System.out.println("Photo uploaded ok");
+			} else {
+				//System.out.println("Photo not uploaded");
+			}
+		}
+		
+		return isUploaded;
+	}
+	
+	public boolean deletePhysicianDocFiles(int fileId) {
+		boolean isDeleted = false;
+		if (fileId > 0) {
+			fileUploadService.deleteFile(fileId);
+			isDeleted = true;
+		}
+		return isDeleted;
+	}
+	
+	public String getPhysicianDocFileName(int fileId) {
+		String file = "";
+		if (fileId > 0) {
+			file = fileUploadService.downloadFileName(fileId);
+		}
+		return file;
+	}
+	
+	
+	public String getPhysicianPhotoFileName(int id, String filepath) {
+		String file = "";
+		if (id > 0) {
+			file = fileUploadService.photoNameByPhysicianId(id, filepath);
+		}
+		return file;
+	}
+
+}
+

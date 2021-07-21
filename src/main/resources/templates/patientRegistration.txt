@@ -1,0 +1,92 @@
+<html>
+	<head>
+		<style>
+			.table {
+				font:13px arial, sans-serif;
+				width:100%;
+				border-spacing: 10px;
+    			border-collapse: separate;
+			}
+			.heading {
+				
+				font-size:22px;
+				border-bottom: 2px solid #4d90fe;
+			}
+			.para {
+				
+				font-size:16px;
+				padding-top:5px;
+			}
+			.footer {
+            	padding-top: 25px;
+				font-size:16px;
+				border-bottom: 2px solid #4d90fe;
+			}
+			.fontItalic {
+            	color:#4d90fe;
+				font-style: italic;
+			}
+			.footerCompany {
+				font-size:14px;
+			}
+			.link {
+            	color:#4d90fe;
+				text-decoration: none;
+				font-size:14px;
+			}
+            .link:hover {
+                color:#4d90fe;
+                text-decoration: underline;
+            }
+			.footerPhone {
+				
+				font-size:14px;
+			}
+            .companyImg {
+            	width: 120px;
+            }
+            .footerMsg {
+                font-size:14px;
+            }
+		</style>
+	</head>
+	<body>
+		<table class="table">
+			<thead>
+				<tr>
+					<td>
+						<img src="http://www.cre8pharmacy.com/wp-content/uploads/2017/03/CRE8-Pharma-logo-web_tightcrop-300x196.png" class="companyImg" />
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr><td class="heading"></td></tr>
+				<tr><td class="para">Hi, ${userName},</td></tr>
+				<tr><td>
+						Welcome to CRE8 Pharmacy!! Your CRE8 Rx Online account has been created and you can login to 
+						<a href="${registerUrl}" target=_blank>CRE8 Rx Online</a>  
+						with Username and Password you signed up with:
+					</td></tr>
+				<tr><td>
+						<p> Username : ${email}</p>
+						<p> Temporary Password : ${password}</p>
+					</td></tr>
+				<tr><td>
+					<p>If you use a temporary password to log in, the Change Password screen displays. 
+						A temporary password may only be used once and you must change it while login to access your account.</p>
+					</td></tr>	
+				<tr><td class="footer">
+					Sincerely,<br/>
+					<span class="fontItalic">Customer Service Team</span><br/>
+					<span class="footerCompany">CRE8 Pharmacy Group LLC</span><br/>
+					<span class="footerPhone">3700 NW 126th Avenue</span><br/>
+					<span class="footerPhone">Coral Springs, FL 33065</span><br/>
+					<span class="footerPhone">Toll Free: (888) 224.5181</span><br/>
+					<span class="footerPhone">Main: (754) 529.8353</span><br/>
+					<span class="footerPhone">Monday - Friday: 9am-6pm </span><br/>
+					<span class="footerMsg">" An experienced team ready to serve you <a href="https://www.cre8pharmacy.com/contact/" target=_blank class="link">Connect with us</a>"</span><br/> 
+					</td></tr>	
+			</tbody>
+		</table>
+	</body>
+</html>

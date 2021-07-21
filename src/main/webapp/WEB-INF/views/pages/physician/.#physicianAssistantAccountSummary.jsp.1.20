@@ -1,0 +1,189 @@
+<%@ include file="../../../layout/taglib.jsp"%>
+
+<!-- page content -->
+<div class="">
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12 formLink">
+			<button type="button" id="newAssistAcc" class="btn btn-primary" >Create New Physician Assistant</button>
+		</div>
+	</div>
+	
+	<form:form method="GET" name="form" commandName="form">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel profileBorder">
+	                <div class="x_title">
+	                  	<h2>Physician Assistant Summary</h2>
+	                  	<div class="clearfix"></div>
+	                </div>
+	                
+	                <div class="x_content x_title_padding">
+						<c:if test="${not empty message}">
+							<div class="row">
+								<div class="col-sm-offset-1 col-sm-10  fontSize14 text-center">
+									<div class="alert alert-success fade in">
+										<a href="#" class="close" data-dismiss="alert">&times;</a> &nbsp;&nbsp;&nbsp; ${message}
+									</div>
+								</div>
+							</div>
+						</c:if>
+	
+						<c:if test="${loginDetail.type == 'Physician'}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
+									<div class="row form-group">
+			                       		<label class="col-md-2 col-sm-2 col-xs-12 ">Assistant Name</label>
+			                       		<div class="col-md-2 col-sm-3 col-xs-12">
+			                       			<select class="autoCompleterPhysicianAssistantId select2_single form-control" style="color:black;" name="autoCompleterPhysicianAssistantId"  id="autoCompleterPhysicianAssistantId"></select>
+											<input type="hidden" id="assistantName" class="form-control" >
+			                       		</div>
+			                       		<label class="col-md-2 col-sm-2 col-xs-12 ">Clinic  Name</label>
+			                       		<div class="col-md-2 col-sm-3 col-xs-12">
+			                       			<select class="autoCompleterClinicId select2_single form-control" style="color:black;" name="autoCompleterClinicId"  id="autoCompleterClinicId"></select>
+											<input type="hidden" id="clinicName" class="form-control" >
+			                       		</div>
+			                       		<label class="col-md-1 col-sm-2 col-xs-12 ">Group</label>
+			                       		<div class="col-md-3 col-sm-3 col-xs-12">
+											<form:select path="groupId" class="select2_single form-control" id="groupId">
+												<form:option value="0">Select</form:option>
+												<form:options items="${groupList}" itemLabel="groupName" itemValue="id" />
+											</form:select>
+			                       		</div>
+			                     	</div>
+			                     	<div class="row form-group">
+			                       		<label class="col-md-2 col-sm-2 col-xs-12 ">Status</label>
+			                       		<div class="col-md-2 col-sm-3 col-xs-12">
+											<select id="status" class="form-control">
+												<option value="">Select</option> 
+												<option value="Active">Active</option>
+												<option value="Inactive">Inactive</option>
+											</select>
+			                       		</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-6 text-center">
+			                       			<button type="button" title="Search" id="newSearch" class="btn btn-primary" >Search</button>
+			                       		</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-6 text-center">
+			                       			<button type="button" id="clearSearch" title="Clear" class="btn btn-primary" >Clear</button>
+			                       		</div>
+			                     	</div>
+								</div>
+							</div>
+						</c:if>
+					
+						<c:if test="${loginDetail.type != 'Physician'}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
+									<div class="row form-group">
+										<div class="col-md-2 col-sm-2 col-xs-12 ">
+											<label >Assistant Name</label>
+										</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-12">
+			                       			<select class="autoCompleterPhysicianAssistantId select2_single form-control" style="color:black;" name="autoCompleterPhysicianAssistantId"  id="autoCompleterPhysicianAssistantId"></select>
+											<input type="hidden" id="assistantName" class="form-control" >
+			                       		</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-12 ">
+			                       			<label>Physician Name</label>
+			                       		</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-12">
+			                       			<select class="autoCompleterPhysicianId select2_single form-control" style="color:black;" name="autoCompleterPhysicianId"  id="autoCompleterPhysicianId"></select>
+											<input type="hidden" id="phyName" class="form-control" >
+			                       		</div>
+			                       		<div class="col-md-1 col-sm-2 col-xs-12 ">
+			                       			<label>Group</label>
+			                       		</div>
+			                       		<div class="col-md-3 col-sm-3 col-xs-12">
+											<form:select path="groupId" class="select2_single form-control" id="groupId">
+												<form:option value="0">Select</form:option>
+												<form:options items="${groupList}" itemLabel="groupName" itemValue="id" />
+											</form:select>
+			                       		</div>		                       		
+			                     	</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
+									<div class="row form-group">
+			                       		<div class="col-md-2 col-sm-2 col-xs-12 ">
+			                       			<label >Clinic  Name</label>
+			                       		</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-12">
+											<select class="autoCompleterClinicId select2_single form-control" style="color:black;" name="autoCompleterClinicId"  id="autoCompleterClinicId"></select>
+											<input type="hidden" id="clinicName" class="form-control" >
+			                       		</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-12 ">
+			                       			<label>Status</label>
+			                       		</div>
+			                       		<div class="col-md-2 col-sm-2 col-xs-12">
+											<select id="status" class="form-control">
+												<option value="">Select</option> 
+												<option value="Active">Active</option>
+												<option value="Inactive">Inactive</option>
+											</select>
+			                       		</div>
+			                       		<div class="col-md-1 col-sm-1 col-xs-6">
+			                       			<button type="button" title="Search" id="newSearch" class="btn btn-primary" >Search</button>
+			                       		</div>
+			                       		<div class="col-md-3 col-sm-2 col-xs-6">
+			                       			<button type="button" id="clearSearch" title="Clear" class="btn btn-primary" >Clear</button>
+			                       		</div>
+			                       	</div>
+								</div>
+							</div>					
+						</c:if>
+	
+	
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left table-responsive">
+								<c:if test="${loginDetail.type == 'Physician'}">
+									<table id="phyPhysicianAsstSummaryTable" class="table table-striped table-bordered">
+										<thead>
+											<tr class="heading_background">
+												<th>Id</th>
+												<th>Edit</th>
+												<th>Assistant Name</th>
+												<th>Clinic Name</th>
+												<th>Group</th>
+												<th>Email</th>
+												<th>Mobile</th>
+												<th>Status</th>
+											</tr>
+										</thead>
+									</table>						
+								</c:if>
+								
+								<c:if test="${loginDetail.type != 'Physician'}">
+									<table id="adminPhysicianAsstSummaryTable" class="table table-striped table-bordered">
+										<thead>
+											<tr class="heading_background">
+												<th>Id</th>
+												<th>Edit</th>
+												<th>Assistant Name</th>
+												<th>Physician Name</th>
+												<th>Clinic Name</th>
+												<th>Group</th>
+												<th>Email</th>
+												<th>Mobile</th>
+												<th>Status</th>
+											</tr>
+										</thead>
+									</table>
+								</c:if>
+								<input type="hidden" id="userId" value="${userid}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form:form>
+	
+	<form:form method="POST" name="editPage" commandName="form" action="editPhysicianassistantaccount"   >
+		<form:hidden path="assistantId" />
+	</form:form>
+	
+</div>
+<!-- /page content -->
+<script>
+var urlPath="${pageContext.request.contextPath}/";
+</script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/physician/physicianAssistantAccountSummary.js?v=3"></script>

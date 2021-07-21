@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	
+	
+	<!--  Template for Login and Register Page	 -->
+	<definition name="page" template="/WEB-INF/layout/defaultLayout.jsp">
+		<put-attribute name="title" value="CRE8 Rx Online" />
+		<put-attribute name="header" value="/WEB-INF/layout/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />
+	</definition>
+
+	<!--  Template for all the Common Page	 -->
+	<definition name="common" template="/WEB-INF/layout/mainPageLayout.jsp">
+		<put-attribute name="title" value="CRE8 Rx Online" />
+		<put-attribute name="footer" value="/WEB-INF/layout/footer_common.jsp" />
+	</definition>
+	
+	<!--  Template for Intrmediate Home Page -->
+	<definition name="intermediatepage" template="/WEB-INF/layout/defaultFooterLayout.jsp">
+		<put-attribute name="title" value="CRE8 Rx Online" />
+		<put-attribute name="header" value="/WEB-INF/layout/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />
+	</definition>
+		
+	<!--Start 	Mapping for Error Pages -->
+	<definition name="error404" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/errorpages/page_404.jsp" />
+	</definition>
+	<definition name="error500" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/errorpages/page_500.jsp" />
+	</definition>	
+	<!--End	Mapping for Error Pages -->
+	
+	<!-- Login,Reset Password,Forgot Password -->	
+	<definition name="login" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/pages/login.jsp" />
+		<put-attribute name="current" value="login" />
+	</definition>	
+	<definition name="patientlogin" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/pages/patientLogin.jsp" />
+		<put-attribute name="current" value="patientlogin" />
+	</definition>	
+	<definition name="resetPasswordForm" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/pages/resetPassword.jsp" />
+		<put-attribute name="current" value="resetPasswordForm" />
+	</definition>
+	<definition name="forgotPasswordForm" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/pages/forgotPassword.jsp" />
+		<put-attribute name="current" value="forgotPasswordForm" />
+	</definition>
+	<!--// Login,Reset Password,Forgot Password -->
+	<!--##################################### Physician Modules start #########################################-->
+		<definition name="changePasswordForm" extends="common">
+			<put-attribute name="body" value="/WEB-INF/views/pages/changePassword.jsp" />
+			<put-attribute name="current" value="changePasswordForm" />
+		</definition>
+		<definition name="changeSecurityQuestionForm" extends="common">
+			<put-attribute name="body" value="/WEB-INF/views/pages/changeSecurityQuestions.jsp" />
+			<put-attribute name="current" value="changeSecurityQuestionForm" />
+		</definition>
+	
+	<!--##################################### Physician Modules end #########################################-->
+	
+	<!--##################################### Physician Modules start #########################################-->
+	<definition name="phyRegPage" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianRegistration.jsp" />
+		<put-attribute name="current" value="phyRegPage" />
+	</definition>	
+	
+	<definition name="physicianaccount" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianAccount.jsp" />
+		<put-attribute name="current" value="physicianSummary" />
+	</definition>
+	<definition name="physicianprofile" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianprofile.jsp" />
+		<put-attribute name="current" value="physicianSummary" />
+	</definition>
+	
+	<definition name="physicianaccountsummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianSummary.jsp" />
+		<put-attribute name="current" value="physicianSummary" />
+	</definition>
+	<!--##################################### Physician Modules end #########################################-->
+	
+	<!--##################################### Physician Assistant Modules start #########################################-->
+	
+	<definition name="physicianassistanthome" extends="intermediatepage">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianassistanthome.jsp" />
+		<put-attribute name="current" value="physicianassistanthome" />
+	</definition>
+	
+	<!--##################################### Physician Assistant end #########################################-->
+	
+	<!--##################################### Physician Assistant Modules start #########################################-->
+	<definition name="physicianassistantaccountsummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianAssistantAccountSummary.jsp" />
+		<put-attribute name="current" value="physicianassistantaccountsummary" />
+	</definition>
+
+     <definition name="physicianassistantaccount" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianAssistantAccount.jsp" />
+		<put-attribute name="current" value="physicianassistantaccountsummary" />
+	</definition>	
+	
+	<definition name="physicianassistantprofile" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/physician/physicianAssistantAccount.jsp" />
+		<put-attribute name="current" value="assistantProfile" />
+	</definition>
+	
+	<!--##################################### Physician Assistant Modules end #########################################-->
+	
+	<!--##################################### Admin and Super Admin Modules start #########################################-->
+	<definition name="adminaccountsummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/admin/adminSummary.jsp" />
+		<put-attribute name="current" value="adminAccountSummary" />
+	</definition>	
+	
+	<definition name="adminaccount" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/admin/adminAccount.jsp" />
+		<put-attribute name="current" value="adminAccountSummary" />
+	</definition>
+
+	<definition name="adminprofile" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/admin/adminAccount.jsp" />
+		<put-attribute name="current" value="adminProfile" />
+	</definition>
+	
+	<definition name="adminprofileleft" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/admin/adminAccount.jsp" />
+		<put-attribute name="current" value="adminprofileleft" />
+	</definition>
+		
+	<!--##################################### Admin and Super Admin Modules end #########################################-->
+
+	
+	<!--##################################### Patient Modules start #########################################-->
+	
+	<definition name="patientAccount" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/patient/patientAccount.jsp" />
+		<put-attribute name="current" value="patientaccountsummary" />
+	</definition>
+	
+	
+	<definition name="patientProfile" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/patient/patientAccount.jsp" />
+		<put-attribute name="current" value="patientProfile" />
+	</definition>
+		
+	<definition name="patientLeftProfile" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/patient/patientAccount.jsp" />
+		<put-attribute name="current" value="patientProfile" />
+	</definition>
+			
+	<definition name="patientaccountsummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/patient/patientAccountSummary.jsp" />
+		<put-attribute name="current" value="patientaccountsummary" />
+	</definition>
+	
+	<!--##################################### Patient Modules end #########################################-->
+	
+	<!--##################################### Group Modules start #########################################-->
+	<definition name="groupMasterSummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/pharmacygroup/groupMasterSummary.jsp" />
+		<put-attribute name="current" value="groupMasterSummary" />
+	</definition>	
+	
+	<definition name="groupMasterPage" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/pharmacygroup/groupMaster.jsp" />
+		<put-attribute name="current" value="groupMasterSummary" />
+	</definition>	
+	
+	
+	<definition name="groupDirectorSummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/pharmacygroup/groupDirectorSummary.jsp" />
+		<put-attribute name="current" value="groupDirectorSummary" />
+	</definition>	
+	
+	<definition name="groupDirector" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/pharmacygroup/groupDirector.jsp" />
+		<put-attribute name="current" value="groupDirectorSummary" />
+	</definition>
+	<!--##################################### Group Modules end #########################################-->
+	
+	<!-- ############ Manual Instruction Starts ################## -->
+	<definition name="manualDocuments" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/manual/documents.jsp" />
+		<put-attribute name="current" value="documentUpload" />
+	</definition>
+	
+	<definition name="viewDocuments" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/manual/documentView.jsp" />
+		<put-attribute name="current" value="manualDocListView" />
+	</definition>
+	<!-- ############ Manual Instruction Ends  ################## -->
+	
+	<!-- ############ Clinic Model Starts ################## -->
+	<definition name="clinicSummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/clinic/clinicSummary.jsp" />
+		<put-attribute name="current" value="clinicSummary" />
+	</definition>
+	
+	<definition name="clinicPage" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/clinic/clinicPage.jsp" />
+		<put-attribute name="current" value="clinicSummary" />
+	</definition>
+	<!-- ############ Clinic Model Ends  ################## -->
+	
+	
+	
+	
+	<!-- ############ Prescription Model Starts ################## -->
+		<definition name="prescriptionView" extends="common">
+			<put-attribute name="body" value="/WEB-INF/views/pages/prescription/prescriptionPage.jsp" />
+			<put-attribute name="current" value="prescriptionSummary" />
+		</definition>
+		
+		
+		<definition name="prescriptionSummary" extends="common">
+			<put-attribute name="body" value="/WEB-INF/views/pages/prescription/prescriptionSummary.jsp" />
+			<put-attribute name="current" value="prescriptionSummary" />
+		</definition>
+				
+	<!-- ############ Prescription Model Ends ################## -->
+	
+		<!--##################################### Order Modules start #########################################-->
+	
+	
+	<definition name="orderSummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/order/orderSummary.jsp" />
+		<put-attribute name="current" value="orderSummary" />
+	</definition>	
+	
+	<definition name="viewOrders" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/order/viewOrder.jsp" />
+		<put-attribute name="current" value="orderSummary" />
+	</definition>	
+
+	<!--##################################### Order Modules end #########################################-->
+	
+	
+		<!--##################################### Invoice Modules start #########################################-->
+	
+	
+	<definition name="invoiceSummary" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/invoice/invoiceSummary.jsp" />
+		<put-attribute name="current" value="invoiceSummary" />
+	</definition>	
+	
+	<definition name="viewInvoice" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/invoice/viewInvoice.jsp" />
+		<put-attribute name="current" value="invoiceSummary" />
+	</definition>	
+
+	<!--##################################### Invoice Modules end #########################################-->
+	
+	
+	
+	<!--##################################### TEST #########################################-->
+	<!--Start Test Pages for Navigation Register Page-->	
+	<definition name="testregister" extends="page">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/register.jsp" />
+		<put-attribute name="current" value="testregister" />
+	</definition>	
+	
+	<!--End Test Pages for Navigation Register Page-->	
+	
+	<!--Start Template for all the Dashboard Pages-->	
+	<definition name="physiciandashboard" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/dashboard/physiciandashboard.jsp" />
+		<put-attribute name="current" value="physiciandashboard" />
+	</definition>
+
+	<definition name="patientdashboard" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/dashboard/patientDashboard.jsp" />
+		<put-attribute name="current" value="patientdashboard" />
+	</definition>
+
+	<definition name="groupdirectordashboard" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/dashboard/groupdirectordashboard.jsp" />
+		<put-attribute name="current" value="groupdirectordashboard" />
+	</definition>
+
+	<definition name="admindashboard" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/dashboard/adminDashboard.jsp" />
+		<put-attribute name="current" value="admindashboard" />
+	</definition>
+	<!--End Template for all the Dashboard Pages-->
+	
+	
+	<!-- REPORTS PAGES -->
+	<definition name="patientsListReport" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/reports/patientList.jsp" />
+		<put-attribute name="current" value="patientsListReport" />
+	</definition>
+
+	<definition name="physicianListReport" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/reports/physicianList.jsp" />
+		<put-attribute name="current" value="physicianListReport" />
+	</definition>
+
+	<definition name="prescriptionListReport" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/reports/prescriptionList.jsp" />
+		<put-attribute name="current" value="prescriptionListReport" />
+	</definition>
+
+	<definition name="orderListReport" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/reports/orderList.jsp" />
+		<put-attribute name="current" value="orderListReport" />
+	</definition>
+	
+	<definition name="invoiceListReport" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/reports/invoiceList.jsp" />
+		<put-attribute name="current" value="invoiceListReport" />
+	</definition>	
+	
+		
+	<!-- End of REPORTS PAGES -->
+	
+		
+	<!--Start Template for all the Common Test Pages-->	
+	
+	<definition name="testdashboard" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/dashboard.jsp" />
+		<put-attribute name="current" value="testdashboard" />
+	</definition>
+		
+	<definition name="testphysicianprofile" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/physicianprofile.jsp" />
+		<put-attribute name="current" value="testphysicianprofile" />
+	</definition>
+	
+	<definition name="testpatientprofile" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/patientprofile.jsp" />
+		<put-attribute name="current" value="testpatientprofile" />
+	</definition>
+	
+	<definition name="testvalidation" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/validatorform.jsp" />
+		<put-attribute name="current" value="testvalidation" />
+	</definition>
+	<!--End Template for all the Common Test Pages-->
+	
+	<definition name="testEmpTable" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/empTable.jsp" />
+		<put-attribute name="current" value="testEmpTable" />
+	</definition>
+	
+	<!-- <definition name="addTestEmp" extends="common">
+		<put-attribute name="title" value="CRE8 Portal" />
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/empadd.jsp" />
+		<put-attribute name="current" value="addTestEmp" />
+	</definition>	 -->
+	
+	 <definition name="addTestEmp" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/empadd1.jsp" />
+		<put-attribute name="current" value="addTestEmp" />
+	</definition>	
+	
+	<definition name="testadminaccount" extends="common">
+		<put-attribute name="body" value="/WEB-INF/views/pages/test/adminAccount.jsp" />
+		<put-attribute name="current" value="dashboard" />
+	</definition>
+
+</tiles-definitions>

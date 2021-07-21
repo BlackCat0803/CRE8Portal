@@ -1,0 +1,584 @@
+package com.pharma.core.pharmaservices.patientservices;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.pharma.core.events.patient.PatientEvent;
+import com.pharma.core.formBean.DocumentFileList;
+import com.pharma.core.formBean.LoginForm;
+import com.pharma.core.formBean.patient.PatientAccountForm;
+import com.pharma.core.formBean.patient.PatientAccountJSonObj;
+import com.pharma.core.formBean.physician.PhysicianDocFileJSonObj;
+import com.pharma.core.model.patientaccount.PatientAccount;
+import com.pharma.core.model.patientaccount.PatientFileUpload;
+import com.pharma.core.model.physician.PhysicianFileUpload;
+import com.pharma.core.model.physician.PhysicianGroup;
+import com.pharma.core.pharmaservices.pharmacygroupservices.GroupMasterService;
+import com.pharma.core.pharmaservices.physicianservices.PhysicianGroupService;
+import com.pharma.core.repository.admin.AdminAccountRepository;
+import com.pharma.core.repository.patient.PatientAccountRespository;
+import com.pharma.core.repository.physician.PhysicianAccountRespository;
+import com.pharma.core.repository.physician.PhysicianAssistantAccountRespository;
+import com.pharma.core.repository.physician.PhysicianGroupRepository;
+import com.pharma.core.util.PharmacyUtil;
+
+@Service("patientAccountService")
+@PropertySource("classpath:webService.properties")
+public class PatientAccountServiceImpl implements PatientAccountService  {
+	
+	@Autowired
+	PatientAccountRespository patientAccountResp;
+
+	@Autowired
+	PhysicianAccountRespository physicianRep;
+	
+	@Autowired
+	PatientFileUploadService fileUploadService;
+	
+	@Autowired
+	PhysicianAssistantAccountRespository assistantRepo;
+	
+	@Autowired
+	AdminAccountRepository adminRepo;	
+	
+	@Autowired
+	GroupMasterService groupService;
+	
+	@Autowired
+	PhysicianGroupService phyGroupService;
+	
+	@Autowired
+	PhysicianGroupRepository phyGroupRepo;
+	
+	@Autowired
+	private ApplicationEventPublisher publisher;
+	
+	@Autowired
+	private Environment env;
+	
+	public PatientAccount save(PatientAccount form) {
+		return null;
+	}
+
+	public PatientAccount save(PatientAccountForm form, CommonsMultipartFile patientPhoto, String rootFilePath, LoginForm loggedInUser, HttpSession session) {
+		PatientAccount acc = null;
+		if (form.getPatientId() > 0)
+			acc = patientAccountResp.findOne(form.getPatientId());
+		else {
+			acc = new PatientAccount();
+			acc.setPassword(form.getPassword());
+		}
+
+		acc.setPhysicianId(form.getPhysicianId());
+		acc.setPatientCode(form.getPatientCode());
+		acc.setStatus(form.getStatus());
+		acc.setDateRegistered(new java.sql.Date(new Date().getTime()));
+		acc.setFirstName(form.getFirstName());
+		acc.setMiddleName(form.getMiddleName());
+		acc.setLastName(form.getLastName());
+		acc.setPatientName(acc.getFirstName().trim() + " " + acc.getLastName().trim());
+		acc.setEmail(form.getEmail());
+		acc.setMobile(form.getMobile());
+		acc.setPhone(form.getPhone());
+		acc.setNotifyNo(form.getNotifyNo());
+		acc.setRxNotify(form.getRxNotify());
+		acc.setRefillRenewal(form.getRefillRenewal());
+		if (form.getDateOfBirth() != null && !"".equalsIgnoreCase(form.getDateOfBirth()))
+			acc.setDateOfBirth( PharmacyUtil.getSqlDateFromString(form.getDateOfBirth()));
+		acc.setGender(form.getGender());
+		acc.setAllergies(form.getAllergies());
+		acc.setOtherMedications(form.getOtherMedications());
+		acc.setMedicalConditions(form.getMedicalConditions());
+		acc.setCriticalComments(form.getCriticalComments());
+		acc.setDriversLicense(form.getDriversLicense());
+		if (form.getLicenseExpDate() != null && !"".equalsIgnoreCase(form.getLicenseExpDate()))
+			acc.setLicenseExpDate( PharmacyUtil.getSqlDateFromString(form.getLicenseExpDate()));
+		acc.setDriversLicenseState(form.getDriversLicenseState());
+		acc.setSsn(form.getSsn());
+		acc.setAddress(form.getAddress());
+		acc.setCity(form.getCity());
+		acc.setMobile(form.getMobile());
+		acc.setState(form.getState());
+		acc.setZipCode(form.getZipCode());
+		acc.setCountry(form.getCountry());
+		acc.setPregnancyprecaution(form.getPregnancyprecaution());
+		
+		acc.setUpdatedBy(loggedInUser.getUserid());
+		acc.setUpdatedByType(loggedInUser.getType());
+		acc.setUpdatedDate(new java.sql.Date(new Date().getTime()));
+		
+		PatientAccount rec = patientAccountResp.save(acc);
+		
+		/*
+		 * Uploaded Files saving process
+		 */
+		if (patientPhoto.getSize() > 0) {
+			String folderName="patient";
+			String photoFileName="photo_"+rec.getId();
+			boolean isUploaded=PharmacyUtil.userPhotoUpload(patientPhoto, folderName, photoFileName, rootFilePath, rec.getId(), "");
+			if (isUploaded){
+				String oname=patientPhoto.getOriginalFilename();
+				String extension = oname.substring(oname.lastIndexOf('.') + 1, oname.length());
+				
+				StringBuffer uploadedFile = new StringBuffer(PharmacyUtil.getFileUploadPath(rootFilePath, folderName, rec.getId(), ""));
+				uploadedFile.append( File.separator + photoFileName + "." + extension);
+				
+				fileUploadService.photoFileSave(rec.getId(), patientPhoto, uploadedFile.toString(), loggedInUser);
+				
+				//System.out.println("Photo uploaded ok");
+			} else {
+				//System.out.println("Photo not uploaded");
+			}
+		}
+
+		try {
+			PublishPatientPushEvent(rec);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return  rec; 
+	}
+
+	public PatientAccountForm getPatientData(int id, String filepath) {
+        PatientAccount form = patientAccountResp.findOne(id);
+		
+        PatientAccountForm acc = new PatientAccountForm();
+		
+        acc.setPatientId(form.getId());
+        acc.setPhysicianId(form.getPhysicianId());
+		acc.setPatientCode(form.getPatientCode());
+		acc.setStatus(form.getStatus());
+		acc.setFirstName(form.getFirstName());
+		acc.setMiddleName(form.getMiddleName());
+		acc.setLastName(form.getLastName());
+		acc.setPatientName(acc.getFirstName().trim() + " " + acc.getLastName().trim());
+		acc.setEmail(form.getEmail());
+		acc.setPassword(form.getPassword());
+		acc.setMobile(form.getMobile());
+		acc.setPhone(form.getPhone());
+		acc.setPasswordResetDate( (form.getPasswordResetDate()));
+		acc.setLoginAttempts(form.getLoginAttempts());
+		acc.setLoginLockedDate(form.getLoginLockedDate());
+		acc.setSecurityQuestionNumber(form.getSecurityQuestionNumber());
+		acc.setSecurityQuestionNumber2(form.getSecurityQuestionNumber2());
+		acc.setSecurityAnswer2(form.getSecurityAnswer2());
+		acc.setSecurityAnswer(form.getSecurityAnswer());
+		acc.setForgotPasswordAttempts(form.getForgotPasswordAttempts());
+		acc.setForgotPwdLockedDate(form.getForgotPwdLockedDate());
+		acc.setNotifyNo(form.getNotifyNo());
+		acc.setRxNotify(form.getRxNotify());
+		acc.setRefillRenewal(form.getRefillRenewal());
+		
+		if (form.getDateOfBirth() != null)
+			acc.setDateOfBirth(PharmacyUtil.getStringDateFromSqlDate(form.getDateOfBirth()));
+		
+		acc.setGender(form.getGender());
+		acc.setAllergies(form.getAllergies());
+		acc.setOtherMedications(form.getOtherMedications());
+		acc.setMedicalConditions(form.getMedicalConditions());
+		acc.setCriticalComments(form.getCriticalComments());
+		acc.setDriversLicense(form.getDriversLicense());
+		if (form.getLicenseExpDate() != null)
+			acc.setLicenseExpDate(PharmacyUtil.getStringDateFromSqlDate(form.getLicenseExpDate()));
+		
+		acc.setDriversLicenseState(form.getDriversLicenseState());
+		
+		acc.setSsn(form.getSsn());
+	//	acc.setDateRegistered(form.getDateRegistered());
+		acc.setUpdatedBy(form.getUpdatedBy());
+		acc.setUpdatedByType(form.getUpdatedByType());
+		acc.setUpdatedDate(form.getUpdatedDate());
+		acc.setAddress(form.getAddress());
+		acc.setCity(form.getCity());
+		acc.setState(form.getState());
+		acc.setZipCode(form.getZipCode());
+		acc.setCountry(form.getCountry());
+		acc.setPregnancyprecaution(form.getPregnancyprecaution());
+
+		acc.setPhotoFile(fileUploadService.photoNameByPatientId(id, filepath));
+		
+		return acc;
+	}
+	
+	public List<PatientAccount> getAllPatient() {
+		return patientAccountResp.findAll();
+	}
+
+	public PatientAccount getPatientAccountEmailAndNotId(String email, int id) {
+		return patientAccountResp.findByEmailAndIdNot(email, id);
+	}
+
+	public PatientAccount getPatientAccountByEmail(String email) {
+		return patientAccountResp.findByEmail(email);
+	}
+
+	public String getPatientAccountDataList(int id, int draw, int start,int length, 
+			String searchTerm, int orderColumn, String orderDir,String patientName, String phyname, String status, int groupId) {
+		
+		if (patientName == null)  patientName = "";
+		if (phyname == null)  phyname = "";
+		if (status == null)  status = "";
+		
+		int total = 0;
+		int pageNumber = 0;
+		Pageable page = null;
+		Page<PatientAccount> patientList = null;
+		
+		Direction dir = Direction.ASC;
+		if (orderDir.equalsIgnoreCase("desc"))
+			dir = Direction.DESC;
+
+		try {
+			if (groupId == 0) {
+				if (id > 0) {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname) && "".equalsIgnoreCase(status)) {
+						total = (int) patientAccountResp.findByAllByPhysician(id, PharmacyUtil.statusActive);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							total = patientAccountResp.getSearchTotal(id, patientName, phyname, PharmacyUtil.statusActive);
+						else
+							total = patientAccountResp.getSearchTotal(id, patientName, phyname, status);
+					}
+				} else {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname)) {
+						total = (int) patientAccountResp.findByAllByStatus(PharmacyUtil.statusActive);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							total = patientAccountResp.getSearchTotal(patientName, phyname, PharmacyUtil.statusActive);
+						else
+							total = patientAccountResp.getSearchTotal(patientName, phyname, status);
+					}
+				}
+			} else {
+				if (id > 0) {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname) && "".equalsIgnoreCase(status)) {
+						total = (int) patientAccountResp.findByAllByPhysicianAndGroup(id, groupId, PharmacyUtil.statusActive);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							total = patientAccountResp.getSearchTotalByGroup(id, groupId, patientName, phyname, PharmacyUtil.statusActive);
+						else
+							total = patientAccountResp.getSearchTotalByGroup(id, groupId, patientName, phyname, status);
+					}
+				} else {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname)) {
+						total = (int) patientAccountResp.findByAllByStatusAndGroup(groupId, PharmacyUtil.statusActive);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							total = patientAccountResp.getSearchTotalByGroup(groupId, patientName, phyname, PharmacyUtil.statusActive);
+						else
+							total = patientAccountResp.getSearchTotalByGroup(groupId, patientName, phyname, status);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		pageNumber = start / length;
+		
+		switch (orderColumn) {
+			case 1: {
+				page = new PageRequest(pageNumber, length, dir, "permission");
+				break;
+			}
+			case 2: {
+				page = new PageRequest(pageNumber, length, dir, "isActive");
+				break;
+			}
+			default: {
+				page = new PageRequest(pageNumber, length, dir, "id");
+				break;
+			}
+		}
+		
+		try {
+			if (groupId == 0) {
+				if (id > 0) {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname) && "".equalsIgnoreCase(status)) {
+						patientList = patientAccountResp.findByAllByPhysician( id,  PharmacyUtil.statusActive, page);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							patientList = patientAccountResp.getSearchRecords(id, patientName, phyname, PharmacyUtil.statusActive, page);
+						else
+							patientList = patientAccountResp.getSearchRecords(id, patientName, phyname, status, page);
+					}
+				} else {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname) && "".equalsIgnoreCase(status)) {
+						patientList = patientAccountResp.findByAllByStatus(PharmacyUtil.statusActive, page);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							patientList = patientAccountResp.getSearchRecords(patientName, phyname,  PharmacyUtil.statusActive, page);
+						else
+							patientList = patientAccountResp.getSearchRecords(patientName, phyname,  status, page);
+					}
+				}
+			} else {
+				if (id > 0) {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname) && "".equalsIgnoreCase(status)) {
+						patientList = patientAccountResp.findByAllByPhysicianAndGroup(id, groupId, PharmacyUtil.statusActive, page);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							patientList = patientAccountResp.getSearchRecordAndGroup(id, groupId, patientName, phyname, PharmacyUtil.statusActive, page);
+						else
+							patientList = patientAccountResp.getSearchRecordAndGroup(id, groupId, patientName, phyname, status, page);
+					}
+				} else {
+					if ("".equalsIgnoreCase(patientName) && "".equalsIgnoreCase(phyname) && "".equalsIgnoreCase(status)) {
+						patientList = patientAccountResp.findByAllByStatusAndGroup(groupId, PharmacyUtil.statusActive, page);
+					} else {
+						if ("".equalsIgnoreCase(status))
+							patientList = patientAccountResp.getSearchRecordAndGroup(groupId, patientName, phyname,  PharmacyUtil.statusActive, page);
+						else
+							patientList = patientAccountResp.getSearchRecordAndGroup(groupId, patientName, phyname,  status, page);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		List<PatientAccountForm> phyAssObjList = new ArrayList<PatientAccountForm>();
+		if (patientList != null && patientList.getSize() > 0 ) {
+			for(PatientAccount a: patientList) {
+				PatientAccountForm obj = new PatientAccountForm();
+				obj.setPatientId(a.getId());
+				obj.setPhysicianId(a.getPhysicianId());
+				obj.setCity(a.getCity());
+				obj.setPhone(a.getPhone());
+				obj.setMobile(a.getMobile());
+				obj.setDateRegistered(a.getDateRegistered());
+				obj.setPatientName(a.getPatientName());
+				obj.setEmail(a.getEmail());
+				obj.setStatus(a.getStatus());
+				obj.setPhysicianName( physicianRep.findOne(a.getPhysicianId()).getPhysicianName() );
+				obj.setDT_RowId("row_" + a.getId());
+				
+				StringBuilder groupName = new StringBuilder();
+				ArrayList<Integer> groupList = new ArrayList<Integer>();
+				List<PhysicianGroup> groupTableList = phyGroupService.getActiveRecordsByPhysician(a.getPhysicianId());
+				if (groupTableList.size() > 0) {
+					for (PhysicianGroup g: groupTableList) {
+						groupList.add(g.getGroupId());
+						groupName.append( groupService.getGroupMasterDetails(g.getGroupId()).getGroupName()).append(",");
+					}
+				}
+				if (groupName.length() > 0)
+					obj.setGroupName( groupName.toString().substring(0, groupName.length()-1) );
+				else
+					obj.setGroupName("");
+				
+				
+				phyAssObjList.add(obj);
+			}
+		}
+
+		PatientAccountJSonObj data = new PatientAccountJSonObj();
+		data.setData(phyAssObjList);
+		data.setDraw(draw);
+		data.setRecordsFiltered(total);
+		data.setRecordsFiltered(total);
+		
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String json2 = gson.toJson(data);
+		
+		return json2;
+	}
+	
+	
+	public List<DocumentFileList> getUploadedDocuments(int id) {
+		List<DocumentFileList> docList = new ArrayList<DocumentFileList>();
+		List<PatientFileUpload> phyList = fileUploadService.getUploadedDocuments(id);
+		
+		SimpleDateFormat sm = new SimpleDateFormat("MM/dd/yyyy");
+		
+		for (PatientFileUpload a: phyList) {
+			DocumentFileList d = new DocumentFileList();
+			
+			d.setFileId(a.getId());
+			d.setFileType(a.getFileType());
+			d.setOriginalFileName(a.getOriginalFileName());
+			d.setStoredFielName(a.getStoredFielName());
+			d.setUploadedDate( sm.format(a.getUploadedDate()) );
+			d.setUserType(a.getUserType());
+			
+			String name = "";
+			if (PharmacyUtil.userPhysician.equalsIgnoreCase(a.getUserType())) {
+				name = physicianRep.findOne(a.getUploadedBy()).getPhysicianName();
+			} else if (PharmacyUtil.userPhysicianAssistant.equalsIgnoreCase(a.getUserType())) {
+				name = assistantRepo.findOne(a.getUploadedBy()).getAssistantName();
+			} else {
+				name = adminRepo.findOne( a.getUploadedBy()).getName();
+			} 
+			d.setUploadedByName(name);
+			
+			docList.add(d);
+		}
+		
+		return docList; 
+	}
+
+	public boolean savePatientDocFiles(CommonsMultipartFile docFile, int patientId, String rootFilePath, LoginForm loggedInUser) {
+		boolean isUploaded = false;
+		if (docFile.getSize() > 0) {
+			// Get last file id (primary key) for generating next id for append with Document file name 
+			int nextDocId = fileUploadService.getLastDocId();
+			
+			String folderName="patient";
+			String photoFileName="document_"+(++nextDocId);
+			isUploaded=PharmacyUtil.userPhotoUpload(docFile, folderName, photoFileName, rootFilePath, patientId, "Document");
+			if (isUploaded){
+				String oname=docFile.getOriginalFilename();
+				String extension = oname.substring(oname.lastIndexOf('.') + 1, oname.length());
+				
+				StringBuffer uploadedFile = new StringBuffer(PharmacyUtil.getFileUploadPath(rootFilePath, folderName, patientId, "Document"));
+				uploadedFile.append( File.separator + photoFileName + "." + extension);
+				
+				fileUploadService.documentFileSave(patientId, docFile, uploadedFile.toString(), loggedInUser);
+				
+				//System.out.println("Patient Document uploaded successfully");
+			} else {
+				//System.out.println("Patient Document not uploaded");
+			}
+		}
+		
+		return isUploaded;
+	}
+
+	public boolean deletePatientDocFiles(int fileId) {
+		boolean isDeleted = false;
+		if (fileId > 0) {
+			fileUploadService.deleteFile(fileId);
+			isDeleted = true;
+		}
+		return isDeleted;
+	}
+
+	public String getPatientDocFileName(int fileId) {
+		String file = "";
+		if (fileId > 0) {
+			file = fileUploadService.downloadFileName(fileId,false);
+		}
+		return file;
+	}
+
+	public String getPatientDownloadDocFileName(int fileId) {
+		String file = "";
+		if (fileId > 0) {
+			file = fileUploadService.downloadFileName(fileId, true);
+		}
+		return file;
+	}
+	
+	public String getPatientPhotoFileName(int id, String filepath) {
+		String file = "";
+		if (id > 0) {
+			file = fileUploadService.photoNameByPatientId(id, filepath);
+		}
+		return file;
+	}
+
+	public String getPatientDocumentDataList(int draw, int start, int length, String searchTerm, int orderColumn, String orderDir, String patientId) {
+		int total = 0;
+		int pageNumber = 0;
+		try {
+			Pageable page = null;
+			Page<PatientFileUpload> documentList = null;
+			
+			Direction dir = Direction.ASC;
+			if (orderDir.equalsIgnoreCase("desc"))
+				dir = Direction.DESC;
+
+			List<PatientFileUpload> phyDocList = fileUploadService.getUploadedDocuments(Integer.parseInt(patientId));
+			total = phyDocList.size();
+			pageNumber = start / length;
+			
+			switch (orderColumn) {
+				case 1: {
+					page = new PageRequest(pageNumber, length, dir, "permission");
+					break;
+				}
+				case 2: {
+					page = new PageRequest(pageNumber, length, dir, "isActive");
+					break;
+				}
+				default: {
+					page = new PageRequest(pageNumber, length, dir, "id");
+					break;
+				}
+			}
+			
+			documentList = fileUploadService.getUploadedDocuments(Integer.parseInt(patientId), page);
+			List<DocumentFileList> phyAssObjList = new ArrayList<DocumentFileList>();
+			SimpleDateFormat sm = new SimpleDateFormat("MM/dd/yyyy");
+			
+			if (documentList != null && documentList.getSize() > 0 ) {
+				for(PatientFileUpload a: documentList) {
+					DocumentFileList d = new DocumentFileList();
+					d.setFileId(a.getId());
+					d.setFileType(a.getFileType());
+					d.setOriginalFileName(a.getOriginalFileName());
+					d.setStoredFielName(a.getStoredFielName());
+					d.setUploadedDate( sm.format(a.getUploadedDate()) );
+					d.setUserType(a.getUserType());
+					
+					String name = "";
+					if (PharmacyUtil.userPhysician.equalsIgnoreCase(a.getUserType())) {
+						name = physicianRep.findOne(a.getUploadedBy()).getPhysicianName();
+					} else if (PharmacyUtil.userPhysicianAssistant.equalsIgnoreCase(a.getUserType())) {
+						name = assistantRepo.findOne(a.getUploadedBy()).getAssistantName();
+					} else {
+						name = adminRepo.findOne( a.getUploadedBy()).getName();
+					} 
+					d.setUploadedByName(name);
+
+					d.setDT_RowId("row_" + a.getId());
+					
+					phyAssObjList.add(d);
+				}
+			}
+			
+			PhysicianDocFileJSonObj data = new PhysicianDocFileJSonObj();
+			data.setData(phyAssObjList);
+			data.setDraw(draw);
+			data.setRecordsFiltered(total);
+			data.setRecordsFiltered(total);
+			
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String json2 = gson.toJson(data);	
+			
+			return json2;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return null;
+	}
+
+	 //You must override this method; It will give you acces to ApplicationEventPublisher
+   public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
+       this.publisher = publisher;
+   }
+   
+	private void PublishPatientPushEvent(PatientAccount patientForm)
+	{
+		 String RESTfulURL=env.getProperty("webservice_url")+env.getProperty("PatientSave");
+		 publisher.publishEvent(new PatientEvent(this, "ADD", patientForm,RESTfulURL));
+	}
+}
