@@ -47,8 +47,8 @@
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
 		 <property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		 <!-- <property name="url" value="jdbc:mysql://localhost:7706/pharmacyportal?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;"/> --> 
-		 <property name="url" value="jdbc:mysql://pharmacyportal.mysql.database.azure.com:3306/pharmacyportal?useSSL=true&amp;requireSSL=false"/>
-		 <property name="username" value="admin_cre8" />
+		 <property name="url" value="jdbc:mysql://pharmacyportal.mysql.database.azure.com:3306/pharmacyportal?useSSL=false&amp;requireSSL=false"/>
+		 <property name="username" value="admin_cre8@pharmacyportal" />
 		 <property name="password" value="pharmacy@2021"
 		/> </bean>
 
