@@ -770,7 +770,7 @@ public class HipaaPasswordValidator {
 		/*int passwordminlength = 8;
 		int passwordmaxlength = 25;*/
 		try {
-			if (!isAsciiPrintable(password)) {
+			/*if (!isAsciiPrintable(password)) {
 				hipaaValidateLogin = false;
 			} else if (password.toLowerCase().indexOf("temp")==0) {
 				hipaaValidateLogin = false;
@@ -784,7 +784,12 @@ public class HipaaPasswordValidator {
 				if (checkSequence(fullname, newpassword, 2) || checkSequence(accountname, newpassword, 2)) {
 					hipaaValidateLogin = false;
 				}
-			}
+			}*/
+			String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$";
+			Pattern pattern = Pattern.compile(passwordPattern);
+			Matcher matcher = pattern.matcher(password);
+			hipaaValidateLogin =  matcher.matches();
+
 		} catch (Exception e) {
 			//System.out.println(e);
 		}

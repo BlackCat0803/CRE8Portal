@@ -185,16 +185,19 @@ function checkHipaaValidation(password,fullname,accountname)
 		accountname=accountname.toLowerCase();
 		accountname = accountname.replace(/\s+/g, '');
 		 
-		if (!isAsciiPrintable(password)) {
+		/*if (!isAsciiPrintable(password)) {
 			hipaaValidateMsg = PASSWORD_RULES[0].message;
-		} else if (password.toLowerCase().indexOf("temp")==0) {
+		}
+		else if (password.toLowerCase().indexOf("temp")==0) {
 			hipaaValidateMsg = PASSWORD_RULES[1].message;
-		} else if (password.length < passwordminlength
+		}
+		else if (password.length < passwordminlength
 				|| password.length > passwordmaxlength) {
 			hipaaValidateMsg = PASSWORD_RULES[2].message;
 		} else if (getPasswordCategoryCount(password) < 3) {
 			hipaaValidateMsg = PASSWORD_RULES[3].message;
-		} else {
+		}
+		else {
 			var newpassword = password;
 			newpassword = newpassword.toLowerCase();
 			if (checkSequence(fullname, newpassword, 2)
@@ -202,7 +205,14 @@ function checkHipaaValidation(password,fullname,accountname)
 				hipaaValidateMsg = PASSWORD_RULES[4].message;
 			}
 
-		}
+		}*/
+		// at least one number, one lowercase and one uppercase letter
+		// at least six characters
+		var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+		if(re.test(password))
+			return hipaaValidateMsg;
+		else
+			return "Password should be of minimum length 6 and contains atleast 1 Capital letter and 1 numeric character."
 	} catch (e) {
 		alert(e)
 	}
