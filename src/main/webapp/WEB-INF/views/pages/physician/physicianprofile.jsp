@@ -100,7 +100,7 @@ var physicianStep=1;
                                           </span>
                           </a>
                         </li>
-                        <li>
+                       <%-- <li>
                           <a href="#step-2" class="disabled" isdone="0" rel="2" onclick="setButtonEnabled(1)">
                             <span class="step_no">2</span>
                             <span class="step_descr">
@@ -108,21 +108,21 @@ var physicianStep=1;
                                               <small>Setup Clinic</small>
                                           </span>
                           </a>
-                        </li>
+                        </li>--%>
                         <li>
-                          <a href="#step-3" class="disabled" isdone="0" rel="3" onclick="setButtonEnabled(2)">
-                            <span class="step_no">3</span>
+                          <a href="#step-2" class="disabled" isdone="0" rel="2" onclick="setButtonEnabled(1)">
+                            <span class="step_no">2</span>
                             <span class="step_descr">
-                                              Step 3<br>
+                                              Step 2<br>
                                               <small>Upload Licenses</small>
                                           </span>
                           </a>
                         </li>
                         <li>
-                          <a href="#step-4" class="disabled" isdone="0" rel="4" onclick="setButtonDisabled(3)">
-                            <span class="step_no">4</span>
+                          <a href="#step-3" class="disabled" isdone="0" rel="3" onclick="setButtonDisabled(2)">
+                            <span class="step_no">3</span>
                             <span class="step_descr">
-                                              Step 4<br>
+                                              Step 3<br>
                                               <small>E-Sign Profile PDF</small>
                                           </span>
                           </a>
@@ -249,7 +249,7 @@ var physicianStep=1;
 					</div>
 
 					<!-- Second Location -->
-					<div class="x_panel">
+					<%--<div class="x_panel">
 	                	<div class="x_title">
 	                    	<h2>Secondary Location</h2>
 	                    	<div class="clearfix"></div>
@@ -287,7 +287,7 @@ var physicianStep=1;
 	                    		</div>
 							</div>
 	                  	</div>
-					</div>
+					</div>--%>
 
 					<!-- Phone -->
 					<div class="x_panel">
@@ -441,7 +441,7 @@ var physicianStep=1;
 	                  </div>
 
 					<!-- Status -->
-					<div class="x_panel">
+					<div class="x_panel" style="display: none">
 	                	<div class="x_title">
 	                    	<h2>Physician Status</h2>
 	                    	<div class="clearfix"></div>
@@ -593,7 +593,7 @@ var physicianStep=1;
 		                        		</div>
 		                      		</div>
 									<div class="row">
-		                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label" for="npi">NPI </label>
+		                        		<label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="npi">NPI </label>
 		                        		<div class="col-md-9 col-sm-9 col-xs-12 form-group">
 		                          			<form:input path="npi" class="form-control" maxlength="25"  />
 		                          			<form:hidden path="upin" />
@@ -809,7 +809,7 @@ var physicianStep=1;
 						</div>
 					  </div>
                     </div>
-                    <div id="step-2" class="content" style="display: none;">
+                    <%--<div id="step-2" class="content" style="display: none;">
                         <h2 class="StepTitle">Step 2 Setup Clinic</h2>
                         <p>
                         	 <button type="button"  class="btn btn-success createNewClinic">Create Physician's Clinic</button>
@@ -826,10 +826,10 @@ var physicianStep=1;
 										</div>
                           				<!-- <label class="col-md-3 col-sm-3 col-xs-12 control-label required" for="clinic-name">Clinic</label> -->
 										<div class="col-md-9 col-sm-9 col-xs-12 form-group">
-											<%-- <form:select path="clinicId" class="select2_single form-control" >
+											&lt;%&ndash; <form:select path="clinicId" class="select2_single form-control" >
 												<form:option value="0">Select</form:option>
 												<form:options items="${clinicList}" itemLabel="clinicName" itemValue="id" />
-											</form:select> --%>
+											</form:select> &ndash;%&gt;
 											
 											<div class="row style-select text-center">
 												<div class="col-md-12 text-center">
@@ -869,10 +869,10 @@ var physicianStep=1;
 									</div>
 							</div>
 						</div>
-                      </div>
-                      
-                     <div id="step-3" class="content" style="display: none;">
-                        <h2 class="StepTitle">Step 3 Upload Licenses</h2>
+                      </div>--%>
+
+                     <div id="step-2" class="content" style="display: none;">
+                        <h2 class="StepTitle">Step 2 Upload Licenses</h2>
                       	<div class="x_panel">
 							<div class="x_title">
 							<h2>Documents</h2>
@@ -984,8 +984,8 @@ var physicianStep=1;
 							</div>
 						</div>
                      
-                      <div id="step-4" class="content" style="display: none;">
-                        <h2 class="StepTitle">Step 4 E-Sign Profile PDF</h2>
+                      <div id="step-3" class="content" style="display: none;">
+                        <h2 class="StepTitle">Step 3 E-Sign Profile PDF</h2>
                      	<div class="x_panel">
 							<div class="x_title">
 							<h2>E-Sign</h2>
@@ -1201,7 +1201,7 @@ var profilestep="${physicianAccount.profilestep}";
 var status="${physicianAccount.status}";
 physicianStep=parseInt(physicianStep)+parseInt(profilestep);
 //alert(profilestep)
-if(profilestep==3)
+if(profilestep==2)
 	$('button[type="submit"]').prop('disabled','disabled');
 else
 	$('button[type="submit"]').removeAttr('disabled');

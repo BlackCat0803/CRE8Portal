@@ -88,7 +88,7 @@ function SmartWizard(target, options) {
         	if(isFormValid)
         		{
         			//alert("profilestep ====="+profilestep)
-        		if(profilestep==3)
+        		if(profilestep==2)
         			$('button[type="submit"]').prop('disabled','disabled');
         			document.physicianAccount.screenflag.value="savenext";
         			//alert(document.physicianAccount.screenflag.value)
@@ -113,7 +113,7 @@ function SmartWizard(target, options) {
     		{
     			physicianStep++;
     			profilestep++;
-    			if(profilestep==3)
+    			if(profilestep==2)
         			$('button[type="submit"]').prop('disabled','disabled');
     		}
     	

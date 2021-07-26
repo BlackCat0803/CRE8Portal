@@ -24,7 +24,7 @@ public class PhysicianProfile {
 	private String zipCode;
 	private Timestamp previousSignon;
 	private String dateRegistrated;
-	private String status;
+	private String status = "";
 	
 	private Timestamp passwordResetDate;
 	private int loginAttempts;

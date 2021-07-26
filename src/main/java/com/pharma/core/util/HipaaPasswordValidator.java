@@ -785,7 +785,7 @@ public class HipaaPasswordValidator {
 					hipaaValidateLogin = false;
 				}
 			}*/
-			String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$";
+			String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d].{6,}$";
 			Pattern pattern = Pattern.compile(passwordPattern);
 			Matcher matcher = pattern.matcher(password);
 			hipaaValidateLogin =  matcher.matches();

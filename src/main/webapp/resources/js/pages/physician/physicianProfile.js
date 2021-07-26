@@ -471,7 +471,7 @@ function formValidation(onLoad) {
 		                message:  $("#err_npi_format").val(),
 	                	callback: function(value, validator, $field) {
 	                		if (isFieldValidate()==1) {
-	                			if ((value == null || value == "") || (value.length > 5))  
+	                			if (value.length > 5)
 	                				return true;
 	                			else {
 	                				return {
@@ -1187,9 +1187,9 @@ $(document).on("change", "input[name=uploadLogoFile]", function(event) {
     	
     	if (gridSize == 0) {
 			
-    		if(profilestep==3)
+    		if(profilestep==2)
 			{
-    			profilestep=2;
+    			profilestep=1;
 				
 			}
 			

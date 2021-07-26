@@ -381,7 +381,7 @@ public class PhysicianAccountServiceImpl implements PhysicianAccountService  {
 		if (!isUpdated) {
 			// Clinic List
 			String[] formIdList = null;
-			if (!"".equalsIgnoreCase( form.getSelectedClinicId()))
+			if (!"".equalsIgnoreCase( form.getSelectedClinicId()) && form.getSelectedClinicId() != null)
 				formIdList = form.getSelectedClinicId().split(",");
 			else
 				formIdList = new String[0];
