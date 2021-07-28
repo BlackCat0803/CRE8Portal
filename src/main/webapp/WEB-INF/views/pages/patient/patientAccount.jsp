@@ -197,7 +197,7 @@
 							
 	                      		
 	                      		
-	                      		<div class="row">
+	                      		<div class="row" style="display: none">
 	                        		<label class="col-md-4 col-sm-12 col-xs-12 control-label required" for="userLoginId">Username</label>
 	                        		<div class="col-md-8 col-sm-12 col-xs-12 form-group">
 										<c:choose>
@@ -210,10 +210,10 @@
 										</c:choose>
 	                        		</div>
 	                      		</div>
-	                      		<div class="col-md-offset-4 col-md-9 col-sm-12 col-xs-12 photoNotes">
+	                      		<div  style="display: none" class="col-md-offset-4 col-md-9 col-sm-12 col-xs-12 photoNotes">
 									<label><b>Note:</b> Username used for patient login purpose</label>
 								</div>
-	                      		<div class="row">
+	                      		<div class="row" style="display: none">
 	                        		<label class="col-md-4 col-sm-12 col-xs-12 control-label required" for="tempPassword">Password</label>
 	                        		<div class="col-md-8 col-sm-12 col-xs-12 form-group">
 									<input type="text" value="${patientAccount.password}" class="form-control" readonly="readonly" />
@@ -478,7 +478,7 @@
                     	<div class="clearfix"></div>
                   	</div>
                   	<div class="x_content x_title_padding">
-						<div class="row">
+						<div class="row" style="display: none">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<c:choose>
 									<c:when	test="${loginDetail.type == 'Administrator' or loginDetail.type == 'Admin' or loginDetail.type == 'Super Admin'}">

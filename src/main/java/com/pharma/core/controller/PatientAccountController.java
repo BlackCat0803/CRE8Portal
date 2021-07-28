@@ -827,7 +827,9 @@ public class PatientAccountController extends PatientBaseController{
 						
 						if (phyGroup != null) {
 							patient.setGroupId(phyGroup.getGroupId());
-							patient.setGroupName( groupService.getGroupMasterDetails(phyGroup.getGroupId()).getGroupName() );
+							GroupMaster groupMaster = groupService.getGroupMasterDetails(phyGroup.getGroupId());
+							if(groupMaster != null)
+								patient.setGroupName(groupMaster.getGroupName());
 						}
 						
 						}
