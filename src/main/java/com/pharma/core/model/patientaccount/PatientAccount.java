@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.pharma.core.converters.JPACryptoConverter;
+import com.pharma.core.util.PharmacyUtil;
 
 /**
  * This class is a JPA entity class
@@ -28,7 +29,7 @@ public class PatientAccount {
 	private int id;
 	//private int physicianId; //Commented on jan 22,2018
 	private String patientCode;
-	private String status;
+	private String status = PharmacyUtil.statusProfileCompleted;
     private String firstName;
 	private String lastName;
 	private String middleName;

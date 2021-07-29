@@ -442,7 +442,7 @@ public class PatientAccountServiceImpl implements PatientAccountService  {
 					}
 				}
 
-				if (!"".equalsIgnoreCase( form.getSelectedGroupId())) {
+				if (form.getSelectedGroupId()!=null && !"".equalsIgnoreCase( form.getSelectedGroupId())) {
 					String[] idList = form.getSelectedGroupId().split(",");
 					if (idList.length > 0) {
 						for (int i=0; i < idList.length; i++) {

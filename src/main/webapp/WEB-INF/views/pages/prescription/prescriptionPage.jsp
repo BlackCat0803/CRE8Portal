@@ -30,7 +30,25 @@
 				
 				
 			</c:if>
-		</div><%-- <div class="col-md-3 col-sm-3 col-xs-3">
+		</div>
+		<div class="col-md-2 col-sm-2 col-xs-2 text-right">
+			<c:if test="${loginDetail.type != 'Physician' or (loginDetail.type == 'Physician' and loginDetail.status != 'New Modifications') }">
+
+				<c:choose>
+					<c:when test="${(loginDetail.type == 'Administrator' or loginDetail.type == 'Super Admin' or loginDetail.type == 'Admin')}">
+						<c:if test="${(loginDetail.patientCreationPermission =='Yes')}">
+							<button type="button" id="newPatientAcc" class="btn btn-primary goNewRec" >Create New Patient</button>
+						</c:if>
+					</c:when>
+					<c:otherwise>
+						<button type="button" id="newPatientAcc" class="btn btn-primary goNewRec" >Create New Patient</button>
+					</c:otherwise>
+				</c:choose>
+
+
+			</c:if>
+		</div>
+			<%-- <div class="col-md-3 col-sm-3 col-xs-3">
 		<c:choose>
 						    	<c:when test="${loginDetail.type == 'Physician'}">
 						        	<div class="col-md-6 col-sm-6 col-xs-12 text-left">
@@ -586,7 +604,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="col-md-3 col-sm-6 col-xs-6 control-label required" for="billingName">Billing Name</label>
+								<label class="col-md-3 col-sm-6 col-xs-6 control-label" for="billingName">Billing Name</label>
 								<div class="col-md-9 col-sm-6 col-xs-6 form-group">
 									<form:input path="billingName" class="form-control " maxlength="100"  />
 								</div>
@@ -594,7 +612,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="col-md-3 col-sm-6 col-xs-6 control-label required" for="billingAddress">Address</label>
+								<label class="col-md-3 col-sm-6 col-xs-6 control-label" for="billingAddress">Address</label>
 								<div class="col-md-9 col-sm-6 col-xs-6 form-group">
 									<form:input path="billingAddress" class="form-control " />
 								</div>
@@ -602,7 +620,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="col-md-3 col-sm-6 col-xs-6 control-label required" for="billingCity">City</label>
+								<label class="col-md-3 col-sm-6 col-xs-6 control-label" for="billingCity">City</label>
 								<div class="col-md-9 col-sm-6 col-xs-6 form-group">
 									<form:input path="billingCity" class="form-control " maxlength="25" />
 								</div>
@@ -610,7 +628,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="col-md-3 col-sm-6 col-xs-6 control-label required" for="billingState">State</label>
+								<label class="col-md-3 col-sm-6 col-xs-6 control-label" for="billingState">State</label>
 								<div class="col-md-9 col-sm-6 col-xs-6 form-group">
 									<form:input path="billingState" class="form-control " maxlength="3" />
 								</div>
@@ -618,7 +636,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="col-md-3 col-sm-6 col-xs-6 control-label required" for="billingZipCode">Zip Code</label>
+								<label class="col-md-3 col-sm-6 col-xs-6 control-label" for="billingZipCode">Zip Code</label>
 								<div class="col-md-9 col-sm-6 col-xs-6 form-group">
 									<form:input path="billingZipCode" class="form-control " maxlength="12" onkeypress="return isNumber(event)" />
 									<form:hidden path="billingCountry"  />

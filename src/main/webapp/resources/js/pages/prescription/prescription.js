@@ -1536,7 +1536,7 @@ try{
 	                    }
 	                }
 	            },
-	            billingName: {
+	           /* billingName: {
 	                validators: {
 	                    notEmpty: {
 	                    	message: $("#err_bill_name").val()
@@ -1570,7 +1570,7 @@ try{
 	                    	message: $("#err_bill_zipcode").val()
 	                    }
 	                }
-	            },
+	            },*/
 	            shippingName: {
 	                validators: {
 	                    notEmpty: {
@@ -2202,3 +2202,6 @@ function restRxItems(){
 		document.getElementById("select2-autoCompleterRxItem-container").innerHTML="<span class=\"select2-selection__placeholder\">Select</span>";
 	}
 }
+$(document).on("click", "#newPatientAcc", function() {
+	location.href=urlPath+"patient/patientAccount";
+} );

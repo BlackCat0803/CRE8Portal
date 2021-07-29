@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.pharma.core.model.pharmacygroup.GroupMaster;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -218,7 +219,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 			} */
 			
 			form.setGroupId( groupId );
-			form.setGroupName(groupService.getGroupMasterDetails(groupId).getGroupName());
+			GroupMaster groupMaster = groupService.getGroupMasterDetails(groupId);
+			if(groupMaster!=null)
+				form.setGroupName(groupMaster.getGroupName());
 			
 			form.setRxICD10("");
 			// form.setPhyPhone(acc.getMobile()+"");

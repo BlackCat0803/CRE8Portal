@@ -439,7 +439,7 @@ public class PatientAccountController extends PatientBaseController{
 			if (patient == null) {
 				SimpleDateFormat dt = new SimpleDateFormat("MM/dd/yyyy");
 				patient = new PatientAccountForm();
-				patient.setStatus(PharmacyUtil.statusNew);
+				patient.setStatus(PharmacyUtil.statusProfileCompleted);
 				patient.setDateRegistered(dt.format( new java.sql.Date(new Date().getTime())) );
 			}
 

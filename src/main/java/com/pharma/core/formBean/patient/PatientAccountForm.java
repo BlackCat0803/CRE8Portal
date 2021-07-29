@@ -1,5 +1,7 @@
 package com.pharma.core.formBean.patient;
 
+import com.pharma.core.util.PharmacyUtil;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 /**
@@ -11,7 +13,7 @@ public class PatientAccountForm {
 	private int patientId;
 	private int physicianId;
 	private String patientCode;
-	private String status;
+	private String status = PharmacyUtil.statusProfileCompleted;
 	private String firstName;
 	private String lastName;
 	private String middleName;
