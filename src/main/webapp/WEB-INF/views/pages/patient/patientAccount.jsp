@@ -252,9 +252,9 @@
                   	<div class="x_content x_title_padding">
 						<div class="row">
 	                    	<div class="col-md-12 col-sm-12 col-xs-12 profile_left">
-								<div class="col-md-offset-4 col-md-6 col-sm-9 col-xs-9 photoNotes">
-									<label><b>Enter Drivers License or Alternate ID (One is Required)</b></label>
-								</div>
+								<%--<div class="col-md-offset-4 col-md-6 col-sm-9 col-xs-9 photoNotes">
+									<label><b>Enter Drivers License or Alternate ID</b></label>
+								</div>--%>
 								<div class="row">
 									<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="driversLicense">Drivers License</label>
 									<div class="col-md-8 col-sm-9 col-xs-12 form-group">

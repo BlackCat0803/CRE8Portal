@@ -583,7 +583,7 @@ function formValidation(onLoad) {
 				}
 			},
 			
-			driversLicense: {
+			/*driversLicense: {
 				validators: {
                 	callback: {
                         message: $("#err_driving_or_alternate_id").val(),
@@ -600,7 +600,7 @@ function formValidation(onLoad) {
                 	}
 				}
 			},
-			
+
 			alternateId : {
 				validators: {
                 	callback: {
@@ -617,8 +617,8 @@ function formValidation(onLoad) {
                         }
                 	}
 				}
-				
-			},
+
+			},*/
 			
 			/*alternateIdTypeId : {
 				validators: {
