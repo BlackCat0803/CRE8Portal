@@ -478,7 +478,7 @@
                     	<div class="clearfix"></div>
                   	</div>
                   	<div class="x_content x_title_padding">
-						<div class="row" style="display: none">
+						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<c:choose>
 									<c:when	test="${loginDetail.type == 'Administrator' or loginDetail.type == 'Admin' or loginDetail.type == 'Super Admin'}">
@@ -623,7 +623,7 @@
 											</div>
 										</div>
 									</c:when>
-									<c:otherwise>
+								<%--	<c:otherwise>
 										<c:choose>
 											<c:when
 												test="${patientAccount.status != 'New Modifications' and patientAccount.status != 'Approved' and patientAccount.status != 'Denied'}">
@@ -718,7 +718,7 @@
 												</div>
 											</c:otherwise>
 										</c:choose>
-									</c:otherwise>
+									</c:otherwise>--%>
 								</c:choose>
 							</div>
 						</div>
