@@ -540,7 +540,7 @@ public class PharmacyAutoCompleterController {
 			LoginForm loggedInUser = (LoginForm) session.getAttribute("loginDetail");
 			if(typeId>0){
 				
-				if(typeId==1){
+				if(typeId==1 || typeId==3){
 					List<PrescriptionItem> itemList = prescriptionItemService.getAutoCompletePrescriptionItemsList(query,String.valueOf(formId));
 				
 					if(itemList!=null && itemList.size()>0)
