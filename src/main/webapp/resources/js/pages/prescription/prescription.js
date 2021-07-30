@@ -2096,7 +2096,7 @@ try{
 	    	  itemresults = [];
 	    	  var rxTypeFormId= $("#rxType").val();
 	    	  
-	    	  if(rxTypeFormId==1){
+	    	  if(rxTypeFormId==1 || rxTypeFormId == 3){
 	    		  data.forEach(function makeResults(element) {
 			        	//alert(element)
 			        	  itemresults.push({
