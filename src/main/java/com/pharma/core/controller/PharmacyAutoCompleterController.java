@@ -1,6 +1,7 @@
 package com.pharma.core.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -581,5 +582,18 @@ public class PharmacyAutoCompleterController {
 
 		return prescriptionTransactionFormList;
 	}
-	
+
+	@RequestMapping(value = "/saveDrug", method = RequestMethod.POST)
+	public @ResponseBody List saveDrug(@RequestParam("typeId") int typeId, @RequestParam("drugName") String drugName, HttpSession session) {
+		try {
+			if (typeId == 1 || typeId == 3) {
+				return prescriptionItemService.saveItem(typeId, drugName);
+			} else {
+				return prescriptionMedicationService.saveMedication(typeId, drugName);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			return Collections.emptyList();
+		}
+	}
 }

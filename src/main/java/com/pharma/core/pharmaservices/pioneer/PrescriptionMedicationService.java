@@ -16,4 +16,6 @@ public interface PrescriptionMedicationService {
 	List<PrescriptionMedication> getAutoCompletePrescriptionMedicationsList(String term,int id);
 
 	List<PrescriptionMedication> getAllAutoCompletePrescriptionMedicationsList();
+
+	List saveMedication(int medTypeId, String medicationDesc);
 }

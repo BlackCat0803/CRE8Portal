@@ -1374,7 +1374,7 @@ try{
 	        			}
 	        		}
 	        	},
-	        	clinicId: {
+	        	/*clinicId: {
 	        		validators: {
 	            		callback: {
 	    	        		message: $("#err_clinic_id").val(),
@@ -1386,7 +1386,7 @@ try{
 	    	        		}
 	            		}
 	                }
-	        	},
+	        	},*/
 	            patientBillToId: {
 	                validators: {
 	                    notEmpty: {
@@ -2072,6 +2072,26 @@ try{
 		}
 	var rxItemFormId= $("#rxItem").val();
 
+	function createNewDrug() {
+		var itemTypeId = $("#rxType").val();
+		var itemValue = localStorage.getItem("drugName");
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', urlPath + '/saveDrug?typeId=' + itemTypeId + '&drugName=' + itemValue, true);
+		xhr.send();
+		xhr.onload = function () {
+			if (this.responseText != "") {
+				$.alert({
+					title: 'Save Info',
+					content: "Drug Saved",
+				});
+			} else {
+				$.alert({
+					title: 'Save Info',
+					content: "Couldn't Saved Drug.",
+				});
+			}
+		}
+	}
 	
 	//alert(rxItemFormId)
 	var itemresults=[];
@@ -2084,6 +2104,7 @@ try{
 	      dataType: 'json',
 	      data: function (params) {
 	    	  var rxTypeFormId= $("#rxType").val();
+	    	  localStorage.setItem("drugName", params.term);
 	    	  //alert(rxTypeFormId)
 	          return {
 	        	  term: $.trim(params.term),
@@ -2126,7 +2147,15 @@ try{
 	        }; */
 	      },
 	      cache: true
-	    }
+	    },
+		language : {
+			"noResults": function() {
+				return "No Results Found <br><button id='createNewDrug' onclick='createNewDrug();' class='btn btn-primary'>Create New Drug</button>";
+			}
+		},
+		escapeMarkup: function (markup) {
+			return markup;
+		}
 	  }).on('change', function (e) {
 		    //alert(this.value)
 		  	var itemId = this.value;

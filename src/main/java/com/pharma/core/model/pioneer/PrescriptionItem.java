@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name="[pioneer.item.item]")
 public class PrescriptionItem {
 
-	
+	private int id;
 	private String itemid	;
 	private String locationid;
 	private int itemtypeid;
@@ -135,9 +135,14 @@ public class PrescriptionItem {
 	private String primarycategoryid;
 	private int immunizationreporttypeid;
 	private String salecomment		;
-	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getItemid() {
 		return itemid;
 	}

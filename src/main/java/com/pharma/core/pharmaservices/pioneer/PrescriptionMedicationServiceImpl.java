@@ -1,5 +1,6 @@
 package com.pharma.core.pharmaservices.pioneer;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,13 @@ public class PrescriptionMedicationServiceImpl implements PrescriptionMedication
 		return medicationObj;
 	}
 
+	public List saveMedication(int medTypeId, String medicationDesc){
+		PrescriptionMedication medication = new PrescriptionMedication();
+		medication.setMedicationid((int) (prescriptionMedicationRepo.count())+1);
+		medication.setMedicationdescription(medicationDesc);
+		medication.setMedtype(medTypeId);
+		medication.setReferencefederaldeaclasscode("0");
+		return Collections.singletonList(prescriptionMedicationRepo.save(medication));
+	}
 		
 }

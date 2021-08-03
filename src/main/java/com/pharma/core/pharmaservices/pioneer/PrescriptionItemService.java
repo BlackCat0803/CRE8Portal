@@ -14,4 +14,6 @@ public interface PrescriptionItemService {
 	List<PrescriptionItem> getAutoCompletePrescriptionItemsList(String term,String id);
 
 	List<PrescriptionItem> getAllAutoCompletePrescriptionItemsList();
+
+	List saveItem(int typeId, String drugName);
 }
