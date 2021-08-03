@@ -150,7 +150,7 @@ function signatureSave() {
 	}
 	else
 	{
-		alert("Enter at least one Items...");
+		//alert("Enter at least one Items...");
 	}
 	
 	
