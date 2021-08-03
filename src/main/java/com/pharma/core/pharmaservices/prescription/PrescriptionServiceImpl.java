@@ -286,8 +286,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 				savedClinicId = prescriptionObj.getClinicId();
 				
 				Clinic clinicObj = clinicRepo.findOne(savedClinicId);
-				form.setClinicName(clinicObj.getClinicName());
-				form.setClinicId(clinicObj.getId());
+				if(clinicObj != null){
+					form.setClinicName(clinicObj.getClinicName());
+					form.setClinicId(clinicObj.getId());
+				}
 			}
 			
 			PhysicianProfile acc = phyService.getPhysicianData(id, null, null);
