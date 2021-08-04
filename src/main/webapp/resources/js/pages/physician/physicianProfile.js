@@ -219,12 +219,12 @@ function formValidation(onLoad) {
 		            }
                 }
             },
-            fax: {
+            /*fax: {
                 validators: {
-                    /*phone: {
+                    /!*phone: {
                         country: 'US',
                         message: $("#err_fax_format").val()
-                    }*/
+                    }*!/
                 	callback: {
 		                message:  $("#err_fax").val(),
 		                callback: function (value, validator, $field) {
@@ -247,7 +247,7 @@ function formValidation(onLoad) {
 		                }
 		            }
                 }
-            },
+            },*/
             mobile: {
                 validators: {
                     /*notEmpty: {

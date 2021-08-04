@@ -305,7 +305,7 @@ var physicianStep=1;
 		                        		</div>
 		                      		</div>
 									<div class="row">
-		                        		<label class="col-md-4 col-sm-3 col-xs-12 control-label required" for="fax">Primary Fax </label>
+		                        		<label class="col-md-4 col-sm-3 col-xs-12 control-label" for="fax">Primary Fax </label>
 		                        		<div class="col-md-8 col-sm-9 col-xs-12 form-group">
 		                          			<form:input path="fax" class="form-control" maxlength="15" onkeypress="return isNumber(event)" />
 		                          			<form:hidden path="phone2" />

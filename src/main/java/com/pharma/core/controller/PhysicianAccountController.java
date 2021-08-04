@@ -1171,7 +1171,7 @@ public class PhysicianAccountController extends PhysicianBaseController{
 
 							if(ProfileESigned.equalsIgnoreCase("ProfileESigned"))
 							{
-								form.setProfilestep(3);
+								form.setProfilestep(2);
 							}
 							mv.setViewName("physicianprofile");
 						}

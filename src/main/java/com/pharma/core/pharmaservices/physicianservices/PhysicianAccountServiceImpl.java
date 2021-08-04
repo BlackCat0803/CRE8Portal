@@ -623,7 +623,7 @@ public class PhysicianAccountServiceImpl implements PhysicianAccountService  {
 							}
 						}
 
-						if (!"".equalsIgnoreCase( form.getSelectedClinicId())) {
+						if (!"".equalsIgnoreCase( form.getSelectedClinicId()) && form.getSelectedClinicId() != null) {
 							String[] idList = form.getSelectedClinicId().split(",");
 							if (idList.length > 0) {
 								for (int i=0; i < idList.length; i++) {
