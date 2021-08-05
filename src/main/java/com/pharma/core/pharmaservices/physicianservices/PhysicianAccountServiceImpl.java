@@ -254,132 +254,130 @@ public class PhysicianAccountServiceImpl implements PhysicianAccountService  {
 		boolean isUpdated = false;
 
 		// First Name
-		if ( (form.getFirstName() == null && acc.getFirstName() != null) || (form.getFirstName() != null && acc.getFirstName() == null) ||
-				(form.getFirstName() != null && acc.getFirstName() != null && !form.getFirstName().equalsIgnoreCase(acc.getFirstName())) )
-			isUpdated=true;
+		if ((form.getFirstName() == null && acc.getFirstName() != null) || (form.getFirstName() != null && acc.getFirstName() == null) ||
+				(form.getFirstName() != null && acc.getFirstName() != null && !form.getFirstName().equalsIgnoreCase(acc.getFirstName())))
+			isUpdated = true;
 
 		// Middle Name
-		if ( (form.getMiddleName() == null && acc.getMiddleName() != null) || (form.getMiddleName() != null && acc.getMiddleName() == null) ||
-				(form.getMiddleName() != null && acc.getMiddleName() != null && !form.getMiddleName().equalsIgnoreCase(acc.getMiddleName())) )
+		if ((form.getMiddleName() == null && acc.getMiddleName() != null) || (form.getMiddleName() != null && acc.getMiddleName() == null) ||
+				(form.getMiddleName() != null && acc.getMiddleName() != null && !form.getMiddleName().equalsIgnoreCase(acc.getMiddleName())))
 			isUpdated = true;
 
 		// Last Name
-		if ( (form.getLastName() == null && acc.getLastName() != null) || (form.getLastName() != null && acc.getLastName() == null) ||
-				(form.getLastName() != null && acc.getLastName() != null && !form.getLastName().equalsIgnoreCase(acc.getLastName())) )
+		if ((form.getLastName() == null && acc.getLastName() != null) || (form.getLastName() != null && acc.getLastName() == null) ||
+				(form.getLastName() != null && acc.getLastName() != null && !form.getLastName().equalsIgnoreCase(acc.getLastName())))
 			isUpdated = true;
 
 		// Street (Address1)
-		if ( (form.getAddress1()  == null && acc.getAddress1() != null) || (form.getAddress1() != null && acc.getAddress1() == null) ||
-				(form.getAddress1() != null && acc.getAddress1() != null && !form.getAddress1().equalsIgnoreCase(acc.getAddress1())) )
+		if ((form.getAddress1() == null && acc.getAddress1() != null) || (form.getAddress1() != null && acc.getAddress1() == null) ||
+				(form.getAddress1() != null && acc.getAddress1() != null && !form.getAddress1().equalsIgnoreCase(acc.getAddress1())))
 			isUpdated = true;
 
 		// City
-		if ( (form.getCity() == null && acc.getCity() != null) || (form.getCity() != null && acc.getCity() == null) ||
-				(form.getCity() != null && acc.getCity() != null && !form.getCity().equalsIgnoreCase(acc.getCity())) )
+		if ((form.getCity() == null && acc.getCity() != null) || (form.getCity() != null && acc.getCity() == null) ||
+				(form.getCity() != null && acc.getCity() != null && !form.getCity().equalsIgnoreCase(acc.getCity())))
 			isUpdated = true;
 
 		// State
-		if ( (form.getState() == null && acc.getState() != null) || (form.getState() != null && acc.getState() == null) ||
-				(form.getState() != null && acc.getState() != null && !form.getState().equalsIgnoreCase(acc.getState())) )
+		if ((form.getState() == null && acc.getState() != null) || (form.getState() != null && acc.getState() == null) ||
+				(form.getState() != null && acc.getState() != null && !form.getState().equalsIgnoreCase(acc.getState())))
 			isUpdated = true;
 
 		// Zip code
-		if ( (form.getZipCode() == null && acc.getZipCode() != null) || (form.getZipCode() != null && acc.getZipCode() == null) ||
-				(form.getZipCode() != null && acc.getZipCode() != null && !form.getZipCode().equalsIgnoreCase(acc.getZipCode())) )
+		if ((form.getZipCode() == null && acc.getZipCode() != null) || (form.getZipCode() != null && acc.getZipCode() == null) ||
+				(form.getZipCode() != null && acc.getZipCode() != null && !form.getZipCode().equalsIgnoreCase(acc.getZipCode())))
 			isUpdated = true;
-
 
 
 		// Second Street (Address2)
-		if ( (form.getAddress2()  == null && acc.getSecondaryAddress1() != null) || (form.getAddress2() != null && acc.getSecondaryAddress1() == null) ||
-				(form.getAddress2() != null && acc.getSecondaryAddress1() != null && !form.getAddress2().equalsIgnoreCase(acc.getSecondaryAddress1())) )
+		if ((form.getAddress2() == null && acc.getSecondaryAddress1() != null) || (form.getAddress2() != null && acc.getSecondaryAddress1() == null) ||
+				(form.getAddress2() != null && acc.getSecondaryAddress1() != null && !form.getAddress2().equalsIgnoreCase(acc.getSecondaryAddress1())))
 			isUpdated = true;
 
 		// Second City
-		if ( (form.getCity2() == null && acc.getSecondaryCity() != null) || (form.getCity2() != null && acc.getSecondaryCity() == null) ||
-				(form.getCity2() != null && acc.getSecondaryCity() != null && !form.getCity2().equalsIgnoreCase(acc.getSecondaryCity())) )
+		if ((form.getCity2() == null && acc.getSecondaryCity() != null) || (form.getCity2() != null && acc.getSecondaryCity() == null) ||
+				(form.getCity2() != null && acc.getSecondaryCity() != null && !form.getCity2().equalsIgnoreCase(acc.getSecondaryCity())))
 			isUpdated = true;
 
 		// Second State
-		if ( (form.getState2() == null && acc.getSecondaryState() != null) || (form.getState2() != null && acc.getSecondaryState() == null) ||
-				(form.getState2() != null && acc.getSecondaryState() != null && !form.getState2().equalsIgnoreCase(acc.getSecondaryState())) )
+		if ((form.getState2() == null && acc.getSecondaryState() != null) || (form.getState2() != null && acc.getSecondaryState() == null) ||
+				(form.getState2() != null && acc.getSecondaryState() != null && !form.getState2().equalsIgnoreCase(acc.getSecondaryState())))
 			isUpdated = true;
 
 		// Second Zip code
-		if ( (form.getZipCode2() == null && acc.getSecondaryZipCode() != null) || (form.getZipCode2() != null && acc.getSecondaryZipCode() == null) ||
-				(form.getZipCode2() != null && acc.getSecondaryZipCode() != null && !form.getZipCode2().equalsIgnoreCase(acc.getSecondaryZipCode())) )
+		if ((form.getZipCode2() == null && acc.getSecondaryZipCode() != null) || (form.getZipCode2() != null && acc.getSecondaryZipCode() == null) ||
+				(form.getZipCode2() != null && acc.getSecondaryZipCode() != null && !form.getZipCode2().equalsIgnoreCase(acc.getSecondaryZipCode())))
 			isUpdated = true;
 
 		// phone
-		if ( (form.getPhone() == null && acc.getPhone() != null) || (form.getPhone() != null && acc.getPhone() == null) ||
-				(form.getPhone() != null && acc.getPhone() != null && !form.getPhone().equalsIgnoreCase(acc.getPhone())) )
+		if ((form.getPhone() == null && acc.getPhone() != null) || (form.getPhone() != null && acc.getPhone() == null) ||
+				(form.getPhone() != null && acc.getPhone() != null && !form.getPhone().equalsIgnoreCase(acc.getPhone())))
 			isUpdated = true;
 
 		// fax
-		if ( (form.getFax() == null && acc.getFax() != null) || (form.getFax() != null && acc.getFax() == null) ||
-				(form.getFax() != null && acc.getFax() != null && !form.getFax().equalsIgnoreCase(acc.getFax())) )
+		if ((form.getFax() == null && acc.getFax() != null) || (form.getFax() != null && acc.getFax() == null) ||
+				(form.getFax() != null && acc.getFax() != null && !form.getFax().equalsIgnoreCase(acc.getFax())))
 			isUpdated = true;
 
 		// home  (phone 2)
-		if ( (form.getPhone2() == null && acc.getPhone2() != null) || (form.getPhone2() != null && acc.getPhone2() == null) ||
-				(form.getPhone2() != null && acc.getPhone2() != null && !form.getPhone2().equalsIgnoreCase(acc.getPhone2())) )
+		if ((form.getPhone2() == null && acc.getPhone2() != null) || (form.getPhone2() != null && acc.getPhone2() == null) ||
+				(form.getPhone2() != null && acc.getPhone2() != null && !form.getPhone2().equalsIgnoreCase(acc.getPhone2())))
 			isUpdated = true;
 
 		// office (phone 3)
-		if ( (form.getPhone3() == null && acc.getPhone3() != null) || (form.getPhone3() != null && acc.getPhone3() == null) ||
-				(form.getPhone3() != null && acc.getPhone3() != null && !form.getPhone3().equalsIgnoreCase(acc.getPhone3())) )
+		if ((form.getPhone3() == null && acc.getPhone3() != null) || (form.getPhone3() != null && acc.getPhone3() == null) ||
+				(form.getPhone3() != null && acc.getPhone3() != null && !form.getPhone3().equalsIgnoreCase(acc.getPhone3())))
 			isUpdated = true;
 
 		// mobile
-		if ( (form.getMobile() == null && acc.getMobile() != null) || (form.getMobile() != null && acc.getMobile() == null) ||
-				(form.getMobile() != null && acc.getMobile() != null && !form.getMobile().equalsIgnoreCase(acc.getMobile())) )
+		if ((form.getMobile() == null && acc.getMobile() != null) || (form.getMobile() != null && acc.getMobile() == null) ||
+				(form.getMobile() != null && acc.getMobile() != null && !form.getMobile().equalsIgnoreCase(acc.getMobile())))
 			isUpdated = true;
 
 		// email
-		if ( (form.getEmail() == null && acc.getEmail() != null) || (form.getEmail() != null && acc.getEmail() == null) ||
-				(form.getEmail() != null && acc.getEmail() != null && !form.getEmail().equalsIgnoreCase(acc.getEmail())) )
+		if ((form.getEmail() == null && acc.getEmail() != null) || (form.getEmail() != null && acc.getEmail() == null) ||
+				(form.getEmail() != null && acc.getEmail() != null && !form.getEmail().equalsIgnoreCase(acc.getEmail())))
 			isUpdated = true;
 
 		// group
-		PhysicianGroup phyGrp =  phyGroupRepo.findRecordByPhysicianId(form.getPhysicianId());
+		PhysicianGroup phyGrp = phyGroupRepo.findRecordByPhysicianId(form.getPhysicianId());
 		if (phyGrp != null) {
-			if ( form.getGroupId() != phyGrp.getGroupId())
+			if (form.getGroupId() != phyGrp.getGroupId())
 				isUpdated = true;
 		}
 
 		PhysicianProfileInfo accProfile = phyProfile.findOne(form.getPhysicianId());
 		// DEA
-		if( accProfile != null){
-			if ( (form.getDea() == null && accProfile.getDea() != null) || (form.getDea() != null &&  accProfile.getDea() == null) ||
-					(form.getDea() != null && accProfile.getDea() != null && !form.getDea().equalsIgnoreCase(accProfile.getDea())) )
+		if (accProfile != null) {
+			if ((form.getDea() == null && accProfile.getDea() != null) || (form.getDea() != null && accProfile.getDea() == null) ||
+					(form.getDea() != null && accProfile.getDea() != null && !form.getDea().equalsIgnoreCase(accProfile.getDea())))
+				isUpdated = true;
+
+			// NPI
+			if ((form.getNpi() == null && accProfile.getNpi() != null) || (form.getNpi() != null && accProfile.getNpi() == null) ||
+					(form.getNpi() != null && accProfile.getNpi() != null && !form.getNpi().equalsIgnoreCase(accProfile.getNpi())))
+				isUpdated = true;
+
+			// UPIN
+			if ((form.getUpin() == null && accProfile.getUpin() != null) || (form.getUpin() != null && accProfile.getUpin() == null) ||
+					(form.getUpin() != null && accProfile.getUpin() != null && !form.getUpin().equalsIgnoreCase(accProfile.getUpin())))
+				isUpdated = true;
+
+			// State License Number
+			if ((form.getStateLicense() == null && accProfile.getStateLicense() != null) || (form.getStateLicense() != null && accProfile.getStateLicense() == null) ||
+					(form.getStateLicense() != null && accProfile.getStateLicense() != null && !form.getStateLicense().equalsIgnoreCase(accProfile.getStateLicense())))
+				isUpdated = true;
+
+			// Medicaid (N/A)
+			if ((form.getMedicaid() == null && accProfile.getMedicaid() != null) || (form.getMedicaid() != null && accProfile.getMedicaid() == null) ||
+					(form.getMedicaid() != null && accProfile.getMedicaid() != null && !form.getMedicaid().equalsIgnoreCase(accProfile.getMedicaid())))
+				isUpdated = true;
+
+			// DPS
+			if ((form.getDps() == null && accProfile.getDps() != null) || (form.getDps() != null && accProfile.getDps() == null) ||
+					(form.getDps() != null && accProfile.getDps() != null && !form.getDps().equalsIgnoreCase(accProfile.getDps())))
 				isUpdated = true;
 		}
-
-		// NPI
-		if ( (form.getNpi() == null && accProfile.getNpi() != null) || (form.getNpi() != null && accProfile.getNpi() == null) ||
-				(form.getNpi() != null && accProfile.getNpi() != null && !form.getNpi().equalsIgnoreCase(accProfile.getNpi())) )
-			isUpdated = true;
-
-		// UPIN
-		if ( (form.getUpin() == null && accProfile.getUpin() != null) || (form.getUpin() != null && accProfile.getUpin() == null) ||
-				(form.getUpin() != null && accProfile.getUpin() != null && !form.getUpin().equalsIgnoreCase(accProfile.getUpin())) )
-			isUpdated = true;
-
-		// State License Number
-		if ( (form.getStateLicense() == null && accProfile.getStateLicense() != null) || (form.getStateLicense() != null && accProfile.getStateLicense() == null) ||
-				(form.getStateLicense() != null && accProfile.getStateLicense() != null && !form.getStateLicense().equalsIgnoreCase(accProfile.getStateLicense())) )
-			isUpdated = true;
-
-		// Medicaid (N/A)
-		if ( (form.getMedicaid() == null && accProfile.getMedicaid() != null) || (form.getMedicaid() != null && accProfile.getMedicaid() == null) ||
-				(form.getMedicaid() != null && accProfile.getMedicaid() != null && !form.getMedicaid().equalsIgnoreCase(accProfile.getMedicaid())) )
-			isUpdated = true;
-
-		// DPS
-		if ( (form.getDps() == null && accProfile.getDps() != null) || (form.getDps() != null && accProfile.getDps() == null) ||
-				(form.getDps() != null && accProfile.getDps() != null && !form.getDps().equalsIgnoreCase(accProfile.getDps())) )
-			isUpdated = true;
-
 		if (!isUpdated) {
 			// Clinic List
 			String[] formIdList = null;
