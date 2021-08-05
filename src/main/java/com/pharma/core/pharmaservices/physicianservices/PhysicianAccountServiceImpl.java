@@ -349,9 +349,11 @@ public class PhysicianAccountServiceImpl implements PhysicianAccountService  {
 
 		PhysicianProfileInfo accProfile = phyProfile.findOne(form.getPhysicianId());
 		// DEA
-		if ( (form.getDea() == null && accProfile.getDea() != null) || (form.getDea() != null && accProfile.getDea() == null) ||
-				(form.getDea() != null && accProfile.getDea() != null && !form.getDea().equalsIgnoreCase(accProfile.getDea())) )
-			isUpdated = true;
+		if( accProfile != null){
+			if ( (form.getDea() == null && accProfile.getDea() != null) || (form.getDea() != null &&  accProfile.getDea() == null) ||
+					(form.getDea() != null && accProfile.getDea() != null && !form.getDea().equalsIgnoreCase(accProfile.getDea())) )
+				isUpdated = true;
+		}
 
 		// NPI
 		if ( (form.getNpi() == null && accProfile.getNpi() != null) || (form.getNpi() != null && accProfile.getNpi() == null) ||
