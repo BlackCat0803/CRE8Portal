@@ -1091,11 +1091,11 @@
 										<c:choose>
 										<c:when test="${(loginDetail.type == 'Administrator' or loginDetail.type == 'Super Admin' or loginDetail.type == 'Admin')}">
 										<c:if test="${(loginDetail.prescriptionCreationPermission =='Yes')}">
-											<button type="submit" class="btn btn-success" onClick="return checkValues();">Save</button>
+											<button type="button" class="btn btn-primary" id="myModal" onClick="signatureClear();div_show(this);">Save & eSign</button>
 										</c:if>
 										</c:when>
 										<c:otherwise>
-											<button type="submit" class="btn btn-success" onClick="return checkValues();">Save</button>
+											<button type="button" class="btn btn-primary" id="myModal" onClick="signatureClear();div_show(this);">Save & eSign</button>
 										</c:otherwise>
 										</c:choose>
 				
@@ -1106,11 +1106,11 @@
 						        	<div class="col-md-6 col-sm-6 col-xs-12 text-right"></div>
 						       	</c:otherwise>
 						  	</c:choose>
-						   	<c:choose>
+						   <%--	<c:choose>
 						    	<c:when test="${loginDetail.type == 'Physician'}">
 						        	<div class="col-md-6 col-sm-12 col-xs-12 text-left">
 										<button type="button" class="btn btn-primary" id="myModal" onclick="signatureClear();div_show(this)" title="Click to eSign">
-									   		Click to eSign
+									   		Save & eSign
 										</button>
 									</div>
 						       	</c:when>
@@ -1124,7 +1124,7 @@
 						       	<c:otherwise>
 						        	<div class="col-md-6 col-sm-12 col-xs-12 text-right"></div>
 						       	</c:otherwise>
-						  	</c:choose>
+						  	</c:choose>--%>
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12 text-center formErrorMsg" style="display:none;">
@@ -1391,7 +1391,7 @@
 				<div class="col-md-5 col-sm-5 col-xs-5 text-right">
 					<div class="row">
 						<div class="col-md-3 col-sm-3 col-xs-3 text-right">
-						 <c:if test="${prescription.esignedPDF}"> --%>
+						 <c:if test="${prescription.esignedPDF}">
 							 <img class=" pdfDownload" src="${pageContext.request.contextPath}/resources/images/pdf-icon-2.png" title="PDF Download" style="height:36px;" style="cursor:pointer" />
 					 	</c:if> 
 						</div>

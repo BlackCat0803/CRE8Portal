@@ -920,13 +920,43 @@ public class PrescriptionController extends PrescriptionBaseController {
 	 */
 	@RequestMapping(value="/savePhysicianPrescriptionSignature", method=RequestMethod.POST)
 	public ModelAndView savePhysicianPrescriptionSignature(Model model,HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			 @ModelAttribute("prescription") PrescriptionForm form, RedirectAttributes redirectAttributes) {
+														   @ModelAttribute("prescription") PrescriptionForm form, RedirectAttributes redirectAttributes) {
 		ModelAndView mv = new ModelAndView();
 		try {
 			if (form.getBase64ImgString() != null && form.getBase64ImgString() .length()>0 && form.getPrescriptionId()>0 && form.getPhysicianId()>0) {
 				prescriptionService.savePhysicianPrescriptionSignature(form.getBase64ImgString(),form.getPrescriptionId(),form.getPhysicianId(),session,form);
 				redirectAttributes.addFlashAttribute("saveStatus", "true");
 				redirectAttributes.addFlashAttribute("message", "Prescription have been successfully E-Signed by the Prescriber");
+				redirectAttributes.addFlashAttribute("form", form);
+				mv.setViewName("redirect:editPrescription");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	/**
+	 *  This method saves prescription and stamps the esignature of the physician to the prescription
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @param session
+	 * @param form
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping(value="/savePhysicianPrescriptionAndSignature", method=RequestMethod.POST)
+	public ModelAndView savePhysicianPrescriptionAndSignature(Model model,HttpServletRequest request, HttpServletResponse response, HttpSession session,
+			 @ModelAttribute("prescription") PrescriptionForm form, RedirectAttributes redirectAttributes) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			if (form.getBase64ImgString() != null && form.getBase64ImgString() .length()>0 && form.getPrescriptionId()>0 && form.getPhysicianId()>0) {
+				String rootFilePath= PharmacyUtil.getRootFolderForPrescriptionPDF(session, env);
+				LoginForm loggedInUser = (LoginForm) session.getAttribute("loginDetail");
+				prescriptionService.savePrescription(form, rootFilePath, session, false, loggedInUser);
+				prescriptionService.savePhysicianPrescriptionSignature(form.getBase64ImgString(),form.getPrescriptionId(),form.getPhysicianId(),session,form);
+				redirectAttributes.addFlashAttribute("saveStatus", "true");
+				redirectAttributes.addFlashAttribute("message", "Prescription have been successfully Saved & E-Signed by the Prescriber");
 				redirectAttributes.addFlashAttribute("form", form);
 				mv.setViewName("redirect:editPrescription");
 			}

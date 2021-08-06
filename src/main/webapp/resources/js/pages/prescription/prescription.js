@@ -1696,6 +1696,9 @@ try{
 		/*var p = document.getElementById('myModal');
 		var position = p.position();
 		alert(position.top )*/
+		if(!checkValues()){
+			return;
+		}
 		
 		if ($("#class2ControlSubtance").val() == "true") {
 			var alertTxt = "As this prescription contains dispensed item of controlled subtance of Class 2, Create a hard copy and scan and " +
@@ -1709,7 +1712,8 @@ try{
 		 			}
 				}
 			});
-		} else {
+		}
+		else {
 			popup6("");
 		}
 	}

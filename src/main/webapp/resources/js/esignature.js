@@ -8,7 +8,7 @@ function signatureCapture() {
 	context.lineWidth = 2.6;
 	context.lineCap = "round";
 	context.fillRect(0, 0, canvas.width, canvas.height);
-	var disableSave = true;
+	var disableSave = false;
 	var pixels = [];
 	var cpixels = [];
 	var xyLast = {};
@@ -52,7 +52,7 @@ function signatureCapture() {
 		function on_mousedown(e) {
 			e.preventDefault();
 			e.stopPropagation();
-
+			$("#savesignature").prop('disabled', false);
 			canvas.addEventListener('mouseup', on_mouseup, false);
 			canvas.addEventListener('mousemove', on_mousemove, false);
 			canvas.addEventListener('touchend', on_mouseup, false);
@@ -126,7 +126,7 @@ function signatureSave() {
 		
 		document.prescription.base64ImgString.value=dataURL;
 		//alert(document.prescription.base64ImgString.value)
-		document.prescription.action = "savePhysicianPrescriptionSignature";
+		document.prescription.action = "savePhysicianPrescriptionAndSignature";
 		document.prescription.submit();
 		
 		/*AjaxCallforEvent("/CRE8Portal/savePhysicianPrescriptionSignature?base64ImgString="+dataURL+"&prescriptionid="+prescriptionid+"&physicianid="+physicianid);
