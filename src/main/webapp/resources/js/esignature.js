@@ -121,8 +121,8 @@ function signatureSave() {
 	var prescriptionid=document.forms[0].prescriptionId.value;
 	var physicianid=document.forms[0].writtenBy.value;
 	//alert(prescriptionid);
-	if(prescriptionid>0)
-	{
+	/*if(prescriptionid>0)
+	{*/
 		
 		document.prescription.base64ImgString.value=dataURL;
 		//alert(document.prescription.base64ImgString.value)
@@ -147,11 +147,11 @@ function signatureSave() {
 	            // alert("Success: " + data );
 		 		// setPhysicianInfo(responseData);
 			};*/
-	}
+	/*}
 	else
 	{
 		//alert("Enter at least one Items...");
-	}
+	}*/
 	
 	
 	

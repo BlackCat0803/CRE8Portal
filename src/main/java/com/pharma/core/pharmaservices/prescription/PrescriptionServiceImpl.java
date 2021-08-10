@@ -2318,11 +2318,11 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 		        		af1.delete();
 		        	
 		        	// Send PDF files to FTP
-		        	boolean isTransferSuccess = prescriptionPdfFTPUpload(String.valueOf(prescriptionid), session);
+		        	/*boolean isTransferSuccess = prescriptionPdfFTPUpload(String.valueOf(prescriptionid), session);
 		        	if (isTransferSuccess)
 						System.out.println("Prescription PDF successfully uploaded to Remote FTP"); 
 					else
-						System.out.println("Failed to transfer Prescription PDF");
+						System.out.println("Failed to transfer Prescription PDF");*/
 		        	
 		        	osf.close();
 				}

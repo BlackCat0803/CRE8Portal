@@ -528,8 +528,39 @@ public class PrescriptionController extends PrescriptionBaseController {
 	@RequestMapping(value = "/savePrescription", method = RequestMethod.POST)
 	public ModelAndView savePrescriptionData(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			 @ModelAttribute("prescription") PrescriptionForm form, RedirectAttributes redirectAttributes) {
-		
+
 		ModelAndView mv = new ModelAndView();
+		try {
+			boolean isUpdate = false;
+			if (form.getPrescriptionId() > 0)
+				isUpdate = true;
+
+			if (form.getBase64ImgString() != null && form.getBase64ImgString() .length()>0 && form.getPrescriptionId()>0 && form.getPhysicianId()>0) {
+				String rootFilePath= PharmacyUtil.getRootFolderForPrescriptionPDF(session, env);
+				LoginForm loggedInUser = (LoginForm) session.getAttribute("loginDetail");
+				PrescriptionMaster acc = prescriptionService.savePrescription(form, rootFilePath, session, false, loggedInUser);
+				if (acc != null) {
+					redirectAttributes.addFlashAttribute("saveStatus", "true");
+					prescriptionService.savePhysicianPrescriptionSignature(form.getBase64ImgString(),form.getPrescriptionId(),form.getPhysicianId(),session,form);
+					if (isUpdate)
+						redirectAttributes.addFlashAttribute("message", "Prescription updated successfully");
+					else
+						redirectAttributes.addFlashAttribute("message", "Prescription have been successfully Saved & E-Signed by the Prescriber");
+
+					form.setPrescriptionId(acc.getId());
+					redirectAttributes.addFlashAttribute("form", form);
+					mv.setViewName("redirect:editPrescription");
+				} else {
+					model.addAttribute("message", "Prescription failed to create");
+					mv.setViewName("error400");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+		
+		/*ModelAndView mv = new ModelAndView();
 		
 		try {
 			LoginForm loggedInUser = (LoginForm) session.getAttribute("loginDetail");
@@ -558,7 +589,7 @@ public class PrescriptionController extends PrescriptionBaseController {
 			mv.setViewName("error500");
 		}
 
-		return mv;
+		return mv;*/
 	}
 	/**
 	 * This method loads the prescription account page
@@ -660,7 +691,7 @@ public class PrescriptionController extends PrescriptionBaseController {
 			boolean isRxNoPresents = false;
 			boolean isClinicDropDownNotShow = false;
 			
-			if (form.getMedications().size() > 0) {
+			if (form.getMedications()!=null && form.getMedications().size() > 0) {
 				for (PrescriptionTransactionForm tran : form.getMedications()) {
 					if (tran.getRxNumber() == null || "".equalsIgnoreCase(tran.getRxNumber()))
 						isRxNoPresents = true;
@@ -950,13 +981,15 @@ public class PrescriptionController extends PrescriptionBaseController {
 			 @ModelAttribute("prescription") PrescriptionForm form, RedirectAttributes redirectAttributes) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			if (form.getBase64ImgString() != null && form.getBase64ImgString() .length()>0 && form.getPrescriptionId()>0 && form.getPhysicianId()>0) {
+			if (form.getBase64ImgString() != null && form.getBase64ImgString() .length()>0 ) {
 				String rootFilePath= PharmacyUtil.getRootFolderForPrescriptionPDF(session, env);
 				LoginForm loggedInUser = (LoginForm) session.getAttribute("loginDetail");
-				prescriptionService.savePrescription(form, rootFilePath, session, false, loggedInUser);
+				PrescriptionMaster acc = prescriptionService.savePrescription(form, rootFilePath, session, false, loggedInUser);
+				form.setPrescriptionOrderNumber(acc.getCre8PrescriptionNo());
 				prescriptionService.savePhysicianPrescriptionSignature(form.getBase64ImgString(),form.getPrescriptionId(),form.getPhysicianId(),session,form);
 				redirectAttributes.addFlashAttribute("saveStatus", "true");
 				redirectAttributes.addFlashAttribute("message", "Prescription have been successfully Saved & E-Signed by the Prescriber");
+				form.setEsignedPDF(true);
 				redirectAttributes.addFlashAttribute("form", form);
 				mv.setViewName("redirect:editPrescription");
 			}
