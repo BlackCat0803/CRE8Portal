@@ -622,7 +622,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 						acc.setMedicationid(f.getMedicationid());
 						acc.setMedicationdescription(f.getMedicationdescription());*/
 						
-						if(f.getType().equalsIgnoreCase("1")){
+						if(f.getType().equalsIgnoreCase("1") || f.getType().equalsIgnoreCase("3")){
 							acc.setItemid(f.getItemid());
 							acc.setItemname(f.getItemname());
 							acc.setMedicationid(0);
