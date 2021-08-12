@@ -131,6 +131,7 @@ $(document).on("click", "#addLine", function(){
 				 				buttons: {
 				 		 			confirm: function () {
 				 		 				populateTableRow();
+										checkValues();
 				 		 				return true;
 				 		 			},
 				 		 			cancel: function () {
@@ -142,17 +143,19 @@ $(document).on("click", "#addLine", function(){
 				 			});
 				 		} else {
 				 			populateTableRow();
+							checkValues();
 				 		}
 				 	}
 				}
 	    	}else {
 	 			populateTableRow();
+				checkValues();
 	 		}
 	    } catch(e1) {
 	    }				  	
 	}
 	
-	checkValues();
+
 });
 
 
