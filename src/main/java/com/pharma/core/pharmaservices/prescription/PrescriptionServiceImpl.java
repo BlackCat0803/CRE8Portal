@@ -1133,7 +1133,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 						f.setId(a.getId());
 						
 						
-						if(a.getType().equalsIgnoreCase("1")){
+						if(a.getType().equalsIgnoreCase("1")||a.getType().equalsIgnoreCase("3")){
 							f.setItemid(a.getItemid());
 							f.setItemname(a.getItemname());
 							
